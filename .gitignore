@@ -1,0 +1,38 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# ---- 原始逐动作审计日志（体量大，未纳入版本库） ----
+*.jsonl
+results/audit_logs/
+
+# ---- 中间产物 / 调试草稿 ----
+scratch/
+p4explore/
+*.sqlite3
+*.sqlite
+
+# ---- Agent 工具链技能定义（非本题求解内容） ----
+.agents/
+
+# ---- LaTeX 工具链自检产物 ----
+paper/tex/_toolchain_test.*
+*.aux
+*.out
+
+# ---- 历史归档与打包产物 ----
+release/_archive/
+delivery/**/action_logs/
+delivery/*.zip
+delivery/**/*.zip
+
+# ---- 编辑器 / 系统 ----
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini

@@ -1,0 +1,6 @@
+ scripts/diagnose_p4_nontermination.py   | 182 +++++++++++++
+ scripts/summarize_p4_head_2opt.py       | 129 ++++++++++
+ scripts/verify_p4_head_2opt_chain.py    | 142 ++++++++++
+ scripts/verify_p4_head_2opt_rigorous.py | 441 ++++++++++++++++++++++++++++++++
+ src/strategy_engine.py                  |  39 ++-
+ 5 files changed, 930 insertions(+), 3 deletions(-)

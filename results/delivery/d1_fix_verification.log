@@ -1,0 +1,32 @@
+====================================================================================================
+D1 定向验证：修复前(old) vs 修复后(new)
+====================================================================================================
+
+状态 A1_normal_scoring_measure（要求：两侧逐字段一致）
+  [old] action=measure reason=followup_promising (Jq=493.7s vs J0=598.8s) pos=[0.0, 0.0] jq=493.7110913949458 plan_len=120 存活=10941 空集+1 不可表示+1
+  [new] action=measure reason=followup_promising (Jq=493.7s vs J0=598.8s) pos=[0.0, 0.0] jq=493.7110913949458 plan_len=120 存活=10941 空集+1 不可表示+1
+
+状态 A2_normal_scoring_real_candidates（要求：两侧逐字段一致）
+  [old] action=measure reason=followup_promising (Jq=469.4s vs J0=598.8s) pos=[300.0, 0.0] jq=469.4479175143923 plan_len=120 存活=10941 空集+0 不可表示+0
+  [new] action=measure reason=followup_promising (Jq=469.4s vs J0=598.8s) pos=[300.0, 0.0] jq=469.4479175143923 plan_len=120 存活=10941 空集+0 不可表示+0
+
+状态 A3_normal_scoring_no_model（要求：两侧逐字段一致）
+  [old] action=measure reason=followup_promising (Jq=372.7s vs J0=598.8s) pos=[0.0, 0.0] jq=372.73427507117003 plan_len=120 存活=10941 空集+0 不可表示+0
+  [new] action=measure reason=followup_promising (Jq=372.7s vs J0=598.8s) pos=[0.0, 0.0] jq=372.73427507117003 plan_len=120 存活=10941 空集+0 不可表示+0
+
+状态 C_far_only_no_model（要求：两侧逐字段一致）
+  [old] action=clear reason=direct_clear_better (J0=598.8s vs Jq=1403.8s) pos=[10.0, 0.0] jq=1403.770176486391 plan_len=120 存活=10941 空集+0 不可表示+0
+  [new] action=clear reason=direct_clear_better (J0=598.8s vs Jq=1403.8s) pos=[10.0, 0.0] jq=1403.770176486391 plan_len=120 存活=10941 空集+0 不可表示+0
+
+状态 B_all_unrepresentable（要求：old 抛 TypeError；new 返回 else 分支且清除计划不变）
+  [old] 抛出 TypeError: unsupported format string passed to NoneType.__format__
+  [new] action=clear reason=direct_clear_better (J0=598.8s vs Jq=不可表示) pos=[10.0, 0.0] jq=None plan_len=120 存活=10941 空集+1 不可表示+1
+  old 抛出 = TypeError（期望 TypeError）
+  new 抛出 = None（期望 None）
+  new 动作 = clean else 分支: True，位置=clear_plan[0]: True，force_clear=True，计划长度=True，计划首点=True
+  new best_jq=None 且不可表示仍被计数: True / True
+  new reason = direct_clear_better (J0=598.8s vs Jq=不可表示)
+
+====================================================================================================
+D1 定向验证总判定：全部通过  → results\delivery\d1_fix_verification.json
+====================================================================================================

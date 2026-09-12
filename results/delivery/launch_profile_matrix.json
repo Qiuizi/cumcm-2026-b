@@ -1,0 +1,68 @@
+{
+  "entry_help_exposes_profile_switch": true,
+  "entry_help_exposes_radial_coverage_switch": true,
+  "profile_matrix": [
+    {
+      "prob": "P3",
+      "profile": "stable",
+      "is_p4": false,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": true,
+      "enable_adaptive_radial_coverage": false,
+      "grid_class": "src.conservative_grid.ConservativeGrid",
+      "local_decision_class": "src.local_decision.LocalDecisionMaker",
+      "expect_2opt_head": true,
+      "expect_adaptive_radial_coverage": false,
+      "passed": true
+    },
+    {
+      "prob": "P3",
+      "profile": "radial_candidate",
+      "is_p4": false,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": true,
+      "enable_adaptive_radial_coverage": true,
+      "grid_class": "src.conservative_grid.ConservativeGrid",
+      "local_decision_class": "src.local_decision.LocalDecisionMaker",
+      "expect_2opt_head": true,
+      "expect_adaptive_radial_coverage": true,
+      "passed": true
+    },
+    {
+      "prob": "P4",
+      "profile": "stable",
+      "is_p4": true,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": false,
+      "enable_adaptive_radial_coverage": false,
+      "grid_class": "conservative_grid_frozen.ConservativeGrid",
+      "local_decision_class": "local_decision_frozen.LocalDecisionMaker",
+      "expect_2opt_head": false,
+      "expect_adaptive_radial_coverage": false,
+      "passed": true
+    },
+    {
+      "prob": "P4",
+      "profile": "radial_candidate",
+      "is_p4": true,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": false,
+      "enable_adaptive_radial_coverage": false,
+      "grid_class": "conservative_grid_frozen.ConservativeGrid",
+      "local_decision_class": "local_decision_frozen.LocalDecisionMaker",
+      "expect_2opt_head": false,
+      "expect_adaptive_radial_coverage": false,
+      "passed": true
+    }
+  ],
+  "overall_pass": true,
+  "note": "本脚本仅构造引擎对象读取最终生效配置，不发起任何 HTTP 通信，不连接官方端口。"
+}

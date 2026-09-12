@@ -1,0 +1,1685 @@
+diff --git a/scripts/aggregate_p3_radial_delivery.py b/scripts/aggregate_p3_radial_delivery.py
+new file mode 100644
+index 0000000..b985b67
+--- /dev/null
++++ b/scripts/aggregate_p3_radial_delivery.py
+@@ -0,0 +1,309 @@
++"""
++aggregate_p3_radial_delivery.py - P3 径向候选版精简交付：九组配对记录的逐局完整性汇总
++
++原则（严格遵循交付要求）：
++1. 只从既有原始记录汇总，不重跑测试、不追加测试局数、不调用官方模拟器。
++   原始记录：
++     - results/p3_radial_coverage_9cases_summary.csv   (配对 CSV，含现实耗时)
++     - results/p3_radial_coverage_9cases_audit.json    (原始审计 JSON，含五类计费明细与径向事件)
++2. 原始记录中不存在的字段一律写 "未记录"，既不填 0，也不从耗时反推成功。
++3. 逐局核对两件事：
++   a) 所有目标是否清除 (成功清除数 == 场景源数)；
++   b) 结束证据是否成立 (T 与 L/5+5M+S+3F+5N 的核算残差 < 1e-3)。
++4. 汇总结果与原始 CSV 之间做交叉一致性校验 (T、L、M、S、F、N 必须逐位吻合)。
++
++输出：
++  results/delivery/p3_radial_per_run_completeness.csv     每局一行 (9 组 × 2 臂 = 18 行)
++  results/delivery/p3_radial_per_case_delta.csv           每案例一行配对节省
++  results/delivery/p3_radial_field_coverage_audit.json     字段级"已记录/未记录"审计
++"""
++
++import sys
++import os
++import csv
++import json
++
++sys.stdout.reconfigure(encoding="utf-8")
++sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
++
++ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
++CSV_PATH = os.path.join(ROOT, "results", "p3_radial_coverage_9cases_summary.csv")
++AUDIT_PATH = os.path.join(ROOT, "results", "p3_radial_coverage_9cases_audit.json")
++OUT_DIR = os.path.join(ROOT, "results", "delivery")
++
++NOT_RECORDED = "未记录"
++
++GROUP_OF = {
++    "P3-Corr-10src-5010": "纠偏三例",
++    "P3-Corr-13src-5013": "纠偏三例",
++    "P3-Corr-16src-5016": "纠偏三例",
++    "P3-New-10src-6010": "新六例",
++    "P3-New-10src-6110": "新六例",
++    "P3-New-13src-6013": "新六例",
++    "P3-New-13src-6113": "新六例",
++    "P3-New-16src-6016": "新六例",
++    "P3-New-16src-6116": "新六例",
++}
++
++
++def load_csv_pairs():
++    with open(CSV_PATH, "r", encoding="utf-8") as f:
++        return {row["Case_ID"]: row for row in csv.DictReader(f)}
++
++
++def fmt(x, nd=6):
++    return f"{x:.{nd}f}"
++
++
++def main():
++    os.makedirs(OUT_DIR, exist_ok=True)
++
++    csv_pairs = load_csv_pairs()
++    with open(AUDIT_PATH, "r", encoding="utf-8") as f:
++        audits = json.load(f)
++
++    case_ids = list(csv_pairs.keys())
++    missing_audit = [c for c in case_ids if c not in audits]
++    if missing_audit:
++        raise SystemExit(f"审计 JSON 缺少案例: {missing_audit}")
++
++    run_rows = []
++    cross_check_failures = []
++    field_status = {}
++
++    def mark(field, recorded: bool, case_id, value):
++        field_status.setdefault(field, {"recorded": [], "not_recorded": []})
++        if recorded:
++            field_status[field]["recorded"].append({"case": case_id, "value": value})
++        else:
++            field_status[field]["not_recorded"].append(case_id)
++
++    for cid in case_ids:
++        pair = csv_pairs[cid]
++        audit = audits[cid]
++        n_src = int(audit["sources"])
++        seed = int(audit["seed"])
++        group = GROUP_OF.get(cid, "未分类")
++
++        for arm, prefix, arm_label in (
++            ("stable", "Base", "stable(稳定基线 v3.4.2, 径向关闭)"),
++            ("radial", "Rad", "radial_candidate(径向候选版, 径向开启)"),
++        ):
++            bil = audit[f"{'base' if arm == 'stable' else 'rad'}_billing"]
++
++            # ---- 原始审计 JSON 已记录的字段 ----
++            t_s = bil["virtual_time"]
++            L_m = bil["distance_m"]
++            M = bil["measure_count"]
++            S = bil["switch_count"]
++            F = bil["clear_fail_count"]
++            N = bil["clear_succ_count"]
++            residual = bil["diff_raw"]
++
++            # ---- 配对 CSV 已记录的字段 ----
++            real_t = float(pair[f"{prefix}_RealTime_s"])
++
++            # ---- 原始记录中缺失的字段：一律"未记录" ----
++            unsolved = NOT_RECORDED              # 原始记录未落盘 unsolved_count
++            absent_cov = NOT_RECORDED            # 原始记录未落盘 COVERAGE_NEGATIVE 计数
++            absent_ub = NOT_RECORDED             # 原始记录未落盘 UPPER_BOUND_EXCLUSION 计数
++            eff_cfg = NOT_RECORDED               # 原始记录未逐局落盘实际生效配置
++
++            # ---- 结束证据 (仅用已记录数据直接判定，不外推) ----
++            all_targets_cleared = (N == n_src)
++            billing_closed = (abs(residual) < 1e-3)
++            evidence = (
++                f"成功清除数={N} 与 场景源数={n_src} {'一致(全部目标清除)' if all_targets_cleared else '不一致(存在未清除目标!)'}; "
++                f"计费残差={residual:.2e}s {'闭合' if billing_closed else '未闭合!'}; "
++                f"未决频道数未落盘, 引擎级全决状态无法从原始记录直接核验"
++            )
++
++            # ---- 与配对 CSV 交叉校验 ----
++            # 配对 CSV 以固定小数位落盘, 容差取显示精度的半个最小分度
++            checks = [
++                ("T", t_s, float(pair[f"{prefix}_T_s"]), 0.005),
++                ("L", L_m, float(pair[f"{prefix}_Dist_m"]), 0.05),
++                ("M", M, int(pair[f"{prefix}_M"]), 0.0),
++                ("S", S, int(pair[f"{prefix}_S"]), 0.0),
++                ("F", F, int(pair[f"{prefix}_F"]), 0.0),
++                ("N", N, int(pair[f"{prefix}_N"]), 0.0),
++            ]
++            for name, a, b, tol in checks:
++                if abs(float(a) - float(b)) > tol + 1e-9:
++                    cross_check_failures.append(
++                        f"{cid}/{arm}: {name} 审计JSON={a} vs 配对CSV={b} (容差±{tol})"
++                    )
++
++            run_rows.append({
++                "Case_ID": cid,
++                "Group": group,
++                "Arm": arm,
++                "Arm_Label": arm_label,
++                "Sources": n_src,
++                "Seed": seed,
++                "Cleared": N,
++                "Unsolved_Channels": unsolved,
++                "Absent_Negative_Coverage": absent_cov,
++                "Absent_UpperBound_Exclusion": absent_ub,
++                "T_s": fmt(t_s, 3),
++                "L_m": fmt(L_m, 3),
++                "Measure_Count": M,
++                "Switch_Count": S,
++                "Fail_Clear_Count": F,
++                "Succ_Clear_Count": N,
++                "RealTime_s": f"{real_t:.3f}",
++                "Billing_Residual_s": fmt(residual, 6),
++                "Billing_Closed": billing_closed,
++                "All_Targets_Cleared": all_targets_cleared,
++                "Completion_Evidence": evidence,
++                "Effective_Config_Recorded": eff_cfg,
++                "Field_Source": (
++                    "T/L/M/S/F/N/残差: 原始审计JSON; 现实耗时: 配对CSV; "
++                    "源数/种子: 原始审计JSON; 未决频道数/阴性覆盖排除数/16源上限排除数/实际生效配置: 原始记录未落盘"
++                ),
++            })
++
++            mark("场景源数", True, cid, n_src)
++            mark("成功清除数", True, cid, N)
++            mark("未决频道数", False, cid, None)
++            mark("阴性覆盖排除数", False, cid, None)
++            mark("16源上限排除数", False, cid, None)
++            mark("T(总虚拟时间)", True, cid, t_s)
++            mark("L(里程)", True, cid, L_m)
++            mark("测量次数", True, cid, M)
++            mark("切频次数", True, cid, S)
++            mark("失败清除次数", True, cid, F)
++            mark("现实耗时", True, cid, real_t)
++            mark("成本核算残差", True, cid, residual)
++            mark("实际生效配置(逐局落盘)", False, cid, None)
++
++    run_csv = os.path.join(OUT_DIR, "p3_radial_per_run_completeness.csv")
++    with open(run_csv, "w", newline="", encoding="utf-8-sig") as f:
++        writer = csv.DictWriter(f, fieldnames=list(run_rows[0].keys()))
++        writer.writeheader()
++        writer.writerows(run_rows)
++
++    # ---------------- 配对增量 (每案例一行) ----------------
++    delta_rows = []
++    for cid in case_ids:
++        pair = csv_pairs[cid]
++        audit = audits[cid]
++        # 全精度取自原始审计 JSON（配对 CSV 为两位小数落盘, 仅用于交叉核对）
++        base_t = audit["base_billing"]["virtual_time"]
++        rad_t = audit["rad_billing"]["virtual_time"]
++        saved = base_t - rad_t
++        if abs(saved - float(pair["Saved_T_s"])) > 0.005 + 1e-9:
++            cross_check_failures.append(
++                f"{cid}: Saved_T 审计JSON={saved:+.6f} vs 配对CSV={pair['Saved_T_s']}"
++            )
++        delta_rows.append({
++            "Case_ID": cid,
++            "Group": GROUP_OF.get(cid, "未分类"),
++            "Sources": int(pair["Sources"]),
++            "Seed": int(pair["Seed"]),
++            "Base_T_s": f"{base_t:.2f}",
++            "Rad_T_s": f"{rad_t:.2f}",
++            "Saved_T_s": f"{saved:+.2f}",
++            "Saved_Pct": f"{(saved / base_t * 100.0):+.3f}%",
++            "Verdict": "获益" if saved > 0.05 else ("退步" if saved < -0.05 else "持平"),
++            "Base_Dist_m": f"{float(pair['Base_Dist_m']):.1f}",
++            "Rad_Dist_m": f"{float(pair['Rad_Dist_m']):.1f}",
++            "Saved_Dist_m": f"{float(pair['Saved_Dist_m']):+.1f}",
++            "Radial_Adjust_Count": int(pair["Radial_Adjust_Count"]),
++            "Billing_Closed": (abs(float(pair["Base_BillDiff_s"])) < 1e-3 and abs(float(pair["Rad_BillDiff_s"])) < 1e-3),
++        })
++
++    delta_csv = os.path.join(OUT_DIR, "p3_radial_per_case_delta.csv")
++    with open(delta_csv, "w", newline="", encoding="utf-8-sig") as f:
++        writer = csv.DictWriter(f, fieldnames=list(delta_rows[0].keys()))
++        writer.writeheader()
++        writer.writerows(delta_rows)
++
++    # ---------------- 统计 ----------------
++    def stats(rows):
++        saved = [float(r["Saved_T_s"]) for r in rows]
++        base = [float(r["Base_T_s"]) for r in rows]
++        mean_saved = sum(saved) / len(saved)
++        mean_base = sum(base) / len(base)
++        return {
++            "count": len(rows),
++            "sum_saved_s": sum(saved),
++            "mean_saved_s": mean_saved,
++            "mean_base_T_s": mean_base,
++            "mean_saved_pct": mean_saved / mean_base * 100.0,
++            "wins": sum(1 for s in saved if s > 0.05),
++            "ties": sum(1 for s in saved if abs(s) <= 0.05),
++            "losses": sum(1 for s in saved if s < -0.05),
++            "regressions": [{"case": r["Case_ID"], "saved_T_s": float(r["Saved_T_s"])}
++                            for r in rows if float(r["Saved_T_s"]) < -0.05],
++        }
++
++    s_new6 = stats([r for r in delta_rows if r["Group"] == "新六例"])
++    s_3 = stats([r for r in delta_rows if r["Group"] == "纠偏三例"])
++    s_all9 = stats(delta_rows)
++
++    field_audit = {
++        "source_records": {
++            "paired_csv": os.path.relpath(CSV_PATH, ROOT).replace("\\", "/"),
++            "raw_audit_json": os.path.relpath(AUDIT_PATH, ROOT).replace("\\", "/"),
++        },
++        "cross_check_vs_paired_csv": {
++            "checked_fields": ["T", "L", "M", "S", "F", "N"],
++            "mismatches": cross_check_failures,
++            "passed": len(cross_check_failures) == 0,
++        },
++        "field_status": {
++            k: {
++                "recorded_in_all_cases": len(v["not_recorded"]) == 0,
++                "recorded_case_count": len(v["recorded"]),
++                "not_recorded_case_count": len(v["not_recorded"]),
++                "not_recorded_cases": sorted(set(v["not_recorded"])),
++            }
++            for k, v in field_status.items()
++        },
++        "no_fabrication_policy": "原始记录中不存在的字段一律写'未记录'，不填0、不由耗时反推成功。",
++    }
++    with open(os.path.join(OUT_DIR, "p3_radial_field_coverage_audit.json"), "w", encoding="utf-8") as f:
++        json.dump(field_audit, f, indent=2, ensure_ascii=False)
++
++    print("=" * 90)
++    print("【九组配对记录 · 逐局完整性汇总】")
++    print("=" * 90)
++    print(f"逐局输出: {os.path.relpath(run_csv, ROOT)}  ({len(run_rows)} 行 = 9 组 × 2 臂)")
++    print(f"配对输出: {os.path.relpath(delta_csv, ROOT)}  ({len(delta_rows)} 行)")
++    print(f"字段审计: results/delivery/p3_radial_field_coverage_audit.json")
++    print("-" * 90)
++    print(f"交叉校验 (审计JSON vs 配对CSV, T/L/M/S/F/N): {'全部通过' if not cross_check_failures else '存在不一致'}")
++    for m in cross_check_failures:
++        print("   !!", m)
++    print("-" * 90)
++    print("字段级记录状态:")
++    for k, v in field_audit["field_status"].items():
++        lib = "已记录" if v["recorded_in_all_cases"] else f"未记录({v['not_recorded_case_count']}/18 局)"
++        print(f"   {k:<28} {lib}")
++    print("-" * 90)
++    print("逐局核对 (全部目标清除 / 结束证据):")
++    bad = [r for r in run_rows if not (r["All_Targets_Cleared"] and r["Billing_Closed"])]
++    print(f"   18 局中 {18 - len(bad)} 局同时满足 [全部目标清除] 且 [计费闭合]；异常 {len(bad)} 局")
++    for r in bad:
++        print(f"   !! {r['Case_ID']}/{r['Arm']}: {r['Completion_Evidence']}")
++    print("-" * 90)
++    for label, s in (("新六例", s_new6), ("纠偏三例", s_3), ("九例全集", s_all9)):
++        print(f"{label}: n={s['count']} 平均配对节省={s['mean_saved_s']:+.2f}s "
++              f"(占基线均值 {s['mean_base_T_s']:.2f}s 的 {s['mean_saved_pct']:+.3f}%) "
++              f"胜/平/负={s['wins']}/{s['ties']}/{s['losses']}")
++    print("-" * 90)
++    print("退步案例保留 (不做机制惩罚):")
++    for s in (s_new6, s_3):
++        for r in s["regressions"]:
++            print(f"   {r['case']}: {r['saved_T_s']:+.2f} s")
++    print("=" * 90)
++
++    return {
++        "new6": s_new6, "corr3": s_3, "all9": s_all9,
++        "cross_check_passed": len(cross_check_failures) == 0,
++    }
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/scripts/build_p3_radial_delivery_package.py b/scripts/build_p3_radial_delivery_package.py
+new file mode 100644
+index 0000000..318f4d1
+--- /dev/null
++++ b/scripts/build_p3_radial_delivery_package.py
+@@ -0,0 +1,245 @@
++"""
++build_p3_radial_delivery_package.py - 组装 P3 径向候选版精简交付包（含 ZIP）
++
++行为：
++1. 由两次本地入口验收落盘 JSON 生成"最终生效配置"（不手工编造配置值）；
++2. 把源码差异、验证脚本、原始记录、逐局汇总归档到交付目录；
++3. 生成 MANIFEST_文件清单.csv（逐文件 sha256 + 字节数）；
++4. 打包为 ZIP 并校验 ZIP 内文件数与清单一致。
++"""
++
++import sys
++import os
++import csv
++import json
++import shutil
++import hashlib
++import zipfile
++
++sys.stdout.reconfigure(encoding="utf-8")
++sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
++
++ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
++PKG_NAME = "P3_radial_candidate_delivery_v3.4.2"
++PKG_DIR = os.path.join(ROOT, "delivery", PKG_NAME)
++ZIP_PATH = os.path.join(ROOT, "delivery", PKG_NAME + ".zip")
++DELIVERY = os.path.join(ROOT, "results", "delivery")
++
++
++def sha256_of(path: str) -> str:
++    h = hashlib.sha256()
++    with open(path, "rb") as f:
++        for chunk in iter(lambda: f.read(1 << 20), b""):
++            h.update(chunk)
++    return h.hexdigest()
++
++
++def ensure_dir(rel: str) -> str:
++    p = os.path.join(PKG_DIR, rel)
++    os.makedirs(p, exist_ok=True)
++    return p
++
++
++def copy_in(src_rel: str, dst_rel: str):
++    src = os.path.join(ROOT, src_rel)
++    dst = os.path.join(PKG_DIR, dst_rel)
++    os.makedirs(os.path.dirname(dst), exist_ok=True)
++    if not os.path.exists(src):
++        print(f"  !! 缺文件, 跳过: {src_rel}")
++        return False
++    shutil.copy2(src, dst)
++    return True
++
++
++def main():
++    os.makedirs(os.path.join(ROOT, "delivery"), exist_ok=True)
++
++    # ---------------- 1. 最终生效配置 ----------------
++    with open(os.path.join(DELIVERY, "entry_validation_stable.json"), "r", encoding="utf-8") as f:
++        ent_stable = json.load(f)
++    with open(os.path.join(DELIVERY, "entry_validation_radial_candidate.json"), "r", encoding="utf-8") as f:
++        ent_radial = json.load(f)
++
++    cfg = {
++        "baseline": "v3.4.2-guard-upperbound",
++        "baseline_git_commit": "160d265",
++        "candidate": "v3.4.2+radial (enable_adaptive_radial_coverage=True, 实验特性, 默认关闭)",
++        "source_of_truth": (
++            "本文件由 scripts/build_p3_radial_delivery_package.py 从两次本地入口验收落盘的 "
++            "results/delivery/entry_validation_*.json 自动生成，非手工填写。"
++        ),
++        "profiles": {
++            "stable": {
++                "launch": "python scripts/run_port_test.py --prob p3 --version C --profile stable --port 2026 --robot_id <队号>",
++                "effective_config": ent_stable["effective_config"],
++                "profile_label": ent_stable["profile_label"],
++                "source_fingerprint": ent_stable["source_fingerprint"],
++            },
++            "radial_candidate": {
++                "launch": "python scripts/run_port_test.py --prob p3 --version C --profile radial_candidate --port 2026 --robot_id <队号>",
++                "effective_config": ent_radial["effective_config"],
++                "profile_label": ent_radial["profile_label"],
++                "source_fingerprint": ent_radial["source_fingerprint"],
++            },
++        },
++        "invariants": {
++            "P3_two_profiles_share_identical_config_except_radial": (
++                {k: v for k, v in ent_stable["effective_config"].items() if k != "enable_adaptive_radial_coverage"}
++                == {k: v for k, v in ent_radial["effective_config"].items() if k != "enable_adaptive_radial_coverage"}
++            ),
++            "both_profiles_enable_2opt_head": bool(
++                ent_stable["effective_config"]["enable_2opt_head"]
++                and ent_radial["effective_config"]["enable_2opt_head"]
++            ),
++            "radial_default_off_in_stable_profile": (ent_stable["effective_config"]["enable_adaptive_radial_coverage"] is False),
++            "source_fingerprint_identical_between_profiles": (ent_stable["source_fingerprint"] == ent_radial["source_fingerprint"]),
++            "P4_frozen": "见 03_verification/launch_profile_matrix.json（P4 两档位均为 radial=False, 2opt=False）",
++        },
++        "entry_acceptance_runs": [
++            {
++                "profile": "stable",
++                "port": ent_stable["scenario"]["port"],
++                "external_official_port": ent_stable["scenario"]["external_official_port"],
++                "sources": ent_stable["scenario"]["sources_requested"],
++                "cleared": ent_stable["summary"]["cleared_count"],
++                "unsolved": ent_stable["summary"]["unsolved_count"],
++                "absent_coverage": ent_stable["summary"]["absent_coverage_count"],
++                "absent_upper_bound": ent_stable["summary"]["absent_upper_bound_count"],
++                "radial_adjustments": ent_stable["summary"]["radial_adjustments_count"],
++                "billing_residual_s": ent_stable["http_audit"]["accounting_discrepancy_s"],
++            },
++            {
++                "profile": "radial_candidate",
++                "port": ent_radial["scenario"]["port"],
++                "external_official_port": ent_radial["scenario"]["external_official_port"],
++                "sources": ent_radial["scenario"]["sources_requested"],
++                "cleared": ent_radial["summary"]["cleared_count"],
++                "unsolved": ent_radial["summary"]["unsolved_count"],
++                "absent_coverage": ent_radial["summary"]["absent_coverage_count"],
++                "absent_upper_bound": ent_radial["summary"]["absent_upper_bound_count"],
++                "radial_adjustments": ent_radial["summary"]["radial_adjustments_count"],
++                "billing_residual_s": ent_radial["http_audit"]["accounting_discrepancy_s"],
++            },
++        ],
++        "note": "以上两局入口验收使用本地 Mock 服务器与非官方端口 (13026/13027)，不构成九组配对评测样本的一部分。",
++    }
++
++    ensure_dir("02_config")
++    with open(os.path.join(PKG_DIR, "02_config", "final_effective_config.json"), "w", encoding="utf-8") as f:
++        json.dump(cfg, f, indent=2, ensure_ascii=False)
++
++    BT = chr(96)
++    md = ["# 最终生效配置（由入口实跑落盘自动生成）", "",
++          "| 配置项 | stable（稳定版） | radial_candidate（径向候选版） |", "|---|---|---|"]
++    keys = list(ent_stable["effective_config"].keys())
++    for k in keys:
++        md.append(f"| {BT}{k}{BT} | {BT}{ent_stable['effective_config'][k]}{BT} | {BT}{ent_radial['effective_config'][k]}{BT} |")
++    md += ["", "## 不变量核验", ""]
++    for k, v in cfg["invariants"].items():
++        md.append(f"- {BT}{k}{BT}: **{v}**")
++    md += ["", "## 源码标识（两档位完全一致）", "", "| 文件 | sha256[:16] |", "|---|---|"]
++    for k, v in ent_stable["source_fingerprint"].items():
++        md.append(f"| {BT}{k}{BT} | {BT}{v}{BT} |")
++    md += ["", "## 入口验收实跑（本地 Mock，非官方端口）", "",
++           "| 档位 | 端口 | 外部官方端口 | 场景源数 | 成功清除 | 未决频道 | 阴性覆盖排除 | 16源上限排除 | 径向调点 | 计费残差(s) |",
++           "|---|---|---|---|---|---|---|---|---|---|"]
++    for r in cfg["entry_acceptance_runs"]:
++        md.append(f"| {r['profile']} | {r['port']} | {r['external_official_port']} | {r['sources']} | "
++                  f"{r['cleared']} | {r['unsolved']} | {r['absent_coverage']} | {r['absent_upper_bound']} | "
++                  f"{r['radial_adjustments']} | {r['billing_residual_s']} |")
++    md += ["", "> 说明：两局入口验收仅用于验证启动接线与配置落地，源分布为时间随机种子，**不作为收益证据**。", ""]
++    with open(os.path.join(PKG_DIR, "02_config", "final_effective_config.md"), "w", encoding="utf-8") as f:
++        f.write("\n".join(md))
++
++    # ---------------- 2. 归档源码与验证脚本 ----------------
++    ensure_dir("01_source_diff/full_source/src")
++    ensure_dir("01_source_diff/full_source/scripts")
++    ensure_dir("03_verification")
++    ensure_dir("04_results")
++
++    copy_in("src/strategy_engine.py", "01_source_diff/full_source/src/strategy_engine.py")
++    copy_in("scripts/run_port_test.py", "01_source_diff/full_source/scripts/run_port_test.py")
++
++    ver_files = [
++        "scripts/run_port_test.py",
++        "scripts/verify_launch_profiles.py",
++        "scripts/verify_p3_radial_coverage_rigorous.py",
++        "scripts/verify_p3_radial_coverage.py",
++        "scripts/aggregate_p3_radial_delivery.py",
++        "scripts/build_p3_radial_delivery_package.py",
++    ]
++    for rel in ver_files:
++        copy_in(rel, "03_verification/" + os.path.basename(rel))
++    for extra in ["launch_profile_matrix.json",
++                  "entry_validation_stable.log", "entry_validation_stable.json",
++                  "entry_validation_radial_candidate.log", "entry_validation_radial_candidate.json"]:
++        copy_in("results/delivery/" + extra, "03_verification/" + extra)
++
++    res_files = [
++        "results/p3_radial_coverage_9cases_summary.csv",
++        "results/p3_radial_coverage_6new_cases.csv",
++        "results/p3_radial_coverage_3cases_corrected.csv",
++        "results/p3_radial_coverage_9cases_audit.json",
++        "results/delivery/p3_radial_per_run_completeness.csv",
++        "results/delivery/p3_radial_per_case_delta.csv",
++        "results/delivery/p3_radial_field_coverage_audit.json",
++    ]
++    for rel in res_files:
++        copy_in(rel, "04_results/" + os.path.basename(rel))
++
++    # ---------------- 3. MANIFEST ----------------
++    entries = []
++    for dirpath, _dirnames, filenames in os.walk(PKG_DIR):
++        for fn in sorted(filenames):
++            full = os.path.join(dirpath, fn)
++            rel = os.path.relpath(full, PKG_DIR).replace("\\", "/")
++            if rel == "MANIFEST_文件清单.csv":
++                continue
++            entries.append({
++                "relative_path": rel,
++                "bytes": os.path.getsize(full),
++                "sha256": sha256_of(full),
++            })
++    entries.sort(key=lambda e: e["relative_path"])
++
++    manifest_path = os.path.join(PKG_DIR, "MANIFEST_文件清单.csv")
++    with open(manifest_path, "w", newline="", encoding="utf-8-sig") as f:
++        w = csv.DictWriter(f, fieldnames=["relative_path", "bytes", "sha256"])
++        w.writeheader()
++        w.writerows(entries)
++    entries.append({
++        "relative_path": "MANIFEST_文件清单.csv",
++        "bytes": os.path.getsize(manifest_path),
++        "sha256": sha256_of(manifest_path),
++    })
++
++    # ---------------- 4. ZIP ----------------
++    if os.path.exists(ZIP_PATH):
++        os.remove(ZIP_PATH)
++    with zipfile.ZipFile(ZIP_PATH, "w", zipfile.ZIP_DEFLATED) as zf:
++        for dirpath, _dirnames, filenames in os.walk(PKG_DIR):
++            for fn in sorted(filenames):
++                full = os.path.join(dirpath, fn)
++                arc = os.path.join(PKG_NAME, os.path.relpath(full, PKG_DIR)).replace("\\", "/")
++                zf.write(full, arc)
++
++    with zipfile.ZipFile(ZIP_PATH, "r") as zf:
++        names = [n for n in zf.namelist() if not n.endswith("/")]
++        bad = zf.testzip()
++
++    print("=" * 88)
++    print("【P3 径向候选版 · 精简交付包组装完成】")
++    print("=" * 88)
++    print(f"交付目录: {PKG_DIR}")
++    print(f"压缩包:   {ZIP_PATH}")
++    print(f"压缩包大小: {os.path.getsize(ZIP_PATH):,} 字节")
++    print(f"目录文件数: {len(entries)} | ZIP 内文件数: {len(names)} | 一致性: {len(entries) == len(names)}")
++    print(f"ZIP 完整性(CRC): {'OK' if bad is None else '损坏: ' + str(bad)}")
++    print("-" * 88)
++    for e in entries:
++        print(f"  {e['bytes']:>9,}  {e['sha256'][:16]}  {e['relative_path']}")
++    print("=" * 88)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/scripts/run_port_test.py b/scripts/run_port_test.py
+index c3650ef..91a6024 100644
+--- a/scripts/run_port_test.py
++++ b/scripts/run_port_test.py
+@@ -4,29 +4,53 @@ run_port_test.py - 端口通信与端到端实测运行脚本
+ 1. 若官方模拟器已启动并处于测试就绪状态 (监听 2026 端口)，本脚本将直接通过 HTTP 端口连入官方模拟器进行测试。
+ 2. 若官方模拟器未启动，本脚本会自动在本地 2026 端口拉起符合官方协议的高真 Mock 服务器进行闭环测试。
+ 
++运行档位 (--profile)：
++  stable           稳定版 v3.4.2 (径向自适应覆盖实验关闭) —— 交付默认档位
++  radial_candidate 径向候选版 v3.4.2+radial (沿射线自适应选点，实验特性)
++两个档位在 P3 下均强制 enable_2opt_head=True，配置完全一致，仅径向开关不同。
++
+ 参数支持：
+ --port 2026 (默认 2026)
+ --robot_id <参赛队号> (默认读取环境变量 ROBOT_ID 或 team2026)
+ --prob p3 或 p4 (默认 p3)
+ --version B 或 C (默认 C)
++--profile stable 或 radial_candidate (默认 stable)
++--radial_coverage on|off (径向开关低级覆盖项，必须与 --profile 一致，否则报错退出)
+ --sources 12 (干扰源个数，仅在本地 mock 时生效)
++--emit_summary_json <path> (可选：把最终生效配置与本局汇总落盘为审计 JSON)
+ """
+ 
+ import sys
+ import os
++import json
+ import time
+ import socket
++import hashlib
+ import argparse
+ import threading
++import subprocess
+ 
+ sys.stdout.reconfigure(encoding="utf-8")
++sys.stderr.reconfigure(encoding="utf-8")
+ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+ 
+-import subprocess
+ from src.client_runner import HttpSimDriver, audit_http_action_log
+ from src.strategy_engine import StrategyEngine
+ from src.mock_server import run_mock_server
+ 
++PROFILE_STABLE = "stable"
++PROFILE_RADIAL = "radial_candidate"
++
++# 参与"源码标识"指纹的同目录/上级目录源码文件（相对工作区根）
++SOURCE_FINGERPRINT_FILES = [
++    "src/strategy_engine.py",
++    "src/local_decision.py",
++    "src/conservative_grid.py",
++    "src/evidence_tracker.py",
++    "src/client_runner.py",
++    "scripts/run_port_test.py",
++]
++
+ 
+ def is_port_in_use(port: int, host: str = "127.0.0.1") -> bool:
+     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+@@ -38,6 +62,10 @@ def is_port_in_use(port: int, host: str = "127.0.0.1") -> bool:
+             return False
+ 
+ 
++def workspace_root() -> str:
++    return os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
++
++
+ def get_code_version() -> str:
+     """获取当前代码版本与 git commit 信息"""
+     try:
+@@ -50,15 +78,63 @@ def get_code_version() -> str:
+         return "v3.4.2-guard-upperbound (2026-09-12)"
+ 
+ 
++def get_git_dirty() -> bool:
++    """工作区是否存在未提交改动（源码标识的可信度声明）"""
++    try:
++        out = subprocess.check_output(
++            ["git", "status", "--porcelain"],
++            stderr=subprocess.DEVNULL
++        ).decode("utf-8").strip()
++        return len(out) > 0
++    except Exception:
++        return True
++
++
++def get_source_fingerprint() -> dict:
++    """逐文件 sha256(前16位) 源码标识，用于证明本次实际运行的源码身份"""
++    root = workspace_root()
++    fp = {}
++    for rel in SOURCE_FINGERPRINT_FILES:
++        path = os.path.join(root, rel)
++        try:
++            with open(path, "rb") as f:
++                fp[rel] = hashlib.sha256(f.read()).hexdigest()[:16]
++        except OSError:
++            fp[rel] = "MISSING"
++    return fp
++
++
++def resolve_profile(args, parser):
++    """解析并校验运行档位与径向开关，返回 (profile, enable_radial_coverage)"""
++    profile = args.profile
++    profile_radial = (profile == PROFILE_RADIAL)
++
++    if args.radial_coverage is None:
++        enable_radial = profile_radial
++    else:
++        enable_radial = (args.radial_coverage.lower() == "on")
++        if enable_radial != profile_radial:
++            parser.error(
++                f"--radial_coverage={args.radial_coverage} 与 --profile={profile} 冲突；"
++                f"请使用 --profile {PROFILE_STABLE}|{PROFILE_RADIAL} 明确选择档位（两者必须一致）"
++            )
++    return profile, enable_radial
++
++
+ def main():
+     parser = argparse.ArgumentParser(description="无线电干扰源定位清除 HTTP 端口官方对接与实测程序")
+     parser.add_argument("--port", type=int, default=2026, help="测试端口，默认 2026")
+     parser.add_argument("--robot_id", type=str, default=os.getenv("ROBOT_ID", "team2026"), help="机器狗标识 (参赛队号，默认读取环境变量 ROBOT_ID 或 team2026)")
+     parser.add_argument("--prob", type=str, default="p3", choices=["p3", "p4"], help="测试问题: p3 或 p4")
+     parser.add_argument("--version", type=str, default="C", choices=["B", "C"], help="策略版本: B 或 C (默认 C)")
++    parser.add_argument("--profile", type=str, default=PROFILE_STABLE, choices=[PROFILE_STABLE, PROFILE_RADIAL],
++                        help="运行档位: stable (稳定版 v3.4.2, 径向关闭, 默认) 或 radial_candidate (径向候选版)")
++    parser.add_argument("--radial_coverage", type=str, default=None, choices=["on", "off"],
++                        help="径向自适应覆盖检测点低级覆盖项；默认随 --profile，若与档位冲突则直接报错")
+     parser.add_argument("--scan_at_clearance", type=str, default="off", choices=["off", "on"], help="P3清除点额外扫未知频道开关: off (默认推荐) 或 on (用于复现基线)")
+     parser.add_argument("--enable_2opt_head", type=str, default=None, choices=["on", "off"], help="首任务2-opt拓扑优化开关: 默认在P3下开启(on)，P4下禁用(off)")
+     parser.add_argument("--sources", type=int, default=12, help="Mock 环境干扰源数量 (10-16)")
++    parser.add_argument("--emit_summary_json", type=str, default=None, help="可选：将最终生效配置与本局汇总写入指定 JSON 路径")
+     parser.add_argument("--verbose", action="store_true", help="打印详细动作日志")
+ 
+     args = parser.parse_args()
+@@ -68,11 +144,25 @@ def main():
+     version = args.version.upper()
+     robot_id = args.robot_id
+     scan_at_clearance = (args.scan_at_clearance.lower() == "on")
++
++    profile, enable_radial_requested = resolve_profile(args, parser)
++
+     if args.enable_2opt_head is not None:
+         enable_2opt_head = (args.enable_2opt_head.lower() == "on")
+     else:
+         enable_2opt_head = (not is_p4)  # P3 默认开启 True，P4 强制保持 False
++
++    # 径向候选仅作用于 P3；P4 严格冻结
++    enable_adaptive_radial_coverage = bool(enable_radial_requested and not is_p4)
++
+     code_version = get_code_version()
++    git_dirty = get_git_dirty()
++    fingerprint = get_source_fingerprint()
++    profile_label = (
++        f"{PROFILE_RADIAL} (径向候选版 v3.4.2+radial, 实验特性, 径向开关=ON)"
++        if profile == PROFILE_RADIAL
++        else f"{PROFILE_STABLE} (稳定版 v3.4.2, 径向实验关闭, 径向开关=OFF)"
++    )
+ 
+     server_thread = None
+     httpd = None
+@@ -95,20 +185,35 @@ def main():
+         version=version,
+         scan_at_clearance=scan_at_clearance,
+         enable_2opt_head=enable_2opt_head,
++        enable_adaptive_radial_coverage=enable_adaptive_radial_coverage,
+         verbose=args.verbose,
+     )
+ 
+     print("=" * 85)
+     print("【2026 数模国赛 B 题】HTTP 端口通信与官方演练实测系统")
+     print("=" * 85)
++    print(f"运行档位 (Profile):      {profile_label}")
+     print(f"代码版本:               {code_version}")
+     print(f"机器狗标识 (队号):      {robot_id}")
+     print(f"目标服务端口:           {port}")
+     print(f"任务模式:               {'问题四 (含未知定向源 - 依赖严格隔离冻结模式)' if is_p4 else '问题三 (全向源 - 完整计划安全覆盖版)'}")
+     print(f"调度策略版本:           版本 {engine.version} ({'开放路线重排+动态剪枝' if engine.version == 'C' else '固定顺序基线'})")
+-    print(f"首任务 2-opt 优化:      {'ON (启用开放路线首任务拓扑换优)' if engine.enable_2opt_head else 'OFF (首任务保持锁定)'}")
+-    print(f"清除点额外扫描开关:     {'ON (基线复现模式: 顺路盲扫)' if engine.scan_at_clearance else 'OFF (优化模式: 仅保留必要搜索与定位扫描)'}")
+-    print(f"底层决策与网格依赖:     {engine.grid_class.__module__}.{engine.grid_class.__name__} / {engine.local_decision.__class__.__module__}.{engine.local_decision.__class__.__name__}")
++    print("-" * 85)
++    print("【最终生效配置 (Effective Config，以下为引擎对象实际取值)】")
++    print(f"  1. is_p4:                              {engine.is_p4}")
++    print(f"  2. version:                            {engine.version}")
++    print(f"  3. enable_pruning:                     {engine.enable_pruning}")
++    print(f"  4. scan_at_clearance:                  {engine.scan_at_clearance}")
++    print(f"  5. enable_2opt_head:                   {engine.enable_2opt_head}")
++    print(f"  6. enable_adaptive_radial_coverage:    {engine.enable_adaptive_radial_coverage}")
++    print(f"  7. enable_reschedule_after_followup:   不存在于当前代码 (等效关闭, 未实现该实验路径)")
++    print(f"  8. 底层决策与网格依赖:                 {engine.grid_class.__module__}.{engine.grid_class.__name__} / {engine.local_decision.__class__.__module__}.{engine.local_decision.__class__.__name__}")
++    print("-" * 85)
++    print("【源码标识 (Source Identity, sha256 前16位)】")
++    print(f"  git HEAD:                {'(工作区存在未提交改动, 以文件指纹为准)' if git_dirty else '(工作区干净)'}")
++    for rel, digest in fingerprint.items():
++        print(f"  {rel:<38} {digest}")
++    print("-" * 85)
+     print(f"本局明文 HTTP 日志归档: {driver.session_file}")
+ 
+     print("\n>>> 开始执行自动搜索、定位与清除主策略 <<<")
+@@ -127,12 +232,16 @@ def main():
+     t_per_n = (vt / cleared_n) if cleared_n > 0 else 0.0
+ 
+     print(f"演练策略与版本:         {summary['version']} | 代码版本: {code_version}")
++    print(f"运行档位:               {profile_label}")
++    print(f"径向自适应覆盖开关:     {'ON (沿射线自适应选点, 实验特性)' if summary.get('enable_adaptive_radial_coverage') else 'OFF (径向实验关闭)'}")
++    print(f"径向调点次数:           {summary.get('radial_adjustments_count', 0)} 次")
+     print(f"首任务 2-opt 优化状态:  {'ON' if summary.get('enable_2opt_head') else 'OFF'} (派发首任务变更: {summary.get('dispatched_head_change_count', 0)} 轮, 内部交换: {summary.get('total_2opt_swaps', 0)} 次)")
+     print(f"清除点额外扫描开关:     {'ON' if summary.get('scan_at_clearance') else 'OFF'}")
+     cov_cnt = summary.get('absent_coverage_count', 0)
+     ub_cnt = summary.get('absent_upper_bound_count', 0)
+     cov_label = "168单元覆盖完备" if not is_p4 else "三角形网格完备覆盖"
+     print(f"证明空频道总数:         {summary['absent_count']} 个 (实际阴性覆盖: {cov_cnt} 个 [{cov_label}] | 16源上限直接排除: {ub_cnt} 个)")
++    print(f"未决频道数:             {summary['unsolved_count']} 个 (成功清除 {cleared_n} 个, 场景已决率 {(20 - summary['unsolved_count']) / 20.0 * 100:.1f}%)")
+     print(f"总虚拟时间 T:           {vt:.2f} 秒 (平均单目标耗时 T/N: {t_per_n:.2f} 秒/目标)")
+     print(f"预测网格空集异常计数:   {summary.get('empty_prediction_count', 0)} 次")
+     print(f"计划未覆盖异常计数:     {summary.get('plan_uncovered_count', 0)} 次")
+@@ -159,6 +268,40 @@ def main():
+     print("  * 官方演练的真实改善情况必须以本次官方实际输出指标为准。")
+     print("=" * 85)
+ 
++    if args.emit_summary_json:
++        out_path = os.path.abspath(args.emit_summary_json)
++        os.makedirs(os.path.dirname(out_path), exist_ok=True)
++        payload = {
++            "profile": profile,
++            "profile_label": profile_label,
++            "code_version": code_version,
++            "git_dirty": git_dirty,
++            "source_fingerprint": fingerprint,
++            "effective_config": {
++                "is_p4": engine.is_p4,
++                "version": engine.version,
++                "enable_pruning": engine.enable_pruning,
++                "scan_at_clearance": engine.scan_at_clearance,
++                "enable_2opt_head": engine.enable_2opt_head,
++                "enable_adaptive_radial_coverage": engine.enable_adaptive_radial_coverage,
++                "grid_class": f"{engine.grid_class.__module__}.{engine.grid_class.__name__}",
++                "local_decision_class": f"{engine.local_decision.__class__.__module__}.{engine.local_decision.__class__.__name__}",
++            },
++            "scenario": {
++                "port": port,
++                "robot_id": robot_id,
++                "sources_requested": args.sources if httpd is not None else "外部端口(未由本脚本指定)",
++                "external_official_port": httpd is None,
++            },
++            "summary": {k: v for k, v in summary.items() if k != "radial_events"},
++            "radial_events": summary.get("radial_events", []),
++            "http_audit": audit,
++            "session_file": driver.session_file,
++        }
++        with open(out_path, "w", encoding="utf-8") as f:
++            json.dump(payload, f, indent=2, ensure_ascii=False)
++        print(f"\n[审计落盘] 最终生效配置与本局汇总已写入: {out_path}")
++
+     if httpd is not None:
+         print("\n正在停止本地 Mock 服务器...")
+         httpd.shutdown()
+@@ -167,4 +310,3 @@ def main():
+ 
+ if __name__ == "__main__":
+     main()
+-
+diff --git a/scripts/verify_launch_profiles.py b/scripts/verify_launch_profiles.py
+new file mode 100644
+index 0000000..f2ff2d1
+--- /dev/null
++++ b/scripts/verify_launch_profiles.py
+@@ -0,0 +1,136 @@
++"""
++verify_launch_profiles.py - 启动档位接线验收（不连接官方端口、不跑完整场景）
++
++核验内容：
++1. run_port_test.py 的 --profile {stable, radial_candidate} 开关确实存在并被解析；
++2. 两个档位在 P3 下均落到 enable_2opt_head=True；
++3. stable 档位落到 enable_adaptive_radial_coverage=False（稳定基线 v3.4.2 保持默认关闭）；
++4. radial_candidate 档位在 P3 下落 True，在 P4 下被强制冻结为 False（双重保护）；
++5. 引擎对象上的实际取值即为"最终生效配置"（打印即证据）。
++
++输出：results/delivery/launch_profile_matrix.json
++"""
++
++import sys
++import os
++import json
++import argparse
++import subprocess
++
++sys.stdout.reconfigure(encoding="utf-8")
++sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
++
++from src.strategy_engine import StrategyEngine
++
++ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
++OUT_DIR = os.path.join(ROOT, "results", "delivery")
++
++
++class NullDriver:
++    """空驱动：仅用于构造引擎对象读取最终生效配置，不产生任何通信"""
++    def enter(self):
++        return {}
++
++    def measure(self, pos, channel):
++        return {}
++
++    def clear(self, pos, channel):
++        return {}
++
++    def exit(self):
++        return {}
++
++
++def build(is_p4: bool, profile: str) -> StrategyEngine:
++    """完全复刻 run_port_test.py 的档位解析与传参逻辑"""
++    enable_radial_requested = (profile == "radial_candidate")
++    enable_2opt_head = (not is_p4)
++    enable_adaptive_radial_coverage = bool(enable_radial_requested and not is_p4)
++    return StrategyEngine(
++        driver=NullDriver(),
++        is_p4=is_p4,
++        version="C",
++        scan_at_clearance=False,
++        enable_2opt_head=enable_2opt_head,
++        enable_adaptive_radial_coverage=enable_adaptive_radial_coverage,
++        verbose=False,
++    )
++
++
++def main():
++    os.makedirs(OUT_DIR, exist_ok=True)
++
++    # ---- 1. 入口开关存在性 ----
++    help_txt = subprocess.check_output(
++        [sys.executable, os.path.join(ROOT, "scripts", "run_port_test.py"), "--help"],
++        stderr=subprocess.STDOUT, cwd=ROOT
++    ).decode("utf-8", errors="replace")
++    has_profile = "--profile" in help_txt and "radial_candidate" in help_txt
++    has_radial = "--radial_coverage" in help_txt
++
++    print("=" * 88)
++    print("【启动档位接线验收 (不连接官方端口)】")
++    print("=" * 88)
++    print(f"run_port_test.py --help 暴露 --profile {{stable,radial_candidate}}: {has_profile}")
++    print(f"run_port_test.py --help 暴露 --radial_coverage {{on,off}}:          {has_radial}")
++
++    # ---- 2. 档位矩阵 ----
++    cases = [
++        ("P3", False, "stable"),
++        ("P3", False, "radial_candidate"),
++        ("P4", True, "stable"),
++        ("P4", True, "radial_candidate"),
++    ]
++    rows = []
++    ok = True
++    print("-" * 88)
++    print(f"{'问题':<4} {'档位':<18} {'is_p4':<6} {'enable_2opt_head':<18} {'enable_adaptive_radial_coverage':<32} {'判定'}")
++    for prob_name, is_p4, profile in cases:
++        eng = build(is_p4, profile)
++        cfg = {
++            "prob": prob_name,
++            "profile": profile,
++            "is_p4": eng.is_p4,
++            "version": eng.version,
++            "enable_pruning": eng.enable_pruning,
++            "scan_at_clearance": eng.scan_at_clearance,
++            "enable_2opt_head": eng.enable_2opt_head,
++            "enable_adaptive_radial_coverage": eng.enable_adaptive_radial_coverage,
++            "grid_class": f"{eng.grid_class.__module__}.{eng.grid_class.__name__}",
++            "local_decision_class": f"{eng.local_decision.__class__.__module__}.{eng.local_decision.__class__.__name__}",
++        }
++
++        if is_p4:
++            expect_2opt, expect_radial = False, False
++        else:
++            expect_2opt = True
++            expect_radial = (profile == "radial_candidate")
++        passed = (eng.enable_2opt_head == expect_2opt) and (eng.enable_adaptive_radial_coverage == expect_radial)
++        ok = ok and passed
++        cfg["expect_2opt_head"] = expect_2opt
++        cfg["expect_adaptive_radial_coverage"] = expect_radial
++        cfg["passed"] = passed
++        rows.append(cfg)
++        print(f"{prob_name:<4} {profile:<18} {str(eng.is_p4):<6} {str(eng.enable_2opt_head):<18} "
++              f"{str(eng.enable_adaptive_radial_coverage):<32} {'PASS' if passed else 'FAIL'}")
++
++    print("-" * 88)
++    print(f"总体判定: {'PASS —— 稳定档/径向候选档接线正确, P4 双重冻结' if (ok and has_profile) else 'FAIL'}")
++    print("=" * 88)
++
++    payload = {
++        "entry_help_exposes_profile_switch": has_profile,
++        "entry_help_exposes_radial_coverage_switch": has_radial,
++        "profile_matrix": rows,
++        "overall_pass": bool(ok and has_profile and has_radial),
++        "note": "本脚本仅构造引擎对象读取最终生效配置，不发起任何 HTTP 通信，不连接官方端口。",
++    }
++    with open(os.path.join(OUT_DIR, "launch_profile_matrix.json"), "w", encoding="utf-8") as f:
++        json.dump(payload, f, indent=2, ensure_ascii=False)
++
++    if not payload["overall_pass"]:
++        raise SystemExit(1)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/scripts/verify_p3_radial_coverage.py b/scripts/verify_p3_radial_coverage.py
+new file mode 100644
+index 0000000..c4f1dca
+--- /dev/null
++++ b/scripts/verify_p3_radial_coverage.py
+@@ -0,0 +1,188 @@
++"""
++verify_p3_radial_coverage.py - P3 径向自适应覆盖检测点对比评测与严格计费公式核验
++
++场景设定：
++1. 3 组全新场景：10 源 (seed=5010), 13 源 (seed=5013), 16 源 (seed=5016)
++2. 同场景配对对比：Baseline (关闭) vs Radial (开启)
++3. 严格审计：
++   - 100% 完整发现与清除证明 (cleared_count == sources, unsolved == 0)
++   - 原始动作计费公式精确校验: T == L/5 + N_switch + 5*N_measure + 3*N_clear_fail + 5*N_clear_succ
++   - 记录实际选用的检测半径及选点快照
++   - 提取“位置改变 -> 后续动作变化”全流程实例
++"""
++
++import sys
++import os
++import csv
++import json
++import time
++import math
++import numpy as np
++
++sys.stdout.reconfigure(encoding="utf-8")
++sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
++
++from src.sim_env import SimEnvironment, LocalSimDriver
++from src.strategy_engine import StrategyEngine
++
++
++def audit_billing_formula(env: SimEnvironment, virtual_time: float) -> tuple[bool, float, dict]:
++    """严格校验计费公式的一致性"""
++    L = env.total_distance_m
++    n_sw = env.switch_count
++    n_meas = env.measure_count
++    n_fail = env.clear_fail_count
++    n_succ = env.clear_succ_count
++
++    expected_t = L / 5.0 + n_sw + 5.0 * n_meas + 3.0 * n_fail + 5.0 * n_succ
++    diff = abs(virtual_time - expected_t)
++    valid = diff < 1e-4
++
++    details = {
++        "virtual_time": virtual_time,
++        "expected_time": expected_t,
++        "diff": diff,
++        "distance_m": L,
++        "time_from_dist": L / 5.0,
++        "switch_count": n_sw,
++        "measure_count": n_meas,
++        "clear_fail_count": n_fail,
++        "clear_succ_count": n_succ,
++    }
++    return valid, diff, details
++
++
++def run_experiment():
++    print("=" * 80)
++    print("【P3 径向自适应覆盖检测点】3 组新场景本地验证与严格计费核验")
++    print("=" * 80)
++
++    test_cases = [
++        {"case_id": "P3-New-10src", "sources": 10, "seed": 5010},
++        {"case_id": "P3-New-13src", "sources": 13, "seed": 5013},
++        {"case_id": "P3-New-16src", "sources": 16, "seed": 5016},
++    ]
++
++    records = []
++    detailed_events = {}
++
++    for tc in test_cases:
++        case_id = tc["case_id"]
++        n_src = tc["sources"]
++        seed = tc["seed"]
++
++        print(f"\n>>> 正在评测案例: {case_id} (源数量={n_src}, 随机种子={seed}) <<<")
++
++        # 1. 运行 Baseline (关闭径向自适应选点)
++        env_base = SimEnvironment.generate_random_case(num_sources=n_src, is_p4=False, seed=seed)
++        driver_base = LocalSimDriver(env_base)
++        eng_base = StrategyEngine(
++            driver=driver_base,
++            is_p4=False,
++            version="C",
++            enable_adaptive_radial_coverage=False,
++            verbose=False,
++        )
++        res_base = eng_base.execute()
++
++        v_valid_base, v_diff_base, v_det_base = audit_billing_formula(env_base, res_base["virtual_time_s"])
++        print(f"  [Baseline] 清除={res_base['cleared_count']}/{n_src}, 虚拟耗时={res_base['virtual_time_s']:.2f}s, "
++              f"里程={env_base.total_distance_m:.1f}m, 计费校验={'PASS' if v_valid_base else 'FAIL'} (误差={v_diff_base:.6f}s)")
++
++        # 2. 运行 Radial (开启径向自适应选点)
++        env_rad = SimEnvironment.generate_random_case(num_sources=n_src, is_p4=False, seed=seed)
++        driver_rad = LocalSimDriver(env_rad)
++        eng_rad = StrategyEngine(
++            driver=driver_rad,
++            is_p4=False,
++            version="C",
++            enable_adaptive_radial_coverage=True,
++            verbose=False,
++        )
++        res_rad = eng_rad.execute()
++
++        v_valid_rad, v_diff_rad, v_det_rad = audit_billing_formula(env_rad, res_rad["virtual_time_s"])
++        saved_t = res_base["virtual_time_s"] - res_rad["virtual_time_s"]
++        saved_d = env_base.total_distance_m - env_rad.total_distance_m
++        print(f"  [Radial]   清除={res_rad['cleared_count']}/{n_src}, 虚拟耗时={res_rad['virtual_time_s']:.2f}s, "
++              f"里程={env_rad.total_distance_m:.1f}m, 计费校验={'PASS' if v_valid_rad else 'FAIL'} (误差={v_diff_rad:.6f}s)")
++        print(f"  [对比效果] 净节省虚拟时间={saved_t:+.2f}s, 里程节省={saved_d:+.1f}m, 径向调点次数={res_rad['radial_adjustments_count']}")
++
++        # 记录实际选用的半径
++        chosen_radii = [ev["chosen_r"] for ev in res_rad.get("radial_events", [])]
++        print(f"  [调点详情] 触发径向调整的半径列表: {chosen_radii}")
++
++        record = {
++            "case_id": case_id,
++            "sources": n_src,
++            "seed": seed,
++            # 基线指标
++            "base_cleared": res_base["cleared_count"],
++            "base_unsolved": res_base["unsolved_count"],
++            "base_T_s": res_base["virtual_time_s"],
++            "base_dist_m": env_base.total_distance_m,
++            "base_meas_cnt": env_base.measure_count,
++            "base_switch_cnt": env_base.switch_count,
++            "base_fail_cnt": env_base.clear_fail_count,
++            "base_real_t_s": res_base["real_time_s"],
++            "base_billing_valid": v_valid_base,
++            # 新功能指标
++            "rad_cleared": res_rad["cleared_count"],
++            "rad_unsolved": res_rad["unsolved_count"],
++            "rad_T_s": res_rad["virtual_time_s"],
++            "rad_dist_m": env_rad.total_distance_m,
++            "rad_meas_cnt": env_rad.measure_count,
++            "rad_switch_cnt": env_rad.switch_count,
++            "rad_fail_cnt": env_rad.clear_fail_count,
++            "rad_real_t_s": res_rad["real_time_s"],
++            "rad_billing_valid": v_valid_rad,
++            # 差异与调点
++            "saved_T_s": saved_t,
++            "saved_dist_m": saved_d,
++            "radial_adjust_cnt": res_rad["radial_adjustments_count"],
++            "chosen_radii": str(chosen_radii),
++        }
++        records.append(record)
++
++        detailed_events[case_id] = {
++            "radial_events": res_rad.get("radial_events", []),
++            "baseline_search_visited": res_base.get("search_points_visited", []),
++            "radial_search_visited": res_rad.get("search_points_visited", []),
++            "base_billing_details": v_det_base,
++            "rad_billing_details": v_det_rad,
++        }
++
++    # 导出 CSV 报告
++    os.makedirs("results", exist_ok=True)
++    csv_path = "results/p3_radial_coverage_comparison.csv"
++    with open(csv_path, "w", newline="", encoding="utf-8") as f:
++        writer = csv.writer(f)
++        writer.writerow([
++            "Case_ID", "Sources", "Seed",
++            "Base_Cleared", "Base_T_s", "Base_Dist_m", "Base_Meas", "Base_Switch", "Base_ClearFail", "Base_RealTime_s", "Base_Billing_Valid",
++            "Rad_Cleared", "Rad_T_s", "Rad_Dist_m", "Rad_Meas", "Rad_Switch", "Rad_ClearFail", "Rad_RealTime_s", "Rad_Billing_Valid",
++            "Saved_T_s", "Saved_Dist_m", "Radial_Adjust_Count", "Chosen_Radii",
++        ])
++        for r in records:
++            writer.writerow([
++                r["case_id"], r["sources"], r["seed"],
++                r["base_cleared"], f"{r['base_T_s']:.2f}", f"{r['base_dist_m']:.1f}", r["base_meas_cnt"], r["base_switch_cnt"], r["base_fail_cnt"], f"{r['base_real_t_s']:.3f}", r["base_billing_valid"],
++                r["rad_cleared"], f"{r['rad_T_s']:.2f}", f"{r['rad_dist_m']:.1f}", r["rad_meas_cnt"], r["rad_switch_cnt"], r["rad_fail_cnt"], f"{r['rad_real_t_s']:.3f}", r["rad_billing_valid"],
++                f"{r['saved_T_s']:.2f}", f"{r['saved_dist_m']:.1f}", r["radial_adjust_cnt"], r["chosen_radii"],
++            ])
++
++    # 导出详细审计 JSON
++    json_path = "results/p3_radial_coverage_audit.json"
++    with open(json_path, "w", encoding="utf-8") as f:
++        json.dump(detailed_events, f, indent=2, ensure_ascii=False)
++
++    print("\n" + "=" * 80)
++    print(f"评测完成！CSV 结果已保存至: {csv_path}")
++    print(f"详细审计快照已保存至: {json_path}")
++    print("=" * 80)
++
++    return records, detailed_events
++
++
++if __name__ == "__main__":
++    run_experiment()
+diff --git a/scripts/verify_p3_radial_coverage_rigorous.py b/scripts/verify_p3_radial_coverage_rigorous.py
+new file mode 100644
+index 0000000..595129a
+--- /dev/null
++++ b/scripts/verify_p3_radial_coverage_rigorous.py
+@@ -0,0 +1,311 @@
++"""
++verify_p3_radial_coverage_rigorous.py - P3 径向自适应覆盖检测点多场景严格配对验证与计费核验
++
++规范：
++1. 实际生效配置严格绑定 v3.4.2 稳定基线：
++   - enable_2opt_head = True (关键纠偏：此前默认为 False，现与 v3.4.2 正式交付版一致)
++   - scan_at_clearance = False
++   - is_p4 = False
++   - enable_reschedule_after_followup = False (关闭)
++   - enable_adaptive_radial_coverage: Baseline 为 False, Radial 为 True
++2. 评测场景：
++   - 纠偏重跑 3 组已有案例: seed=5010 (10源), seed=5013 (13源), seed=5016 (16源)
++   - 全新独立 6 组案例:
++     * N=10: seed=6010, seed=6110
++     * N=13: seed=6013, seed=6113
++     * N=16: seed=6016, seed=6116
++3. 严格计费公式核验:
++   T = L/5 + 5M + S + 3F + 5N
++   其中: L为里程, M为测量次数, S为切频次数, F为清除失败次数, N为清除成功次数
++   核算采用未舍入原始浮点数，确认清除动作不改变测量频道。
++4. 导出:
++   - results/p3_radial_coverage_3cases_corrected.csv
++   - results/p3_radial_coverage_6new_cases.csv
++   - results/p3_radial_coverage_9cases_summary.csv
++   - results/p3_radial_coverage_9cases_audit.json
++"""
++
++import sys
++import os
++import csv
++import json
++import time
++import math
++import subprocess
++import numpy as np
++
++sys.stdout.reconfigure(encoding="utf-8")
++sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
++
++from src.sim_env import SimEnvironment, LocalSimDriver
++from src.strategy_engine import StrategyEngine
++
++
++def get_git_commit() -> str:
++    try:
++        out = subprocess.check_output(["git", "rev-parse", "HEAD"], stderr=subprocess.DEVNULL)
++        return out.decode("utf-8").strip()
++    except Exception:
++        return "UNKNOWN"
++
++
++def audit_billing_exact(env: SimEnvironment, virtual_time: float) -> tuple[bool, float, dict]:
++    L = env.total_distance_m
++    M = env.measure_count
++    S = env.switch_count
++    F = env.clear_fail_count
++    N = env.clear_succ_count
++
++    expected_t = L / 5.0 + 5.0 * M + 1.0 * S + 3.0 * F + 5.0 * N
++    diff = abs(virtual_time - expected_t)
++    valid = diff < 1e-3  # 浮点累加容差
++
++    details = {
++        "virtual_time": virtual_time,
++        "expected_time": expected_t,
++        "diff_raw": diff,
++        "distance_m": L,
++        "move_time_s": L / 5.0,
++        "measure_count": M,
++        "measure_time_s": 5.0 * M,
++        "switch_count": S,
++        "switch_time_s": 1.0 * S,
++        "clear_fail_count": F,
++        "clear_fail_time_s": 3.0 * F,
++        "clear_succ_count": N,
++        "clear_succ_time_s": 5.0 * N,
++    }
++    return valid, diff, details
++
++
++def run_single_case(cid: str, n_src: int, seed: int):
++    # 1. 运行 Baseline (开启 2-opt 首任务，关闭径向调点)
++    env_base = SimEnvironment.generate_random_case(num_sources=n_src, is_p4=False, seed=seed)
++    drv_base = LocalSimDriver(env_base)
++    eng_base = StrategyEngine(
++        driver=drv_base,
++        is_p4=False,
++        version="C",
++        scan_at_clearance=False,
++        enable_2opt_head=True,
++        enable_adaptive_radial_coverage=False,
++        verbose=False,
++    )
++    t0_b = time.perf_counter()
++    res_base = eng_base.execute()
++    real_t_base = time.perf_counter() - t0_b
++    valid_b, diff_b, det_b = audit_billing_exact(env_base, res_base["virtual_time_s"])
++
++    # 2. 运行 Radial (开启 2-opt 首任务，开启径向调点)
++    env_rad = SimEnvironment.generate_random_case(num_sources=n_src, is_p4=False, seed=seed)
++    drv_rad = LocalSimDriver(env_rad)
++    eng_rad = StrategyEngine(
++        driver=drv_rad,
++        is_p4=False,
++        version="C",
++        scan_at_clearance=False,
++        enable_2opt_head=True,
++        enable_adaptive_radial_coverage=True,
++        verbose=False,
++    )
++    t0_r = time.perf_counter()
++    res_rad = eng_rad.execute()
++    real_t_rad = time.perf_counter() - t0_r
++    valid_r, diff_r, det_r = audit_billing_exact(env_rad, res_rad["virtual_time_s"])
++
++    # 细分贡献分解
++    dt_total = res_base["virtual_time_s"] - res_rad["virtual_time_s"]
++    dt_move = (env_base.total_distance_m - env_rad.total_distance_m) / 5.0
++    dt_meas = 5.0 * (env_base.measure_count - env_rad.measure_count)
++    dt_sw = 1.0 * (env_base.switch_count - env_rad.switch_count)
++    dt_fail = 3.0 * (env_base.clear_fail_count - env_rad.clear_fail_count)
++
++    chosen_radii = [ev["chosen_r"] for ev in res_rad.get("radial_events", [])]
++    expected_saves = [ev["expected_save_s"] for ev in res_rad.get("radial_events", [])]
++    sum_expected_save = sum(expected_saves)
++
++    row = {
++        "case_id": cid,
++        "sources": n_src,
++        "seed": seed,
++        # Baseline
++        "base_cleared": res_base["cleared_count"],
++        "base_unsolved": res_base["unsolved_count"],
++        "base_T_s": res_base["virtual_time_s"],
++        "base_dist_m": env_base.total_distance_m,
++        "base_M": env_base.measure_count,
++        "base_S": env_base.switch_count,
++        "base_F": env_base.clear_fail_count,
++        "base_N": env_base.clear_succ_count,
++        "base_real_t_s": real_t_base,
++        "base_diff_raw": diff_b,
++        "base_valid": valid_b,
++        # Radial
++        "rad_cleared": res_rad["cleared_count"],
++        "rad_unsolved": res_rad["unsolved_count"],
++        "rad_T_s": res_rad["virtual_time_s"],
++        "rad_dist_m": env_rad.total_distance_m,
++        "rad_M": env_rad.measure_count,
++        "rad_S": env_rad.switch_count,
++        "rad_F": env_rad.clear_fail_count,
++        "rad_N": env_rad.clear_succ_count,
++        "rad_real_t_s": real_t_rad,
++        "rad_diff_raw": diff_r,
++        "rad_valid": valid_r,
++        # 差异与分解
++        "saved_T_s": dt_total,
++        "contrib_move_s": dt_move,
++        "contrib_meas_s": dt_meas,
++        "contrib_switch_s": dt_sw,
++        "contrib_fail_s": dt_fail,
++        "saved_dist_m": env_base.total_distance_m - env_rad.total_distance_m,
++        # 选点统计
++        "radial_adjust_cnt": res_rad["radial_adjustments_count"],
++        "sum_expected_save_s": sum_expected_save,
++        "chosen_radii": str(chosen_radii),
++    }
++
++    audit_entry = {
++        "case_id": cid,
++        "sources": n_src,
++        "seed": seed,
++        "base_billing": det_b,
++        "rad_billing": det_r,
++        "radial_events": res_rad.get("radial_events", []),
++        "search_visited_base": res_base.get("search_points_visited", []),
++        "search_visited_rad": res_rad.get("search_points_visited", []),
++    }
++
++    print(f"  [{cid}] Base T={res_base['virtual_time_s']:.2f}s | Rad T={res_rad['virtual_time_s']:.2f}s | "
++          f"ΔT={dt_total:+.2f}s (移动{dt_move:+.1f}s, 测量{dt_meas:+.1f}s, 切频{dt_sw:+.1f}s, 失败{dt_fail:+.1f}s) | "
++          f"调点={res_rad['radial_adjustments_count']}次 (预估={sum_expected_save:.1f}s) | 计费={'PASS' if valid_b and valid_r else 'FAIL'}")
++
++    return row, audit_entry
++
++
++def save_csv(path: str, records: list):
++    os.makedirs(os.path.dirname(path), exist_ok=True)
++    with open(path, "w", newline="", encoding="utf-8") as f:
++        writer = csv.writer(f)
++        writer.writerow([
++            "Case_ID", "Sources", "Seed",
++            "Base_Cleared", "Base_T_s", "Base_Dist_m", "Base_M", "Base_S", "Base_F", "Base_N", "Base_RealTime_s", "Base_BillDiff_s",
++            "Rad_Cleared", "Rad_T_s", "Rad_Dist_m", "Rad_M", "Rad_S", "Rad_F", "Rad_N", "Rad_RealTime_s", "Rad_BillDiff_s",
++            "Saved_T_s", "Contrib_Move_s", "Contrib_Meas_s", "Contrib_Switch_s", "Contrib_Fail_s", "Saved_Dist_m",
++            "Radial_Adjust_Count", "Sum_Expected_Save_s", "Chosen_Radii",
++        ])
++        for r in records:
++            writer.writerow([
++                r["case_id"], r["sources"], r["seed"],
++                r["base_cleared"], f"{r['base_T_s']:.2f}", f"{r['base_dist_m']:.1f}", r["base_M"], r["base_S"], r["base_F"], r["base_N"], f"{r['base_real_t_s']:.3f}", f"{r['base_diff_raw']:.6f}",
++                r["rad_cleared"], f"{r['rad_T_s']:.2f}", f"{r['rad_dist_m']:.1f}", r["rad_M"], r["rad_S"], r["rad_F"], r["rad_N"], f"{r['rad_real_t_s']:.3f}", f"{r['rad_diff_raw']:.6f}",
++                f"{r['saved_T_s']:.2f}", f"{r['contrib_move_s']:.2f}", f"{r['contrib_meas_s']:.2f}", f"{r['contrib_switch_s']:.2f}", f"{r['contrib_fail_s']:.2f}", f"{r['saved_dist_m']:.1f}",
++                r["radial_adjust_cnt"], f"{r['sum_expected_save_s']:.2f}", r["chosen_radii"],
++            ])
++
++
++def analyze_records(name: str, records: list):
++    n = len(records)
++    saved_list = [r["saved_T_s"] for r in records]
++    wins = sum(1 for s in saved_list if s > 0.05)
++    ties = sum(1 for s in saved_list if abs(s) <= 0.05)
++    losses = sum(1 for s in saved_list if s < -0.05)
++
++    mean_saved = float(np.mean(saved_list))
++    max_regress = min(saved_list)
++    max_gain = max(saved_list)
++
++    tot_move = sum(r["contrib_move_s"] for r in records)
++    tot_meas = sum(r["contrib_meas_s"] for r in records)
++    tot_sw = sum(r["contrib_switch_s"] for r in records)
++    tot_fail = sum(r["contrib_fail_s"] for r in records)
++
++    # 去掉最大获益案例后的均值
++    without_max = [s for s in saved_list]
++    without_max.remove(max_gain)
++    mean_without_max = float(np.mean(without_max)) if without_max else 0.0
++
++    print(f"\n==================== 【{name}】统计汇总 ({n} 局) ====================")
++    print(f"胜 / 平 / 负:                   {wins} / {ties} / {losses}")
++    print(f"平均配对节省时间 (均值):         {mean_saved:+.2f} s")
++    print(f"最大单局退步 (最差负值):         {max_regress:+.2f} s")
++    print(f"最大单局获益 (最佳正值):         {max_gain:+.2f} s")
++    print(f"各项累计贡献分解:               移动={tot_move:+.2f}s, 测量={tot_meas:+.2f}s, 切频={tot_sw:+.2f}s, 失败清除={tot_fail:+.2f}s")
++    print(f"排除最大获益案例后平均节省:      {mean_without_max:+.2f} s")
++    print("=" * 65)
++
++    return {
++        "count": n,
++        "wins": wins,
++        "ties": ties,
++        "losses": losses,
++        "mean_saved_s": mean_saved,
++        "max_regression_s": max_regress,
++        "max_gain_s": max_gain,
++        "mean_without_max_gain_s": mean_without_max,
++        "contrib_total_move_s": tot_move,
++        "contrib_total_meas_s": tot_meas,
++        "contrib_total_switch_s": tot_sw,
++        "contrib_total_fail_s": tot_fail,
++    }
++
++
++def main():
++    commit = get_git_commit()
++    print("=" * 80)
++    print(f"【P3 径向自适应覆盖评测】当前 Git Commit: {commit}")
++    print("运行参数严格锁定:")
++    print("  - version = 'C'")
++    print("  - enable_2opt_head = True (v3.4.2 交付基线标准)")
++    print("  - scan_at_clearance = False")
++    print("  - is_p4 = False")
++    print("  - enable_reschedule_after_followup = False")
++    print("=" * 80)
++
++    # 1. 纠偏重跑 3 组案例 (seed 5010, 5013, 5016)
++    print("\n>>> 第一阶段：纠偏重跑原三组配对案例 (enable_2opt_head=True) <<<")
++    cases_3 = [
++        {"case_id": "P3-Corr-10src-5010", "sources": 10, "seed": 5010},
++        {"case_id": "P3-Corr-13src-5013", "sources": 13, "seed": 5013},
++        {"case_id": "P3-Corr-16src-5016", "sources": 16, "seed": 5016},
++    ]
++    records_3 = []
++    audits_all = {}
++    for c in cases_3:
++        r, a = run_single_case(c["case_id"], c["sources"], c["seed"])
++        records_3.append(r)
++        audits_all[c["case_id"]] = a
++
++    save_csv("results/p3_radial_coverage_3cases_corrected.csv", records_3)
++    analyze_records("纠偏后原 3 组案例", records_3)
++
++    # 2. 运行全新 6 组案例
++    print("\n>>> 第二阶段：全新 6 组独立场景配对测试 <<<")
++    cases_6 = [
++        {"case_id": "P3-New-10src-6010", "sources": 10, "seed": 6010},
++        {"case_id": "P3-New-10src-6110", "sources": 10, "seed": 6110},
++        {"case_id": "P3-New-13src-6013", "sources": 13, "seed": 6013},
++        {"case_id": "P3-New-13src-6113", "sources": 13, "seed": 6113},
++        {"case_id": "P3-New-16src-6016", "sources": 16, "seed": 6016},
++        {"case_id": "P3-New-16src-6116", "sources": 16, "seed": 6116},
++    ]
++    records_6 = []
++    for c in cases_6:
++        r, a = run_single_case(c["case_id"], c["sources"], c["seed"])
++        records_6.append(r)
++        audits_all[c["case_id"]] = a
++
++    save_csv("results/p3_radial_coverage_6new_cases.csv", records_6)
++    analyze_records("全新 6 组案例", records_6)
++
++    # 3. 汇总全部 9 组案例
++    records_9 = records_3 + records_6
++    save_csv("results/p3_radial_coverage_9cases_summary.csv", records_9)
++    with open("results/p3_radial_coverage_9cases_audit.json", "w", encoding="utf-8") as f:
++        json.dump(audits_all, f, indent=2, ensure_ascii=False)
++
++    analyze_records("全部 9 组统一配置汇总", records_9)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/src/strategy_engine.py b/src/strategy_engine.py
+index 7338764..6ba521f 100644
+--- a/src/strategy_engine.py
++++ b/src/strategy_engine.py
+@@ -40,14 +40,16 @@ class StrategyEngine:
+         enable_pruning: bool = None,
+         scan_at_clearance: bool = False,  # 普通清除点额外扫未知频道开关 (实证表明关闭可省~223s扫描时间)
+         enable_2opt_head: bool = False,  # 允许2-opt优化改变首任务的独立开关
++        enable_adaptive_radial_coverage: bool = False,  # P3沿原射线可移动检测点独立开关
+     ):
+         self.driver = driver
+         self.is_p4 = is_p4
+         self.version = version.upper()
+         self.verbose = verbose
+-        # P4 严格保持冻结状态，不执行清除点额外扫描，且不开启首任务2-opt
++        # P4 严格保持冻结状态，不执行清除点额外扫描，且不开启首任务2-opt与径向自适应覆盖
+         self.scan_at_clearance = scan_at_clearance if not is_p4 else False
+         self.enable_2opt_head = enable_2opt_head if not is_p4 else False
++        self.enable_adaptive_radial_coverage = enable_adaptive_radial_coverage if not is_p4 else False
+ 
+         # 是否启用搜索点动态替代剪枝 (根据主要浪费分解进行的单项核心优化)
+         if enable_pruning is None:
+@@ -61,6 +63,8 @@ class StrategyEngine:
+         self.virtual_time_s = 0.0
+         self.dispatched_head_change_count = 0  # 统计2-opt导致最终实际派发首任务变更的轮数
+         self.total_2opt_swaps = 0              # 统计2-opt内部交换/翻转的总次数
++        self.radial_adjustments_count = 0      # 统计沿射线调整覆盖检测位置的次数
++        self.radial_events = []                # 记录详细径向覆盖调点审计快照
+ 
+         if not is_p4:
+             self.evidence_tracker = EvidenceTrackerP3()
+@@ -463,6 +467,106 @@ class StrategyEngine:
+                 self._log(f"贪心调度：选择最近搜索任务 ({pt[0]:.1f}, {pt[1]:.1f}) (估计距离 {best_d:.1f}m)")
+                 self.scan_channels_at_station(pt)
+ 
++    def _select_radial_search_point(
++        self,
++        ray_idx: int,
++        theta: float,
++        nom_pt: tuple,
++        next_pos: tuple = None,
++    ) -> tuple[float, tuple, dict]:
++        """
++        在给定射线 theta_i 沿向选择候选半径 r in [999, 1700]：
++        目标函数：MoveCost(cur_pos -> q(r)) + ScanCost(q(r)) + ConnectCost(q(r) -> next_pos)
++        原来的 r = 999.0 始终作为必选候选之一。
++        """
++        cur_p = np.array(self.cur_pos, dtype=float)
++        next_p = np.array(next_pos, dtype=float) if next_pos is not None else None
++
++        # 候选半径集合: 999.0 必须始终保留，配合步长 25m 离散采样点
++        candidate_r = [999.0] + list(np.arange(1000.0, 1700.1, 25.0))
++
++        # 预先获取当前所有 UNKNOWN 频道
++        unknown_channels = [c for c, st in self.channels.items() if st.status == "UNKNOWN"]
++
++        best_cost = 1e9
++        best_r = 999.0
++        best_details = {}
++        cost_baseline = None
++
++        cos_t = math.cos(theta)
++        sin_t = math.sin(theta)
++
++        for r in candidate_r:
++            q = (float(r * cos_t), float(r * sin_t))
++            q_arr = np.array(q, dtype=float)
++
++            # 1. 当前位置到检测点的位移费用 (速度 5.0m/s)
++            d_cur = float(np.linalg.norm(q_arr - cur_p))
++            t_move_cur = d_cur / 5.0
++
++            # 2. 本站拟扫描费用
++            channels_to_scan = []
++            for ch in unknown_channels:
++                if self.evidence_tracker.can_eliminate_any_cell(q, ch):
++                    channels_to_scan.append(ch)
++
++            if not channels_to_scan:
++                t_scan = 0.0
++            else:
++                # 拟扫描规则完全同 scan_channels_at_station: 若当前频道在其中，则优先排第一以省一次切频
++                if self.cur_channel in channels_to_scan:
++                    channels_to_scan.remove(self.cur_channel)
++                    channels_to_scan.insert(0, self.cur_channel)
++
++                cur_ch = self.cur_channel
++                t_scan = 0.0
++                for ch in channels_to_scan:
++                    if ch != cur_ch:
++                        t_scan += 1.0
++                        cur_ch = ch
++                    t_scan += 5.0
++
++            # 3. 衔接后续任务的移动费用 (没有后续任务时不附加返回原点费用)
++            if next_p is not None:
++                d_next = float(np.linalg.norm(next_p - q_arr))
++                t_connect = d_next / 5.0
++            else:
++                t_connect = 0.0
++
++            total_c = t_move_cur + t_scan + t_connect
++
++            if abs(r - 999.0) < 1e-4:
++                cost_baseline = total_c
++
++            # 选优 (严格更优才替换，防止微小浮点误差扰动)
++            if total_c < best_cost - 1e-4:
++                best_cost = total_c
++                best_r = r
++                best_details = {
++                    "move_cur_s": t_move_cur,
++                    "scan_s": t_scan,
++                    "connect_s": t_connect,
++                    "channels_to_scan": channels_to_scan,
++                }
++
++        # 如果最优解与基线 999.0 费用几乎一致 (<= 1e-4)，保持基线 999.0
++        if cost_baseline is not None and abs(best_cost - cost_baseline) <= 1e-4:
++            best_r = 999.0
++            best_cost = cost_baseline
++
++        chosen_pt = (float(best_r * cos_t), float(best_r * sin_t))
++        info = {
++            "ray_idx": ray_idx,
++            "theta_deg": math.degrees(theta),
++            "chosen_r": best_r,
++            "chosen_pos": chosen_pt,
++            "best_cost": best_cost,
++            "cost_baseline": cost_baseline,
++            "expected_save_s": (cost_baseline - best_cost) if cost_baseline is not None else 0.0,
++            "details": best_details,
++        }
++        return best_r, chosen_pt, info
++
+     def run_version_c_openroute(self):
+         """版本 C / C_openroute：开放路线重排 (Nearest Insertion + 2-Opt 启发式)"""
+         ver_tag = "C_OPT" if self.enable_pruning else "C_BASELINE"
+@@ -502,6 +606,7 @@ class StrategyEngine:
+                 })
+ 
+             if len(tasks) == 1:
++                path = [0]
+                 best_task = tasks[0]
+             else:
+                 # 构造开放路径：起点为 cur_pos，采用最近插入法构造巡检链路
+@@ -596,8 +701,43 @@ class StrategyEngine:
+                 self._log(f"开放路线调度：选择任务链路首目标 {ch} (估计距离 {d_est:.1f}m)")
+                 self.service_found_target(ch)
+             else:
+-                pt = best_task["pos"]
+-                self.remaining_search_points.remove(pt)
++                nom_pt = best_task["pos"]
++                ang = math.atan2(nom_pt[1], nom_pt[0]) % (2.0 * math.pi)
++                ray_idx = int(round(ang / (2.0 * math.pi / 7.0))) % 7
++                theta = 2.0 * math.pi * ray_idx / 7.0
++
++                if not self.is_p4 and self.enable_adaptive_radial_coverage:
++                    next_pos = tasks[path[1]]["pos"] if len(path) > 1 else None
++                    chosen_r, pt, r_info = self._select_radial_search_point(
++                        ray_idx=ray_idx,
++                        theta=theta,
++                        nom_pt=nom_pt,
++                        next_pos=next_pos,
++                    )
++                    if abs(chosen_r - 999.0) > 1e-3:
++                        self.radial_adjustments_count += 1
++                        self.radial_events.append({
++                            "virtual_time_s": round(self.virtual_time_s, 2),
++                            "ray_idx": ray_idx,
++                            "theta_deg": round(math.degrees(theta), 2),
++                            "nom_pos": (round(nom_pt[0], 2), round(nom_pt[1], 2)),
++                            "chosen_r": round(chosen_r, 2),
++                            "chosen_pos": (round(pt[0], 2), round(pt[1], 2)),
++                            "cur_pos": (round(self.cur_pos[0], 2), round(self.cur_pos[1], 2)),
++                            "next_pos": (round(next_pos[0], 2), round(next_pos[1], 2)) if next_pos else None,
++                            "cost_baseline_s": round(r_info["cost_baseline"], 2) if r_info["cost_baseline"] is not None else None,
++                            "cost_chosen_s": round(r_info["best_cost"], 2),
++                            "expected_save_s": round(r_info["expected_save_s"], 2),
++                        })
++                        self._log(
++                            f"【径向覆盖选点调整】射线 {ray_idx} (θ={math.degrees(theta):.1f}°): 基线 r=999.0m -> 选定 r={chosen_r:.1f}m "
++                            f"(预计耗时 {r_info['cost_baseline']:.1f}s -> {r_info['best_cost']:.1f}s, 预期节省 {r_info['expected_save_s']:.1f}s)"
++                        )
++                else:
++                    pt = nom_pt
++
++                if nom_pt in self.remaining_search_points:
++                    self.remaining_search_points.remove(nom_pt)
+                 d_est = np.linalg.norm(np.array(pt) - np.array(self.cur_pos))
+ 
+                 # 核查是否存在“覆盖证据已经足够，却仍执行固定搜索点”的行为 (仅在 P3 核查)
+@@ -649,8 +789,11 @@ class StrategyEngine:
+             "enable_pruning": self.enable_pruning,
+             "scan_at_clearance": self.scan_at_clearance,
+             "enable_2opt_head": self.enable_2opt_head,
++            "enable_adaptive_radial_coverage": self.enable_adaptive_radial_coverage,
+             "dispatched_head_change_count": self.dispatched_head_change_count,
+             "total_2opt_swaps": self.total_2opt_swaps,
++            "radial_adjustments_count": self.radial_adjustments_count,
++            "radial_events": self.radial_events,
+             "empty_prediction_count": getattr(self.local_decision, "empty_prediction_count", 0),
+             "plan_uncovered_count": getattr(self.local_decision, "plan_uncovered_count", 0),
+             "max_single_decision_ms": getattr(self.local_decision, "max_decision_real_time_ms", 0.0),

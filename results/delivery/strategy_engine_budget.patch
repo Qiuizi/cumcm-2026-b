@@ -1,0 +1,154 @@
+diff --git a/src/strategy_engine.py b/src/strategy_engine.py
+index fa39267..080a8f5 100644
+--- a/src/strategy_engine.py
++++ b/src/strategy_engine.py
+@@ -91,7 +91,17 @@ class StrategyEngine:
+         self.completion_status = "NOT_STARTED"     # COMPLETED / SAFE_EXIT_BUDGET / INCOMPLETE
+         self.terminal_reason = None
+         self.max_virtual_duration_s = None
++        # 现实预算（附件2 §12）：
++        #   self.max_real_duration_s   —— /enter 返回的**配置上限**，仅作报告，不当作本局可用时间
++        #   self.real_budget_s         —— 本局实际可用现实时间 = min(remaining_real_duration_s, 配置上限)
++        #   self.start_monotonic       —— 预算起点（单调时钟，/enter 成功后固定一次）
++        #   self.real_deadline_monotonic —— 绝对截止点；通信重试只消耗预算，不会重新开始或延长
+         self.max_real_duration_s = None
++        self.real_budget_s = None
++        self.start_monotonic = None
++        self.real_deadline_monotonic = None
++        self.real_budget_elapsed_s = None
++        self.monotonic_clock = time.monotonic   # 预算计量时钟（可注入，供可控时钟测试）
+         self.failed_targets = []                   # 显式判失败的目标记录
+         self.max_repeat_clear_fail = int(max_repeat_clear_fail)
+         self.head_dispatch_records = []        # 逐轮记录"2-opt 前后首任务"，用于统计真正改变下一动作的次数
+@@ -243,6 +253,10 @@ class StrategyEngine:
+             channels_to_scan.insert(0, self.cur_channel)
+ 
+         for ch in channels_to_scan:
++            # 现实/虚拟预算检查：截止后不得再派发任何测量/清除动作
++            if self._check_budget_or_stop():
++                break
++
+             # 每次准备扫描具体 UNKNOWN 频道前重新检查
+             if self.get_confirmed_count() >= 16:
+                 self.resolve_remaining_as_upper_bound_exclusion()
+@@ -302,19 +316,33 @@ class StrategyEngine:
+         """现实/虚拟预算检查。返回 (是否耗尽, 终止原因)。"""
+         if self.max_virtual_duration_s is not None and self.virtual_time_s >= self.max_virtual_duration_s:
+             return True, "VIRTUAL_BUDGET_EXHAUSTED"
+-        if self.max_real_duration_s is not None and (time.time() - self.start_real_time) >= self.max_real_duration_s:
++        # 现实预算：本局可用时间取 /enter 的 remaining_real_duration_s（配置上限封顶），
++        # 以**单调时钟**计量并固定起点；网络重试期间时间照常流逝，故不会重新开始或延长预算。
++        if (self.real_budget_s is not None and self.start_monotonic is not None
++                and (self.monotonic_clock() - self.start_monotonic) >= self.real_budget_s):
+             return True, "REAL_BUDGET_EXHAUSTED"
+         return False, None
+ 
++    def _real_elapsed_s(self):
++        """自 /enter 成功起的现实耗时（单调时钟）；预算尚未开始时返回 0.0。"""
++        if self.start_monotonic is None:
++            return 0.0
++        return self.monotonic_clock() - self.start_monotonic
++
+     def _check_budget_or_stop(self) -> bool:
+         """预算耗尽时记录终止原因并返回 True（调用方应 break，按合法退出路径结束）"""
+         exhausted, reason = self._budget_exhausted()
+         if exhausted:
+-            self.terminal_reason = reason
+-            self._log(
+-                f"【预算终止】{reason}: 虚拟时间 {self.virtual_time_s:.1f}s / "
+-                f"现实耗时 {time.time() - self.start_real_time:.1f}s —— 安全退出（非成功完成）"
+-            )
++            if self.terminal_reason != reason:      # 同一终止原因只如实记录一次
++                self.terminal_reason = reason
++                budget_desc = (
++                    f"{self.real_budget_s:.1f}s" if self.real_budget_s is not None else "未设定"
++                )
++                self._log(
++                    f"【预算终止】{reason}: 虚拟时间 {self.virtual_time_s:.1f}s / "
++                    f"现实耗时 {self._real_elapsed_s():.1f}s（本局现实预算 {budget_desc}）"
++                    f" —— 安全退出（非成功完成）"
++                )
+             return True
+         return False
+ 
+@@ -518,7 +546,9 @@ class StrategyEngine:
+         self._log(">>> 启动方案版本 B (稳定基线：固定覆盖顺序) <<<")
+ 
+         # 1. 原点首扫
+-        self.scan_channels_at_station((0.0, 0.0))
++        # 1. 原点首扫（预算若已耗尽则不得再派发任何测量/清除动作）
++        if not self._check_budget_or_stop():
++            self.scan_channels_at_station((0.0, 0.0))
+ 
+         # 2. 循环处理直至全部解决
+         while not self.check_completion():
+@@ -553,7 +583,9 @@ class StrategyEngine:
+         self._log(">>> 启动方案版本 C_greedy (对照：最近邻贪心调度) <<<")
+ 
+         # 1. 原点首扫
+-        self.scan_channels_at_station((0.0, 0.0))
++        # 1. 原点首扫（预算若已耗尽则不得再派发任何测量/清除动作）
++        if not self._check_budget_or_stop():
++            self.scan_channels_at_station((0.0, 0.0))
+ 
+         while not self.check_completion():
+             if self._check_budget_or_stop():
+@@ -707,8 +739,9 @@ class StrategyEngine:
+         ver_tag = "C_OPT" if self.enable_pruning else "C_BASELINE"
+         self._log(f">>> 启动方案版本 {ver_tag} (开放路线重排 | 动态剪枝={self.enable_pruning}) <<<")
+ 
+-        # 1. 原点首扫
+-        self.scan_channels_at_station((0.0, 0.0))
++        # 1. 原点首扫（预算若已耗尽则不得再派发任何测量/清除动作）
++        if not self._check_budget_or_stop():
++            self.scan_channels_at_station((0.0, 0.0))
+         if self.enable_pruning:
+             self.prune_redundant_search_points()
+ 
+@@ -909,15 +942,22 @@ class StrategyEngine:
+         """执行完整求解任务并退出"""
+         self.start_real_time = time.time()
+         enter_res = self.driver.enter() or {}
+-        # 现实/虚拟预算：以模拟器返回为准，缺失时退回赛题默认值
++        # 虚拟预算：以模拟器返回为准，缺失时退回赛题默认值
+         self.max_virtual_duration_s = float(
+             enter_res.get("max_virtual_duration_s",
+                           enter_res.get("remaining_virtual_duration_s", 360000.0)) or 360000.0
+         )
+-        self.max_real_duration_s = float(
+-            enter_res.get("max_real_duration_s",
+-                          enter_res.get("remaining_real_duration_s", 1200.0)) or 1200.0
+-        )
++        # 现实预算（附件2 §12）：
++        #   本局可用现实时间 = /enter 返回的 remaining_real_duration_s；
++        #   max_real_duration_s 只是**配置上限**，既不覆盖实际剩余时间，也不固定假定 1200 秒。
++        #   起点取 /enter 成功这一刻的单调时钟；之后的通信重试只消耗预算，不会重新开始。
++        max_real_cap = enter_res.get("max_real_duration_s")
++        remaining_real = enter_res.get("remaining_real_duration_s")
++        self.max_real_duration_s = float(max_real_cap) if max_real_cap is not None else 1200.0
++        raw_budget = float(remaining_real) if remaining_real is not None else self.max_real_duration_s
++        self.real_budget_s = max(0.0, min(raw_budget, self.max_real_duration_s))
++        self.start_monotonic = self.monotonic_clock()
++        self.real_deadline_monotonic = self.start_monotonic + self.real_budget_s
+ 
+         if self.version == "B":
+             self.run_version_b()
+@@ -926,6 +966,8 @@ class StrategyEngine:
+         else:
+             self.run_version_c_openroute()
+ 
++        # 现实预算耗时：取"派发循环结束那一刻"的单调耗时（不含 /exit 往返）
++        self.real_budget_elapsed_s = self._real_elapsed_s()
+         self.driver.exit()
+         self.end_real_time = time.time()
+ 
+@@ -983,6 +1025,9 @@ class StrategyEngine:
+             "completed_successfully": self.completion_status == "COMPLETED",
+             "terminal_reason": self.terminal_reason,
+             "max_virtual_duration_s": self.max_virtual_duration_s,
++            "real_budget_s": self.real_budget_s,
++            "real_budget_elapsed_monotonic_s": getattr(self, "real_budget_elapsed_s", None),
++            "real_budget_source": "min(/enter.remaining_real_duration_s, /enter.max_real_duration_s)",
+             "max_real_duration_s": self.max_real_duration_s,
+             "avg_time_per_target": (self.virtual_time_s / cleared_count) if cleared_count > 0 else 0.0,
+             "decision_count": len(self.decision_logs),

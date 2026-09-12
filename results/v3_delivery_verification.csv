@@ -1,0 +1,25 @@
+Case_ID,Sources_N,Version_Tag,Version_Desc,Cleared_N,Virtual_Time_T_s,Unit_Time_T_over_N_s,Total_Move_Dist_m,Measure_Count,Channel_Switch_Count,Clear_Succ_Count,Clear_Fail_Count,Dispatched_Head_Change_Count,Total_2opt_Swaps,Empty_Prediction_Count,Plan_Uncovered_Count,Real_Time_s,Max_Single_Decision_ms
+seed-110,10,v3.3-scan-off-frozen,V1 (Frozen Baseline),10,2832.70,283.27,10168.5,119,115,10,13,N/A,N/A,N/A,N/A,2.53,N/A
+seed-110,10,v3.3.1-scorefix-only,V2 (ScoreFix Only),10,2832.24,283.22,10196.2,119,115,10,11,0,2,0,25,5.00,496.41
+seed-110,10,v3.4-scorefix-2opthead,V3-old (50step-truncated),10,2703.71,270.37,9563.5,119,116,10,10,2,6,0,20,4.92,629.50
+seed-113,13,v3.3-scan-off-frozen,V1 (Frozen Baseline),13,3273.21,251.79,12601.1,107,90,13,21,N/A,N/A,N/A,N/A,6.81,N/A
+seed-113,13,v3.3.1-scorefix-only,V2 (ScoreFix Only),13,3216.05,247.39,12755.2,96,90,13,10,0,0,351,31,10.02,1475.16
+seed-113,13,v3.4-scorefix-2opthead,V3-old (50step-truncated),13,3169.40,243.80,12432.0,95,89,13,18,1,3,344,32,5.56,552.91
+seed-116,16,v3.3-scan-off-frozen,V1 (Frozen Baseline),16,3684.98,230.31,14764.9,95,87,16,30,N/A,N/A,N/A,N/A,3.42,N/A
+seed-116,16,v3.3.1-scorefix-only,V2 (ScoreFix Only),16,3641.61,227.60,14803.0,92,87,16,18,0,3,456,36,7.25,465.75
+seed-116,16,v3.4-scorefix-2opthead,V3-old (50step-truncated),16,3550.85,221.93,14549.3,84,75,16,22,1,6,435,56,8.51,636.30
+bench-4000,10,v3.3-scan-off-frozen,V1 (Frozen Baseline),10,3403.50,340.35,12262.5,133,119,10,39,N/A,N/A,N/A,N/A,2.26,N/A
+bench-4000,10,v3.3.1-scorefix-only,V2 (ScoreFix Only),10,3352.04,335.20,12210.2,123,119,10,42,0,0,259,20,4.29,500.95
+bench-4000,10,v3.4-scorefix-2opthead,V3-old (50step-truncated),10,3144.37,314.44,11591.9,124,120,10,12,1,1,267,20,4.29,522.36
+bench-4300,13,v3.3-scan-off-frozen,V1 (Frozen Baseline),13,3280.61,252.35,12533.0,112,89,13,20,N/A,N/A,N/A,N/A,3.36,N/A
+bench-4300,13,v3.3.1-scorefix-only,V2 (ScoreFix Only),13,3200.45,246.19,12602.2,95,89,13,17,0,1,391,26,6.07,447.28
+bench-4300,13,v3.4-scorefix-2opthead,V3-old (50step-truncated),13,2932.69,225.59,11358.5,95,88,13,11,1,3,369,31,6.60,525.10
+bench-4600,16,v3.3-scan-off-frozen,V1 (Frozen Baseline),16,2955.83,184.74,11274.2,87,69,16,39,N/A,N/A,N/A,N/A,3.82,N/A
+bench-4600,16,v3.3.1-scorefix-only,V2 (ScoreFix Only),16,2847.51,177.97,11357.5,78,70,16,12,0,1,431,35,6.91,527.66
+bench-4600,16,v3.4-scorefix-2opthead,V3-old (50step-truncated),16,2847.51,177.97,11357.5,78,70,16,12,0,1,431,35,15.34,1535.39
+seed-110,10,v3.4.1-complete-coverage,V3 (Complete Coverage),10,2703.71,270.37,9563.5,119,116,10,10,2,6,0,0,10.85,1993.64
+seed-113,13,v3.4.1-complete-coverage,V3 (Complete Coverage),13,3169.40,243.80,12432.0,95,89,13,18,1,3,0,0,10.68,1279.20
+seed-116,16,v3.4.1-complete-coverage,V3 (Complete Coverage),16,3550.85,221.93,14549.3,84,75,16,22,1,6,0,0,16.37,1878.36
+bench-4000,10,v3.4.1-complete-coverage,V3 (Complete Coverage),10,3144.37,314.44,11591.9,124,120,10,12,1,1,0,0,8.09,1472.09
+bench-4300,13,v3.4.1-complete-coverage,V3 (Complete Coverage),13,2932.69,225.59,11358.5,95,88,13,11,1,3,0,0,13.32,1349.42
+bench-4600,16,v3.4.1-complete-coverage,V3 (Complete Coverage),16,2896.33,181.02,11341.6,76,69,16,33,0,1,0,0,13.46,1338.69

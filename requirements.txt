@@ -1,0 +1,7 @@
+# CUMCM 2026 B 题求解依赖
+# 环境：Python 3.9+（在 3.12 上验证）
+
+numpy>=1.21
+scipy>=1.7
+matplotlib>=3.5
+requests>=2.26

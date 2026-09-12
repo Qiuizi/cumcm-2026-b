@@ -1,0 +1,217 @@
+{
+  "geometry": {
+    "grid_count": 10941,
+    "plan_len": 120,
+    "q_far": [
+      -2000.0,
+      0.0
+    ],
+    "probe": [
+      {
+        "d_sc": 3402.1,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      },
+      {
+        "d_sc": 2838.0,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      },
+      {
+        "d_sc": 3360.0,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      },
+      {
+        "d_sc": 3424.0,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      },
+      {
+        "d_sc": 3034.0,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      },
+      {
+        "d_sc": 2498.0,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      },
+      {
+        "d_sc": 2336.0,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      },
+      {
+        "d_sc": 2628.0,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      },
+      {
+        "d_sc": 3378.0,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      },
+      {
+        "d_sc": 3500.1,
+        "clone_count": 10941,
+        "clone_contradiction": true,
+        "rejected_prune_count": 1,
+        "p_recv_frozen": 0.0
+      }
+    ],
+    "clone_marked_contradiction": true,
+    "clone_never_emptied": true,
+    "frozen_p_recv_all_zero": true
+  },
+  "case2_model_positive": {
+    "action": "measure",
+    "reason": "followup_promising (Jq=493.7s vs J0=598.8s)",
+    "position": [
+      0.0,
+      0.0
+    ],
+    "surviving_cells": 10941,
+    "j0": 598.7701764863903,
+    "best_jq": 493.7110913949458,
+    "error": null,
+    "counters_delta": {
+      "empty_prediction_count": 1,
+      "unrepresentable_prediction_count": 1,
+      "call_fallback_count": 0,
+      "decision_fallback_count": 0,
+      "decision_with_model_count": 1,
+      "model_score_count": 11,
+      "fallback_reason_hist": {}
+    }
+  },
+  "case2_control_no_model": {
+    "action": "measure",
+    "reason": "followup_promising (Jq=372.7s vs J0=598.8s)",
+    "position": [
+      0.0,
+      0.0
+    ],
+    "surviving_cells": 10941,
+    "j0": 598.7701764863903,
+    "best_jq": 372.73427507117003,
+    "error": null,
+    "counters_delta": {
+      "empty_prediction_count": 0,
+      "unrepresentable_prediction_count": 0,
+      "call_fallback_count": 20,
+      "decision_fallback_count": 1,
+      "decision_with_model_count": 0,
+      "model_score_count": 0,
+      "fallback_reason_hist": {
+        "predictor_not_attached": 20
+      }
+    }
+  },
+  "case1_empty_hypotheses": {
+    "action": "measure",
+    "reason": "followup_promising (Jq=372.7s vs J0=598.8s)",
+    "position": [
+      0.0,
+      0.0
+    ],
+    "surviving_cells": 10941,
+    "j0": 598.7701764863903,
+    "best_jq": 372.73427507117003,
+    "error": null,
+    "counters_delta": {
+      "empty_prediction_count": 0,
+      "unrepresentable_prediction_count": 0,
+      "call_fallback_count": 20,
+      "decision_fallback_count": 1,
+      "decision_with_model_count": 0,
+      "model_score_count": 0,
+      "fallback_reason_hist": {
+        "all_hypotheses_incompatible_after_3_observations": 20
+      }
+    }
+  },
+  "case3_actual_grid_contradiction": {
+    "action": "fail",
+    "reason": "model_contradiction_observation_conflicts_with_grid",
+    "position": [
+      0.0,
+      0.0
+    ],
+    "surviving_cells": 10941,
+    "j0": 0.0,
+    "best_jq": null,
+    "error": null,
+    "counters_delta": {
+      "empty_prediction_count": 0,
+      "unrepresentable_prediction_count": 0,
+      "call_fallback_count": 0,
+      "decision_fallback_count": 0,
+      "decision_with_model_count": 0,
+      "model_score_count": 0,
+      "fallback_reason_hist": {}
+    }
+  },
+  "case3_actual_grid_count_zero": {
+    "action": "fail",
+    "reason": "empty_grid_no_valid_state",
+    "position": [
+      0.0,
+      0.0
+    ],
+    "surviving_cells": 0,
+    "j0": 0.0,
+    "best_jq": null,
+    "error": null,
+    "counters_delta": {
+      "empty_prediction_count": 0,
+      "unrepresentable_prediction_count": 0,
+      "call_fallback_count": 0,
+      "decision_fallback_count": 0,
+      "decision_with_model_count": 0,
+      "model_score_count": 0,
+      "fallback_reason_hist": {}
+    }
+  },
+  "case4_all_candidates_unrepresentable": {
+    "action": null,
+    "reason": null,
+    "position": null,
+    "surviving_cells": null,
+    "j0": null,
+    "best_jq": null,
+    "error": {
+      "type": "TypeError",
+      "message": "unsupported format string passed to NoneType.__format__",
+      "where": "\"reason\": f\"direct_clear_better (J0={j0:.1f}s vs Jq={best_jq:.1f}s)\","
+    },
+    "counters_delta": {
+      "empty_prediction_count": 1,
+      "unrepresentable_prediction_count": 1,
+      "call_fallback_count": 0,
+      "decision_fallback_count": 0,
+      "decision_with_model_count": 0,
+      "model_score_count": 1,
+      "fallback_reason_hist": {}
+    }
+  },
+  "all_pass": true
+}

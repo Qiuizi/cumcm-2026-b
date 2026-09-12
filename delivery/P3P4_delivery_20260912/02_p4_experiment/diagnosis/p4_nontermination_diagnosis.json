@@ -1,0 +1,266 @@
+{
+  "action_cap": 1500,
+  "A_recorded_scenarios_reproducibility": {
+    "benchmark P4-10src-case1": {
+      "status": "RUNAWAY",
+      "actions": 1501,
+      "cleared": 0,
+      "unsolved": 20,
+      "T_s": 4706.011,
+      "stuck_zero_cell_channels": [
+        10
+      ],
+      "real_time_s": 0.338,
+      "n_sources": 10,
+      "seed": 5000,
+      "dir_ratio": 0.5,
+      "omnidirectional": 4,
+      "directional": 6,
+      "component_mode": "frozen",
+      "action_cap": 1500
+    },
+    "heldout H01-10src-dir20": {
+      "status": "RUNAWAY",
+      "actions": 1501,
+      "cleared": 0,
+      "unsolved": 20,
+      "T_s": 4802.8,
+      "stuck_zero_cell_channels": [
+        12
+      ],
+      "real_time_s": 0.355,
+      "n_sources": 10,
+      "seed": 9101,
+      "dir_ratio": 0.2,
+      "omnidirectional": 7,
+      "directional": 3,
+      "component_mode": "frozen",
+      "action_cap": 1500
+    },
+    "heldout H02-10src-dir50": {
+      "status": "RUNAWAY",
+      "actions": 1501,
+      "cleared": 0,
+      "unsolved": 20,
+      "T_s": 4629.0,
+      "stuck_zero_cell_channels": [
+        19
+      ],
+      "real_time_s": 0.348,
+      "n_sources": 10,
+      "seed": 9102,
+      "dir_ratio": 0.5,
+      "omnidirectional": 3,
+      "directional": 7,
+      "component_mode": "frozen",
+      "action_cap": 1500
+    },
+    "benchmark P4-13src-case1": {
+      "status": "RUNAWAY",
+      "actions": 1501,
+      "cleared": 0,
+      "unsolved": 20,
+      "T_s": 4991.72,
+      "stuck_zero_cell_channels": [
+        9
+      ],
+      "real_time_s": 0.332,
+      "n_sources": 13,
+      "seed": 5001,
+      "dir_ratio": 0.5,
+      "omnidirectional": 7,
+      "directional": 6,
+      "component_mode": "frozen",
+      "action_cap": 1500
+    },
+    "benchmark P4-16src-case1": {
+      "status": "RUNAWAY",
+      "actions": 1501,
+      "cleared": 0,
+      "unsolved": 20,
+      "T_s": 4623.4,
+      "stuck_zero_cell_channels": [
+        15
+      ],
+      "real_time_s": 0.356,
+      "n_sources": 16,
+      "seed": 5002,
+      "dir_ratio": 0.5,
+      "omnidirectional": 10,
+      "directional": 6,
+      "component_mode": "frozen",
+      "action_cap": 1500
+    }
+  },
+  "B_component_attribution": {
+    "benchmark P4-10src-case1": {
+      "frozen": {
+        "status": "RUNAWAY",
+        "actions": 1501,
+        "cleared": 0,
+        "unsolved": 20,
+        "T_s": 4706.011,
+        "stuck_zero_cell_channels": [
+          10
+        ],
+        "real_time_s": 0.338,
+        "n_sources": 10,
+        "seed": 5000,
+        "dir_ratio": 0.5,
+        "omnidirectional": 4,
+        "directional": 6,
+        "component_mode": "frozen",
+        "action_cap": 1500
+      },
+      "shared": {
+        "status": "NORMAL",
+        "actions": 347,
+        "cleared": 10,
+        "unsolved": 0,
+        "T_s": 6285.641,
+        "real_time_s": 34.792,
+        "n_sources": 10,
+        "seed": 5000,
+        "dir_ratio": 0.5,
+        "omnidirectional": 4,
+        "directional": 6,
+        "component_mode": "shared",
+        "action_cap": 1500
+      }
+    },
+    "heldout H01-10src-dir20": {
+      "frozen": {
+        "status": "RUNAWAY",
+        "actions": 1501,
+        "cleared": 0,
+        "unsolved": 20,
+        "T_s": 4802.8,
+        "stuck_zero_cell_channels": [
+          12
+        ],
+        "real_time_s": 0.355,
+        "n_sources": 10,
+        "seed": 9101,
+        "dir_ratio": 0.2,
+        "omnidirectional": 7,
+        "directional": 3,
+        "component_mode": "frozen",
+        "action_cap": 1500
+      },
+      "shared": {
+        "status": "NORMAL",
+        "actions": 366,
+        "cleared": 10,
+        "unsolved": 0,
+        "T_s": 7039.073,
+        "real_time_s": 43.401,
+        "n_sources": 10,
+        "seed": 9101,
+        "dir_ratio": 0.2,
+        "omnidirectional": 7,
+        "directional": 3,
+        "component_mode": "shared",
+        "action_cap": 1500
+      }
+    },
+    "benchmark P4-13src-case1": {
+      "frozen": {
+        "status": "RUNAWAY",
+        "actions": 1501,
+        "cleared": 0,
+        "unsolved": 20,
+        "T_s": 4991.72,
+        "stuck_zero_cell_channels": [
+          9
+        ],
+        "real_time_s": 0.332,
+        "n_sources": 13,
+        "seed": 5001,
+        "dir_ratio": 0.5,
+        "omnidirectional": 7,
+        "directional": 6,
+        "component_mode": "frozen",
+        "action_cap": 1500
+      },
+      "shared": {
+        "status": "NORMAL",
+        "actions": 374,
+        "cleared": 13,
+        "unsolved": 0,
+        "T_s": 8674.066,
+        "real_time_s": 103.173,
+        "n_sources": 13,
+        "seed": 5001,
+        "dir_ratio": 0.5,
+        "omnidirectional": 7,
+        "directional": 6,
+        "component_mode": "shared",
+        "action_cap": 1500
+      }
+    }
+  },
+  "C_experiment_scenarios": {
+    "experiment P4H-10src-7210": {
+      "status": "RUNAWAY",
+      "actions": 1501,
+      "cleared": 0,
+      "unsolved": 20,
+      "T_s": 4834.8,
+      "stuck_zero_cell_channels": [
+        18
+      ],
+      "real_time_s": 0.275,
+      "n_sources": 10,
+      "seed": 7210,
+      "dir_ratio": 0.5,
+      "omnidirectional": 1,
+      "directional": 9,
+      "component_mode": "frozen",
+      "action_cap": 1500
+    },
+    "experiment P4H-13src-7213": {
+      "status": "RUNAWAY",
+      "actions": 1501,
+      "cleared": 0,
+      "unsolved": 20,
+      "T_s": 5015.0,
+      "stuck_zero_cell_channels": [
+        14
+      ],
+      "real_time_s": 0.294,
+      "n_sources": 13,
+      "seed": 7213,
+      "dir_ratio": 0.5,
+      "omnidirectional": 6,
+      "directional": 7,
+      "component_mode": "frozen",
+      "action_cap": 1500
+    },
+    "experiment P4H-16src-7216": {
+      "status": "RUNAWAY",
+      "actions": 1501,
+      "cleared": 0,
+      "unsolved": 20,
+      "T_s": 5323.095,
+      "stuck_zero_cell_channels": [
+        15
+      ],
+      "real_time_s": 0.423,
+      "n_sources": 16,
+      "seed": 7216,
+      "dir_ratio": 0.5,
+      "omnidirectional": 7,
+      "directional": 9,
+      "component_mode": "frozen",
+      "action_cap": 1500
+    }
+  },
+  "mechanism": {
+    "trigger": "FOUND 目标补测后保守网格存活单元数归零 (over-pruning)",
+    "loop": "service_found_target 的 while st.status == 'FOUND' 中，冻结决策器基于空网格仍返回 clear 动作",
+    "effect": "clear 固定位置持续失败 (3s/次)，无移动，虚拟时间无界增长，check_completion 永不成立",
+    "note": "引擎未对 max_virtual_duration_s / max_real_duration_s 做任何强制终止"
+  },
+  "attribution": "根目录冻结组件快照；共享 src/ 组件在同一场景可正常终止",
+  "scope_limit": "本诊断只读，不修改任何策略或组件"
+}

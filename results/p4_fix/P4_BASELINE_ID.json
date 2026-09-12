@@ -1,0 +1,117 @@
+{
+  "baseline_id": "P4-BASELINE-v3.5.0-fix",
+  "supersedes": "P4 主线冻结组件快照 (root local_decision_frozen.py / conservative_grid_frozen.py, 2026-09-11 23:38)",
+  "branch": "fix/p4-baseline-correctness",
+  "head_commit": "4557ad564eb49b3036172b18a125119e0dd5ce27",
+  "branch_point": "3a7491206c16acaa8c363b483679d9ab2a09da2f",
+  "branch_point_message": "merge(p3): merge verified P3 adaptive radial coverage candidate into mainline",
+  "fix_commits": [
+    {
+      "short": "fb2de99",
+      "full": "fb2de9971c7a28dbae6bbe33688c091c3662e69b",
+      "subject": "fix(p4): correct inverted bearing-cone test in frozen conservative grid"
+    },
+    {
+      "short": "75f2f16",
+      "full": "75f2f160dd3f2dfe2c83a959ca0b17d6998f41a6",
+      "subject": "fix(p4): make frozen decision maker fail explicitly instead of faking a safe clear"
+    },
+    {
+      "short": "4557ad5",
+      "full": "4557ad564eb49b3036172b18a125119e0dd5ce27",
+      "subject": "fix(p4): explicit failure status, repeat-clear breaker and budget safe-exit"
+    }
+  ],
+  "component_sha256_16_at_acceptance": {
+    "conservative_grid_frozen.py": "6d4f0476537ba25a",
+    "local_decision_frozen.py": "ce0836c5d84addad",
+    "src/strategy_engine.py": "4d5250dc1c13a651",
+    "src/conservative_grid.py": "2908487383308aca",
+    "src/local_decision.py": "eac1bdd8a0b3e964",
+    "src/sim_env.py": "ffa4f33aa5f943de"
+  },
+  "changed_files": [
+    "conservative_grid_frozen.py",
+    "local_decision_frozen.py",
+    "src/strategy_engine.py"
+  ],
+  "unchanged": [
+    "P4 覆盖点集 (25 点, EvidenceTrackerP4.all_points)",
+    "P4 扫描规则 (needs_measure_at)",
+    "P4 完成判据 (check_completion + 16 源上限排除)",
+    "P4 清除点额外扫描开关 (仍强制关闭)",
+    "P3 径向选点 (未迁移到 P4)",
+    "共享组件 src/conservative_grid.py 与 src/local_decision.py (保证 P3 合入状态不变)"
+  ],
+  "guarantees": {
+    "prediction_does_not_mutate_real_grid": true,
+    "legitimate_observation_keeps_true_cell": true,
+    "empty_set_is_not_a_safe_clear_basis": true,
+    "model_contradiction_not_reported_as_absent_or_cleared": true,
+    "repeated_clear_fail_same_pos_same_state_is_broken": true,
+    "budget_exit_distinguished_from_success": true
+  },
+  "default_switch_state": {
+    "P4 enable_2opt_head": "False (默认关闭，需调用方显式开启)",
+    "P3 profile": "stable (径向开关默认关闭)"
+  },
+  "acceptance": {
+    "arm": "fixed_baseline (enable_2opt_head=False)",
+    "scenarios": [
+      "P4H-10src-7210",
+      "P4H-13src-7213",
+      "P4H-16src-7216"
+    ],
+    "passed": true,
+    "runs": [
+      {
+        "case_id": "P4H-10src-7210",
+        "sources": 10,
+        "seed": 7210,
+        "completion_status": "COMPLETED",
+        "cleared": 10,
+        "unsolved": 0,
+        "failed": 0,
+        "T_s": 7040.56,
+        "acceptance_pass": true
+      },
+      {
+        "case_id": "P4H-13src-7213",
+        "sources": 13,
+        "seed": 7213,
+        "completion_status": "COMPLETED",
+        "cleared": 13,
+        "unsolved": 0,
+        "failed": 0,
+        "T_s": 7840.015,
+        "acceptance_pass": true
+      },
+      {
+        "case_id": "P4H-16src-7216",
+        "sources": 16,
+        "seed": 7216,
+        "completion_status": "COMPLETED",
+        "cleared": 16,
+        "unsolved": 0,
+        "failed": 0,
+        "T_s": 8147.65,
+        "acceptance_pass": true
+      }
+    ],
+    "criteria": [
+      "completion_status==COMPLETED",
+      "cleared==场景源数",
+      "unsolved==0 且 failed==0",
+      "源频道全 CLEARED / 非源频道全 ABSENT",
+      "计费闭合 T=L/5+5M+S+3F+5N",
+      "无网格矛盾事件"
+    ]
+  },
+  "verification_evidence": {
+    "minimal_repro_before": "results/p4_fix/diagnosis/minimal_repro_before.json",
+    "minimal_repro_after": "results/p4_fix/diagnosis/minimal_repro_after_fix.json",
+    "grid_semantics_equivalence": "results/p4_fix/verification/grid_semantics_equivalence.json",
+    "p3_unchanged": "results/p4_fix/verification/p3_unchanged_after_p4_fix.json"
+  },
+  "note": "旧冻结文件与旧失败日志全部保留；本标识仅描述修复后的新基线。"
+}

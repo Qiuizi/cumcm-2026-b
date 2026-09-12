@@ -1,0 +1,128 @@
+{
+  "A_diagnostics": {
+    "ok": true,
+    "requests": 3,
+    "request_ids": [
+      "measure-000001",
+      "measure-000001",
+      "measure-000001"
+    ],
+    "diagnostics": [
+      {
+        "timestamp": 1789240390.3469522,
+        "path": "/measure",
+        "request": {
+          "arena_id": "default",
+          "robot_id": "stubtest",
+          "request_id": "measure-000001",
+          "position": {
+            "x": 1.0,
+            "y": 2.0
+          },
+          "channel": 7
+        },
+        "response": null,
+        "diagnostic": "retryable_status",
+        "attempt": 1,
+        "error": "",
+        "status_code": 500
+      },
+      {
+        "timestamp": 1789240390.8700197,
+        "path": "/measure",
+        "request": {
+          "arena_id": "default",
+          "robot_id": "stubtest",
+          "request_id": "measure-000001",
+          "position": {
+            "x": 1.0,
+            "y": 2.0
+          },
+          "channel": 7
+        },
+        "response": null,
+        "diagnostic": "transport_error",
+        "attempt": 2,
+        "error": "ConnectionError(ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
+      },
+      {
+        "timestamp": 1789240391.3897326,
+        "path": "/measure",
+        "request": {
+          "arena_id": "default",
+          "robot_id": "stubtest",
+          "request_id": "measure-000001",
+          "position": {
+            "x": 1.0,
+            "y": 2.0
+          },
+          "channel": 7
+        },
+        "response": null,
+        "diagnostic": "transport_error",
+        "attempt": 3,
+        "error": "ConnectionError(ProtocolError('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')))"
+      },
+      {
+        "timestamp": 1789240391.3917658,
+        "path": "/measure",
+        "request": {
+          "arena_id": "default",
+          "robot_id": "stubtest",
+          "request_id": "measure-000001",
+          "position": {
+            "x": 1.0,
+            "y": 2.0
+          },
+          "channel": 7
+        },
+        "response": null,
+        "diagnostic": "retry_exhausted",
+        "attempt": 3,
+        "error": "no HTTP 200 after all attempts (last_status=500)",
+        "status_code": 500
+      }
+    ],
+    "audit": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\results\\delivery\\_diag_stub_session.jsonl",
+      "unique_accepted_action_count": 0,
+      "total_move_dist_m": 0.0,
+      "movement_time_s": 0.0,
+      "movement_pct": 0.0,
+      "channel_switch_count": 0,
+      "channel_switch_time_s": 0.0,
+      "measure_count": 0,
+      "measure_time_s": 0.0,
+      "clear_fail_count": 0,
+      "clear_fail_time_s": 0.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 0.0,
+      "final_virtual_time_s": 0.0,
+      "accounting_discrepancy_s": 0.0,
+      "time_last_clear_to_exit_s": 0.0
+    },
+    "error": "HTTP 请求失败: /measure（3 次尝试均未取得 HTTP 200，最后状态码 500）"
+  },
+  "B_behaviour_unchanged": {
+    "ok": true,
+    "baseline": {
+      "T_virtual_s": 8661.1,
+      "L_dist_m": 30840.5,
+      "M_measures": 349,
+      "S_switches": 308,
+      "F_clear_fail": 130,
+      "N_clear_succ": 10
+    },
+    "after": {
+      "T_virtual_s": 8661.1,
+      "L_dist_m": 30840.51,
+      "M_measures": 349,
+      "S_switches": 308,
+      "F_clear_fail": 130,
+      "N_clear_succ": 10
+    },
+    "returncode": 0
+  },
+  "all_pass": true
+}

@@ -1,0 +1,6 @@
+frozen  n=10 seed=5000 dir=0.50 : RUNAWAY act= 6001 cleared= 0 T= 18206.01   0.5s
+frozen  n=10 seed=9101 dir=0.20 : RUNAWAY act= 6001 cleared= 0 T= 18302.80   0.6s
+frozen  n=13 seed=5001 dir=0.50 : RUNAWAY act= 6001 cleared= 0 T= 18491.72   0.5s
+shared  n=10 seed=5000 dir=0.50 : NORMAL  act=  347 cleared=10 T=  6285.64  34.7s
+shared  n=10 seed=9101 dir=0.20 : NORMAL  act=  366 cleared=10 T=  7039.07  43.1s
+shared  n=13 seed=5001 dir=0.50 : NORMAL  act=  374 cleared=13 T=  8674.07 103.8s

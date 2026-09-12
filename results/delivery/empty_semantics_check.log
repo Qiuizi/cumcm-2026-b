@@ -1,0 +1,51 @@
+====================================================================================================
+合成几何：一次 0° 测向观测得到的保守安全网格
+====================================================================================================
+  存活单元数 = 10941；单元距测量点范围 = [4.0, 1500.2] m；清除计划长度 = 120；find_safe_clear_position(cur) = None
+
+  候选点 q = (-2000.0, 0.0)（样本单元距 q ≈ 3402 m）时，逐样本按“测向反馈”更新克隆网格：
+    d_sc=  3402.1 m  克隆 count= 10941  contradiction=True  被拒裁剪=1  冻结 p_recv=0.0
+    d_sc=  2838.0 m  克隆 count= 10941  contradiction=True  被拒裁剪=1  冻结 p_recv=0.0
+    d_sc=  3360.0 m  克隆 count= 10941  contradiction=True  被拒裁剪=1  冻结 p_recv=0.0
+
+====================================================================================================
+(2) “预测网格空集异常” = empty_prediction_count：模型正概率 + 测向反馈不可表示
+====================================================================================================
+  [模型可用 p_recv=0.5；候选 = [远点(会矛盾), 原点(可表示)]] action=measure reason=followup_promising (Jq=493.7s vs J0=598.8s) surviving=10941 j0=598.7701764863903 jq=493.7110913949458
+     计数增量: {"empty_prediction_count": 1, "unrepresentable_prediction_count": 1, "call_fallback_count": 0, "decision_fallback_count": 0, "decision_with_model_count": 1, "model_score_count": 11, "fallback_reason_hist": {}}
+
+  对照 A（同一几何、同一候选、无模型 ⇒ 冻结公式 p_recv=0，不进入测向分支）：
+  [predictor=None（冻结回退）] action=measure reason=followup_promising (Jq=372.7s vs J0=598.8s) surviving=10941 j0=598.7701764863903 jq=372.73427507117003
+     计数增量: {"empty_prediction_count": 0, "unrepresentable_prediction_count": 0, "call_fallback_count": 20, "decision_fallback_count": 1, "decision_with_model_count": 0, "model_score_count": 0, "fallback_reason_hist": {"predictor_not_attached": 20}}
+
+====================================================================================================
+(1) 模型回退 = call_fallback_count / decision_fallback_count（与 empty_prediction_count 无关）
+====================================================================================================
+  [假设集耗尽（n_alive=0）] action=measure reason=followup_promising (Jq=372.7s vs J0=598.8s) surviving=10941 j0=598.7701764863903 jq=372.73427507117003
+     计数增量: {"empty_prediction_count": 0, "unrepresentable_prediction_count": 0, "call_fallback_count": 20, "decision_fallback_count": 1, "decision_with_model_count": 0, "model_score_count": 0, "fallback_reason_hist": {"all_hypotheses_incompatible_after_3_observations": 20}}
+
+====================================================================================================
+(3) 实际安全网格不可用：contradiction=True（常见） 与 count()==0（构造期掩空）
+====================================================================================================
+  反向测向后的网格：count()=10941  contradiction=True  被拒裁剪=1
+  [实际网格 contradiction=True] action=fail reason=model_contradiction_observation_conflicts_with_grid surviving=10941 j0=0.0 jq=None
+     计数增量: {"empty_prediction_count": 0, "unrepresentable_prediction_count": 0, "call_fallback_count": 0, "decision_fallback_count": 0, "decision_with_model_count": 0, "model_score_count": 0, "fallback_reason_hist": {}}
+  合成空网格：count()=0  contradiction=False
+  [实际网格 count()==0（合成）] action=fail reason=empty_grid_no_valid_state surviving=0 j0=0.0 jq=None
+     计数增量: {"empty_prediction_count": 0, "unrepresentable_prediction_count": 0, "call_fallback_count": 0, "decision_fallback_count": 0, "decision_with_model_count": 0, "model_score_count": 0, "fallback_reason_hist": {}}
+
+====================================================================================================
+(4) 明确实现缺陷：全部候选都不可表示时，打分回退分支对 None 做 `:.1f` 格式化
+====================================================================================================
+  [唯一候选=远点（被剔除）⇒ best_jq=None] **抛出异常 TypeError: unsupported format string passed to NoneType.__format__**  （"reason": f"direct_clear_better (J0={j0:.1f}s vs Jq={best_jq:.1f}s)",）
+     计数增量: {"empty_prediction_count": 1, "unrepresentable_prediction_count": 1, "call_fallback_count": 0, "decision_fallback_count": 0, "decision_with_model_count": 0, "model_score_count": 1, "fallback_reason_hist": {}}
+  冻结基类同一位置（local_decision_frozen.py:470 与候选版 :385 相同写法）
+
+====================================================================================================
+判定
+====================================================================================================
+  (1) 假设集为空     → call_fallback +20、decision_fallback +1、empty_prediction +0（原因 ['all_hypotheses_incompatible_after_3_observations']）
+  (2) 预测网格空集   → empty_prediction +1、unrepresentable +1、回退 +0；对照（无模型）= +0
+  (3) 实际网格不可用 → action=fail（contradiction）/ fail（count=0），两种预测空集增量均 0/0
+  (4) 缺陷复现       → {'type': 'TypeError', 'message': 'unsupported format string passed to NoneType.__format__', 'where': '"reason": f"direct_clear_better (J0={j0:.1f}s vs Jq={best_jq:.1f}s)",'}
+  总判定: 通过

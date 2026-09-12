@@ -1,0 +1,74 @@
+
+[候选前置核对] 冻结源码指纹与实际加载模块一致性：一致
+    experiments/stage3_candidate/model.py                ada6c0069ee9b426 OK
+    experiments/stage3_candidate/predictor.py            0fa1753454775cbd OK
+    experiments/stage3_candidate/candidate_decision.py   811ed39875813301 OK
+    experiments/stage3_candidate/observer.py             a58d1931ff3334fe OK
+    experiments/stage3_candidate/launch.py               95330f69f79983c7 OK
+    local_decision_frozen.py                             6d26e61de9a25fd4 OK   [候选决策主体的生成来源 / 基类]
+    conservative_grid_frozen.py                          778af8fd986a79b6 OK   [候选决策主体的生成来源 / 基类]
+    模型先验规格一致性：一致
+[候选前置核对] 真值隔离静态检查：通过（无禁止字段访问）
+
+[本地模拟运行] 端口 14027 空闲，在本地拉起高真 Mock 服务器 (源数=10, seed=9501)...
+Mock Simulator Server running at http://127.0.0.1:14027 (Sources: 10, is_p4: True)...
+[PORT] 本局明文通信日志单独归档绝对路径: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_001541_team2026.jsonl
+=====================================================================================
+【2026 数模国赛 B 题】HTTP 端口通信与官方演练实测系统
+=====================================================================================
+运行档位 (Profile):      history_candidate (P4 历史接收模型候选版, 模型与回退规则冻结, 直接复用已验证模块)
+代码版本:               v3.4.2-guard-upperbound (git-badd8f6, 2026-09-12)
+机器狗标识 (队号):      team2026
+目标服务端口:           14027
+任务模式:               问题四 (含未知定向源 - 依赖严格隔离冻结模式)
+调度策略版本:           版本 C (开放路线重排+动态剪枝)
+-------------------------------------------------------------------------------------
+【最终生效配置 (Effective Config，以下为引擎对象实际取值)】
+  1. is_p4:                              True
+  2. version:                            C
+  3. enable_pruning:                     True
+  4. scan_at_clearance:                  False
+  5. enable_2opt_head:                   False
+  6. enable_adaptive_radial_coverage:    False
+  7. enable_reschedule_after_followup:   不存在于当前代码 (等效关闭, 未实现该实验路径)
+  8. 底层决策与网格依赖:                 conservative_grid_frozen.ConservativeGrid / candidate_decision.HistoryCandidateDecision
+-------------------------------------------------------------------------------------
+【源码标识 (Source Identity, sha256 前16位)】
+  git HEAD:                (工作区存在未提交改动, 以文件指纹为准)
+  src/strategy_engine.py                 8dca0841ba7c45de
+  src/local_decision.py                  eac1bdd8a0b3e964
+  src/conservative_grid.py               2908487383308aca
+  src/evidence_tracker.py                4a627a8bb8a236a1
+  src/client_runner.py                   e4e6ba0f160d9b94
+  src/sim_env.py                         ffa4f33aa5f943de
+  local_decision_frozen.py               6d26e61de9a25fd4
+  conservative_grid_frozen.py            778af8fd986a79b6
+  scripts/run_port_test.py               204ac11cae0cec19
+  experiments/stage3_candidate/candidate_decision.py 811ed39875813301
+  experiments/stage3_candidate/predictor.py 0fa1753454775cbd
+  experiments/stage3_candidate/model.py  ada6c0069ee9b426
+  experiments/stage3_candidate/observer.py a58d1931ff3334fe
+  experiments/stage3_candidate/wiring.py a327f47beabd2640
+-------------------------------------------------------------------------------------
+【候选接线信息 (history_candidate，直接复用已验证模块)】
+  决策器实现:             candidate_decision.HistoryCandidateDecision
+  决策器源码文件:         D:\桌面\output\cumcm2026\experiments\stage3_candidate\candidate_decision.py
+  接收预测接口实现:       predictor.HistoryReceptionPredictor
+  预测器源码文件:         D:\桌面\output\cumcm2026\experiments\stage3_candidate\predictor.py
+  观测来源:               observer.RecordingObserverDriver (包在 HttpSimDriver 外层)
+  观测字段白名单:         ['kind', 'p', 'svd']
+  冻结先验:               {'n_hyp': 512, 'p_dir': 0.5, 'r_range': [1000.0, 1500.0], 'u_prior': 'uniform[0,2pi)', 'eps_deg': 'inherit_from_grid', 'pool_factor': 40, 'max_rounds': 6, 'seed_base': 20260912, 'seed_stride': 131}
+  更新规则:               refilter_all_compatible_hypotheses_with_full_history
+  回退规则:               empty_hypothesis_set -> return None -> frozen_recv_prob
+  决策器限值:             {'max_followups': 12, 'max_followup_time_s': 600.0, 'margin_s': 5.0}
+  冻结源码指纹核对:       一致
+  真值隔离静态检查:       通过
+  本地实例真值访问:       无（决策器只拿到 HTTP 接口返回的 measure_result / svd_deg）
+-------------------------------------------------------------------------------------
+Traceback (most recent call last):
+  File "D:\桌面\output\cumcm2026\scripts\run_port_test.py", line 547, in <module>
+    main()
+  File "D:\桌面\output\cumcm2026\scripts\run_port_test.py", line 349, in main
+    print(f"本局明文 HTTP 日志归档: {driver.session_file}")
+                                     ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'RecordingObserverDriver' object has no attribute 'session_file'

@@ -1,0 +1,26 @@
+diff --git "a/scratch\\_prev_entry\\run_port_test_prev.py" "b/scripts\\run_port_test.py"
+index a7a335d..38f9f4e 100644
+--- "a/scratch\\_prev_entry\\run_port_test_prev.py"
++++ "b/scripts\\run_port_test.py"
+@@ -404,6 +404,8 @@ def main():
+                 "completion": {
+                     "completion_status": "ABORTED_HTTP_NO_COMPLETION",
+                     "completed_successfully": False,
++                    "real_budget_s": getattr(engine, "real_budget_s", None),
++                    "max_real_duration_s": getattr(engine, "max_real_duration_s", None),
+                     "abort": abort_info,
+                     "note": "运行在 HTTP 动作失败后中止；未完成状态如实记录，未伪造 COMPLETED",
+                 },
+@@ -578,6 +580,12 @@ def main():
+                 "real_time_s": s.get("real_time_s"),
+                 "virtual_time_s": s.get("virtual_time_s"),
+                 "avg_time_per_target": s.get("avg_time_per_target"),
++                # 现实预算（附件2 §12）：本局可用时间取 /enter 的 remaining_real_duration_s，
++                # max_real_duration_s 仅为配置上限；预算耗尽时如实记 SAFE_EXIT_BUDGET
++                "real_budget_s": s.get("real_budget_s"),
++                "real_budget_source": s.get("real_budget_source"),
++                "real_budget_elapsed_monotonic_s": s.get("real_budget_elapsed_monotonic_s"),
++                "max_real_duration_s": s.get("max_real_duration_s"),
+             },
+             "per_channel_end_evidence": {
+                 str(ch): {"status": st.status,

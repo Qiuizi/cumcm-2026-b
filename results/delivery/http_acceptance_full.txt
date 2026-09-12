@@ -1,0 +1,70 @@
+========================================================================================================
+有限交付验收：P4 history_candidate 接入 HTTP 入口（本地替代 HTTP 服务）
+========================================================================================================
+
+[接线状态] already-applied  已应用=True
+[接线差异] 已导出 patch: D:\桌面\output\cumcm2026\results\delivery\run_port_test_wiring.patch (23378 字节)
+
+[R1] C:\Users\123\AppData\Local\Programs\Python\Python312\python.exe scripts/run_port_test.py --port 14026 --prob p4 --version C --profile stable --robot_id team2026 --sources 10 --mock_seed 9501 --session_dir results\delivery\http_sessions
+     returncode=0  会话文件=D:\桌面\output\cumcm2026\results\delivery\http_sessions\session_stable_p4_20260913_004235.json
+
+[R2] C:\Users\123\AppData\Local\Programs\Python\Python312\python.exe scripts/run_port_test.py --port 14027 --prob p4 --version C --profile history_candidate --robot_id team2026 --sources 10 --mock_seed 9501 --session_dir results\delivery\http_sessions
+     returncode=0  会话文件=D:\桌面\output\cumcm2026\results\delivery\http_sessions\session_history_candidate_p4_20260913_004517.json
+
+[R3] C:\Users\123\AppData\Local\Programs\Python\Python312\python.exe scripts/run_port_test.py --port 14028 --prob p3 --version C --profile stable --robot_id team2026 --sources 10 --mock_seed 9501 --session_dir results\delivery\http_sessions
+     returncode=0  会话文件=D:\桌面\output\cumcm2026\results\delivery\http_sessions\session_stable_p3_20260913_004540.json
+
+========================================================================================================
+A. 实际调用的决策器、模型参数与模块指纹
+========================================================================================================
+  R1_decision_class                  = local_decision_frozen.LocalDecisionMaker
+  R1_grid_class                      = conservative_grid_frozen.ConservativeGrid
+  R1_is_frozen_baseline              = True
+  R2_decision_class                  = candidate_decision.HistoryCandidateDecision
+  R2_decision_module_file            = D:\桌面\output\cumcm2026\experiments\stage3_candidate\candidate_decision.py
+  R2_is_candidate                    = True
+  R2_module_is_validated_stage3      = True
+  R2_frozen_prior                    = {'n_hyp': 512, 'p_dir': 0.5, 'r_range': [1000.0, 1500.0], 'u_prior': 'uniform[0,2pi)', 'eps_deg': 'inherit_from_grid', 'pool_factor': 40, 'max_rounds': 6, 'seed_base': 20260912, 'seed_stride': 131}
+  R2_prior_matches_freeze            = True
+  R2_wiring_prior_spec_match         = True
+  R2_provenance_all_match            = True
+  R2_candidate_file_hashes           = {'experiments/stage3_candidate/model.py': 'ada6c0069ee9b426', 'experiments/stage3_candidate/predictor.py': '0fa1753454775cbd', 'experiments/stage3_candidate/candidate_decision.py': '811ed39875813301', 'experiments/stage3_candidate/observer.py': 'a58d1931ff3334fe', 'experiments/stage3_candidate/launch.py': '95330f69f79983c7'}
+  R2_frozen_file_hashes              = {'local_decision_frozen.py': '6d26e61de9a25fd4', 'conservative_grid_frozen.py': '778af8fd986a79b6'}
+  R2_decision_limits                 = {'max_followups': 12, 'max_followup_time_s': 600.0, 'margin_s': 5.0}
+
+========================================================================================================
+B. 候选是否已脱离本地真值访问
+========================================================================================================
+  候选模块 AST 静态检查:   通过
+  观测字段白名单:          ['kind', 'p', 'svd']
+  HttpSimDriver 字段:      ['abs_session_path', 'base_url', 'log_file', 'remaining_real_duration_s', 'req_seq', 'robot_id', 'session_file', 'start_timestamp', 'timeout_s']
+  接口层真值字段命中:      无
+  观测器位于接口层外层:    observer.RecordingObserverDriver
+
+========================================================================================================
+C. 完整清除、逐频道结束证据、计费闭合
+========================================================================================================
+  R1: 完成=True 清除=10 空频道=10 未决=0 失败=0 | 逐频道结束证据 20/20 (全决=True) | T=8661.1 闭合残差=0.002s 闭合=True | 现实=177.35501861572266s
+  R2: 完成=True 清除=10 空频道=10 未决=0 失败=0 | 逐频道结束证据 20/20 (全决=True) | T=7454.35 闭合残差=0.004s 闭合=True | 现实=160.18729972839355s
+  R3: 完成=True 清除=10 空频道=10 未决=0 失败=0 | 逐频道结束证据 20/20 (全决=True) | T=3319.93 闭合残差=-0.004s 闭合=True | 现实=21.50359845161438s
+
+========================================================================================================
+D. 接线前后在相同输入观测下的决策一致性
+========================================================================================================
+  HTTP 候选动作数=366  本地候选动作数=366  长度相同=True
+  逐动作完全一致 = True
+  HTTP T=7454.35  本地 T=7454.341  相同=True
+  本地候选分项: {'T_virtual_s': 7454.341, 'L_dist_m': 26851.71, 'M_measures': 329, 'S_switches': 308, 'F_clear_fail': 27, 'N_clear_succ': 10, 'cleared': 10, 'absent': 10}
+
+========================================================================================================
+E. P3 既有入口配置是否保持不变
+========================================================================================================
+  比较的配置项: ['is_p4', 'version', 'enable_pruning', 'scan_at_clearance', 'enable_2opt_head', 'enable_adaptive_radial_coverage', 'grid_class', 'local_decision_class']
+  配置差异: 无
+  配置保持不变 = True
+  源码指纹变化（可能来自更早轮次，非本次接线）: {'src/strategy_engine.py': {'reference': 'd98fd3660a82e693', 'now': '8dca0841ba7c45de'}, 'src/evidence_tracker.py': {'reference': 'e9d89c9adb9c6152', 'now': '4a627a8bb8a236a1'}, 'src/sim_env.py': {'reference': None, 'now': 'ffa4f33aa5f943de'}, 'local_decision_frozen.py': {'reference': None, 'now': '6d26e61de9a25fd4'}, 'conservative_grid_frozen.py': {'reference': None, 'now': '778af8fd986a79b6'}, 'scripts/run_port_test.py': {'reference': 'b2bcb8f17a0b4275', 'now': '230606087416c5f1'}}
+
+========================================================================================================
+总判定：全部通过
+========================================================================================================
+验收汇总 -> D:\桌面\output\cumcm2026\results\delivery\http_acceptance_summary.json

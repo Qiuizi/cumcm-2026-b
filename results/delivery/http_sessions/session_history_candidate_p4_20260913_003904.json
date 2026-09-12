@@ -1,0 +1,548 @@
+{
+  "profile": "history_candidate",
+  "profile_label": "history_candidate (P4 历史接收模型候选版, 模型与回退规则冻结, 直接复用已验证模块)",
+  "prob": "p4",
+  "port": 14027,
+  "robot_id": "team2026",
+  "mock_seed": 9501,
+  "external_port": false,
+  "sources_requested": 10,
+  "code_version": "v3.4.2-guard-upperbound (git-badd8f6, 2026-09-12)",
+  "git_dirty": true,
+  "source_fingerprint": {
+    "src/strategy_engine.py": "8dca0841ba7c45de",
+    "src/local_decision.py": "eac1bdd8a0b3e964",
+    "src/conservative_grid.py": "2908487383308aca",
+    "src/evidence_tracker.py": "4a627a8bb8a236a1",
+    "src/client_runner.py": "e4e6ba0f160d9b94",
+    "src/sim_env.py": "ffa4f33aa5f943de",
+    "local_decision_frozen.py": "6d26e61de9a25fd4",
+    "conservative_grid_frozen.py": "778af8fd986a79b6",
+    "scripts/run_port_test.py": "230606087416c5f1",
+    "experiments/stage3_candidate/candidate_decision.py": "811ed39875813301",
+    "experiments/stage3_candidate/predictor.py": "0fa1753454775cbd",
+    "experiments/stage3_candidate/model.py": "ada6c0069ee9b426",
+    "experiments/stage3_candidate/observer.py": "a58d1931ff3334fe",
+    "experiments/stage3_candidate/wiring.py": "a327f47beabd2640"
+  },
+  "effective_config": {
+    "is_p4": true,
+    "version": "C",
+    "enable_pruning": true,
+    "scan_at_clearance": false,
+    "enable_2opt_head": false,
+    "enable_adaptive_radial_coverage": false,
+    "grid_class": "conservative_grid_frozen.ConservativeGrid",
+    "local_decision_class": "candidate_decision.HistoryCandidateDecision",
+    "local_decision_module_file": "D:\\桌面\\output\\cumcm2026\\experiments\\stage3_candidate\\candidate_decision.py"
+  },
+  "completion": {
+    "completion_status": "COMPLETED",
+    "completed_successfully": true,
+    "terminal_reason": null,
+    "cleared_count": 10,
+    "absent_count": 10,
+    "unsolved_count": 0,
+    "failed_count": 0,
+    "failed_targets": [],
+    "absent_coverage_count": 10,
+    "absent_upper_bound_count": 0,
+    "real_time_s": 158.8450517654419,
+    "virtual_time_s": 7454.354,
+    "avg_time_per_target": 745.4354000000001
+  },
+  "per_channel_end_evidence": {
+    "1": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "2": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "3": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "4": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "5": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "6": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "7": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "8": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "9": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "10": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "11": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "12": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "13": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "14": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "15": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "16": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "17": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "18": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "19": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "20": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    }
+  },
+  "billing": {
+    "movement_time_s": 5370.35,
+    "channel_switch_time_s": 308.0,
+    "measure_time_s": 1645.0,
+    "clear_fail_time_s": 81.0,
+    "clear_succ_time_s": 50.0,
+    "total_accounted_virtual_time_s": 7454.35,
+    "final_virtual_time_s": 7454.35,
+    "accounting_discrepancy_s": 0.0004,
+    "unique_accepted_action_count": 368,
+    "total_move_dist_m": 26851.77,
+    "L_dist_m": 26851.77,
+    "M_measures": 329,
+    "S_switches": 308,
+    "F_clear_fail": 27,
+    "N_clear_succ": 10,
+    "closure_formula": "T = L/5 + 5M + S + 3F + 5N",
+    "closure_recomputed_s": 7454.354,
+    "closure_residual_s": 0.004
+  },
+  "candidate": {
+    "decision_class": "candidate_decision.HistoryCandidateDecision",
+    "decision_module_file": "D:\\桌面\\output\\cumcm2026\\experiments\\stage3_candidate\\candidate_decision.py",
+    "predictor_class": "predictor.HistoryReceptionPredictor",
+    "predictor_module_file": "D:\\桌面\\output\\cumcm2026\\experiments\\stage3_candidate\\predictor.py",
+    "observer_class": "observer.RecordingObserverDriver",
+    "observer_module_file": "D:\\桌面\\output\\cumcm2026\\experiments\\stage3_candidate\\observer.py",
+    "predictor_frozen_prior": {
+      "n_hyp": 512,
+      "p_dir": 0.5,
+      "r_range": [
+        1000.0,
+        1500.0
+      ],
+      "u_prior": "uniform[0,2pi)",
+      "eps_deg": "inherit_from_grid",
+      "pool_factor": 40,
+      "max_rounds": 6,
+      "seed_base": 20260912,
+      "seed_stride": 131
+    },
+    "update_rule": "refilter_all_compatible_hypotheses_with_full_history",
+    "fallback_rule": "empty_hypothesis_set -> return None -> frozen_recv_prob",
+    "observation_keys_allowed": [
+      "kind",
+      "p",
+      "svd"
+    ],
+    "decision_limits": {
+      "max_followups": 12,
+      "max_followup_time_s": 600.0,
+      "margin_s": 5.0
+    },
+    "provenance_all_match": true,
+    "truth_isolation_clean": true,
+    "provenance": {
+      "candidate_files": {
+        "experiments/stage3_candidate/model.py": {
+          "expected": "ada6c0069ee9b426bb174dba9c59e874c46d72a034b7d70f446a317b8c4b50c2",
+          "actual": "ada6c0069ee9b426bb174dba9c59e874c46d72a034b7d70f446a317b8c4b50c2",
+          "match": true
+        },
+        "experiments/stage3_candidate/predictor.py": {
+          "expected": "0fa1753454775cbd0efdd98f7fc98682bd79265fd2aed185420281cb87500006",
+          "actual": "0fa1753454775cbd0efdd98f7fc98682bd79265fd2aed185420281cb87500006",
+          "match": true
+        },
+        "experiments/stage3_candidate/candidate_decision.py": {
+          "expected": "811ed398758133016ec37e24e56eb01e799660464bd39523f5ccdb3c0c01c4af",
+          "actual": "811ed398758133016ec37e24e56eb01e799660464bd39523f5ccdb3c0c01c4af",
+          "match": true
+        },
+        "experiments/stage3_candidate/observer.py": {
+          "expected": "a58d1931ff3334fe578f095632a98af71986dc7463eaf4f9e2e523a616db1261",
+          "actual": "a58d1931ff3334fe578f095632a98af71986dc7463eaf4f9e2e523a616db1261",
+          "match": true
+        },
+        "experiments/stage3_candidate/launch.py": {
+          "expected": "95330f69f79983c7da6029c856eb3c6a8e47015e99e24e0bb0098e9f8cd7b012",
+          "actual": "95330f69f79983c7da6029c856eb3c6a8e47015e99e24e0bb0098e9f8cd7b012",
+          "match": true
+        }
+      },
+      "frozen_baseline": {
+        "local_decision_frozen.py": {
+          "expected": "6d26e61de9a25fd4ee82e643ea1a4b6e172cd38a3f52e2e996d4757d06cef642",
+          "actual": "6d26e61de9a25fd4ee82e643ea1a4b6e172cd38a3f52e2e996d4757d06cef642",
+          "match": true,
+          "loaded_from": "D:\\桌面\\output\\cumcm2026\\local_decision_frozen.py",
+          "role": "候选决策主体的生成来源 / 基类"
+        },
+        "conservative_grid_frozen.py": {
+          "expected": "778af8fd986a79b60d690e60b8daeaa21adc40d7b372c2e900d6838babebfd08",
+          "actual": "778af8fd986a79b60d690e60b8daeaa21adc40d7b372c2e900d6838babebfd08",
+          "match": true,
+          "loaded_from": "D:\\桌面\\output\\cumcm2026\\conservative_grid_frozen.py",
+          "role": "候选决策主体的生成来源 / 基类"
+        }
+      },
+      "all_match": true,
+      "frozen_model_spec": {
+        "expected": {
+          "n_hyp": 512,
+          "p_dir": 0.5,
+          "r_prior": [
+            1000.0,
+            1500.0
+          ],
+          "u_prior": "uniform[0,2pi)",
+          "eps_deg": "inherit_from_safety_grid",
+          "pool_factor": 40,
+          "max_rounds": 6,
+          "seed_base": 20260912,
+          "seed_stride": 131,
+          "update_rule": "refilter_all_compatible_hypotheses_with_full_history",
+          "fallback_rule": "empty_hypothesis_set -> reception_probability returns None -> decision maker falls back to frozen_recv_prob verbatim",
+          "note_on_priors": "p_dir / R 区间 / 朝向均匀分布均为建模假设，不是题面事实"
+        },
+        "actual": {
+          "n_hyp": 512,
+          "p_dir": 0.5,
+          "r_prior": [
+            1000.0,
+            1500.0
+          ],
+          "u_prior": "uniform[0,2pi)",
+          "eps_deg": "inherit_from_safety_grid",
+          "pool_factor": 40,
+          "max_rounds": 6,
+          "seed_base": 20260912,
+          "seed_stride": 131,
+          "update_rule": "refilter_all_compatible_hypotheses_with_full_history",
+          "fallback_rule": "empty_hypothesis_set -> reception_probability returns None -> decision maker falls back to frozen_recv_prob verbatim"
+        },
+        "match": true
+      }
+    }
+  },
+  "model_stats": {
+    "decisions_with_model": 26,
+    "decision_fallbacks": 0,
+    "call_fallbacks": 0,
+    "model_score_calls": 4370,
+    "fallback_reason_hist": {},
+    "action_changed_count": 0,
+    "position_changed_count": 11,
+    "models_created": 10,
+    "update_records": [
+      {
+        "channel": 9,
+        "n_obs": 2,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 9,
+        "n_obs": 3,
+        "n_alive_before": 512,
+        "n_alive_after": 296,
+        "eliminated": 216,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 8,
+        "n_obs": 5,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 8,
+        "n_obs": 6,
+        "n_alive_before": 512,
+        "n_alive_after": 7,
+        "eliminated": 505,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 19,
+        "n_obs": 1,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 19,
+        "n_obs": 2,
+        "n_alive_before": 512,
+        "n_alive_after": 94,
+        "eliminated": 418,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 19,
+        "n_obs": 3,
+        "n_alive_before": 94,
+        "n_alive_after": 36,
+        "eliminated": 58,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 19,
+        "n_obs": 4,
+        "n_alive_before": 36,
+        "n_alive_after": 5,
+        "eliminated": 31,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 11,
+        "n_obs": 2,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 11,
+        "n_obs": 3,
+        "n_alive_before": 512,
+        "n_alive_after": 10,
+        "eliminated": 502,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 12,
+        "n_obs": 1,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 12,
+        "n_obs": 2,
+        "n_alive_before": 512,
+        "n_alive_after": 11,
+        "eliminated": 501,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 7,
+        "n_obs": 1,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 7,
+        "n_obs": 2,
+        "n_alive_before": 512,
+        "n_alive_after": 96,
+        "eliminated": 416,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 7,
+        "n_obs": 3,
+        "n_alive_before": 96,
+        "n_alive_after": 2,
+        "eliminated": 94,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 1,
+        "n_obs": 1,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 1,
+        "n_obs": 2,
+        "n_alive_before": 512,
+        "n_alive_after": 99,
+        "eliminated": 413,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 1,
+        "n_obs": 3,
+        "n_alive_before": 99,
+        "n_alive_after": 15,
+        "eliminated": 84,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 1,
+        "n_obs": 4,
+        "n_alive_before": 15,
+        "n_alive_after": 1,
+        "eliminated": 14,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 15,
+        "n_obs": 13,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 15,
+        "n_obs": 14,
+        "n_alive_before": 512,
+        "n_alive_after": 19,
+        "eliminated": 493,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 17,
+        "n_obs": 15,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 17,
+        "n_obs": 16,
+        "n_alive_before": 512,
+        "n_alive_after": 324,
+        "eliminated": 188,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 17,
+        "n_obs": 17,
+        "n_alive_before": 324,
+        "n_alive_after": 2,
+        "eliminated": 322,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 10,
+        "n_obs": 22,
+        "n_alive_before": 512,
+        "n_alive_after": 512,
+        "eliminated": 0,
+        "exhausted": false,
+        "exhausted_reason": null
+      },
+      {
+        "channel": 10,
+        "n_obs": 23,
+        "n_alive_before": 512,
+        "n_alive_after": 7,
+        "eliminated": 505,
+        "exhausted": false,
+        "exhausted_reason": null
+      }
+    ]
+  },
+  "observation_census": {
+    "no_signal_total": 306,
+    "no_signal_followup": 3,
+    "no_signal_grid_exists": 3,
+    "no_signal_grid_not_shrunk": 3,
+    "no_signal_grid_shrunk": 0
+  },
+  "http_session_file": "D:\\桌面\\output\\cumcm2026\\results\\audit_logs\\http_session_20260913_003625_team2026.jsonl"
+}

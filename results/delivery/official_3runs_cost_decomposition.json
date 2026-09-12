@@ -1,0 +1,155 @@
+{
+  "targets": [
+    {
+      "label": "020309",
+      "channel": 5,
+      "run_no": 5531364280976582949,
+      "case_code": "4W45-MSUU-V4V7-H9DZ",
+      "team_no": "202623001546",
+      "entered": 1,
+      "end_reason": "user_exit",
+      "jammer_count": 13,
+      "measure_count": 243,
+      "switch_count": 223,
+      "clear_fail_count": 80,
+      "clear_success_count": 13,
+      "virtual_time_s": 7132.201412,
+      "program_run_duration_ms": 103217,
+      "billing_fixed_s": 1743,
+      "inferred_move_time_s": 5389.201,
+      "inferred_move_dist_m": 26946.0,
+      "clear_fail_per_measure": 0.329,
+      "cleared_all": true
+    },
+    {
+      "label": "020517",
+      "channel": 9,
+      "run_no": 3190371593355798820,
+      "case_code": "C6KE-BSQB-9CZD-P5CH",
+      "team_no": "202623001546",
+      "entered": 1,
+      "end_reason": "user_exit",
+      "jammer_count": 15,
+      "measure_count": 239,
+      "switch_count": 224,
+      "clear_fail_count": 90,
+      "clear_success_count": 15,
+      "virtual_time_s": 7533.067149,
+      "program_run_duration_ms": 68521,
+      "billing_fixed_s": 1764,
+      "inferred_move_time_s": 5769.067,
+      "inferred_move_dist_m": 28845.3,
+      "clear_fail_per_measure": 0.377,
+      "cleared_all": true
+    },
+    {
+      "label": "020723",
+      "channel": 16,
+      "run_no": 2317764918308646655,
+      "case_code": "4S29-ZUPR-M9XK-ZTCM",
+      "team_no": "202623001546",
+      "entered": 1,
+      "end_reason": "user_exit",
+      "jammer_count": 12,
+      "measure_count": 295,
+      "switch_count": 266,
+      "clear_fail_count": 83,
+      "clear_success_count": 12,
+      "virtual_time_s": 7676.983322,
+      "program_run_duration_ms": 206226,
+      "billing_fixed_s": 2050,
+      "inferred_move_time_s": 5626.983,
+      "inferred_move_dist_m": 28134.9,
+      "clear_fail_per_measure": 0.281,
+      "cleared_all": true
+    }
+  ],
+  "cross_check": {
+    "run": "374517967544758826 (011421)",
+    "client_log": "http_session_20260913_011421_202623001546.jsonl",
+    "client_switch_count": 207,
+    "server_switch_count": 207,
+    "client_measure": 232,
+    "server_measure": 232,
+    "client_clear_fail": 43,
+    "server_clear_fail": 43,
+    "client_clear_succ": 3,
+    "server_clear_succ": 3,
+    "client_final_vt": 4126.59,
+    "server_virtual_time_s": 4126.59483,
+    "switch_count_equal": true,
+    "residual_move_time_s": 2615.595,
+    "inferred_move_dist_m": 13078.0,
+    "client_reported_move_dist_m": 13077.97
+  },
+  "distribution": {
+    "measure_accepted_count": {
+      "020309": {
+        "value": 243,
+        "rank_from_top": 17,
+        "n": 49
+      },
+      "020517": {
+        "value": 239,
+        "rank_from_top": 18,
+        "n": 49
+      },
+      "020723": {
+        "value": 295,
+        "rank_from_top": 7,
+        "n": 49
+      }
+    },
+    "clear_failure_count": {
+      "020309": {
+        "value": 80,
+        "rank_from_top": 14,
+        "n": 49
+      },
+      "020517": {
+        "value": 90,
+        "rank_from_top": 11,
+        "n": 49
+      },
+      "020723": {
+        "value": 83,
+        "rank_from_top": 13,
+        "n": 49
+      }
+    },
+    "virtual_time_s": {
+      "020309": {
+        "value": 7132.201412,
+        "rank_from_top": 23,
+        "n": 49
+      },
+      "020517": {
+        "value": 7533.067149,
+        "rank_from_top": 17,
+        "n": 49
+      },
+      "020723": {
+        "value": 7676.983322,
+        "rank_from_top": 14,
+        "n": 49
+      }
+    },
+    "program_run_duration_ms": {
+      "020309": {
+        "value": 103217,
+        "rank_from_top": 13,
+        "n": 49
+      },
+      "020517": {
+        "value": 68521,
+        "rank_from_top": 16,
+        "n": 49
+      },
+      "020723": {
+        "value": 206226,
+        "rank_from_top": 6,
+        "n": 49
+      }
+    }
+  }
+}

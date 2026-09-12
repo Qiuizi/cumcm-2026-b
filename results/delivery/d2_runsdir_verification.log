@@ -1,0 +1,30 @@
+====================================================================================================
+D2 定向验证：默认运行日志写入包外独立目录 + 重建前后内容与指纹不变
+====================================================================================================
+  包目录        : D:\桌面\output\cumcm2026\release\p4_history_candidate_v1
+  包外运行根目录: D:\桌面\output\cumcm2026\release\p4_official_runs
+  重建前：包内 results/ 文件数=0，包外 runs/ 文件数=2
+  重建前 runs/ 指纹：
+    e967dc05ae847153  audit_logs/_D2_probe_runsdir_test.jsonl
+    f1371bd485d65929  legacy_package_results/audit_logs/_D2_probe_legacy_test.jsonl
+
+  入口退出码 = 3（期望 3：3 次重试后如实中止）
+  包外 runs/ 新增文件 3 个：
+    ce457e534ee80e7b  audit_logs/http_session_20260913_040231_d2test.jsonl
+    ce457e534ee80e7b  http_action_log.jsonl
+    6ca1b738a8bf7e32  sessions/session_stable_p4_20260913_040233.json
+  包内 results/ 新增文件 0 个（期望 0）: []
+
+  第二次重建返回码 = 0
+  重建日志片段：
+        predictor.py             0fa1753454775cbd  identical=True
+        model.py                 ada6c0069ee9b426  identical=True
+        observer.py              a58d1931ff3334fe  identical=True
+      入口改造锚点命中：[(0, 1), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1), (6, 1), (7, 1), (8, 1), (9, 1), (10, 1), (11, 1), (12, 1)]
+  重建后：包外 runs/ 文件数=5，包内 results/ 文件数=0（期望 0）
+  逐个文件指纹保持一致: True（共 5 个；丢失 []）
+
+====================================================================================================
+D2 定向验证总判定：全部通过
+====================================================================================================
+结果已写入 D:\桌面\output\cumcm2026\results\delivery\d2_runsdir_verification.json

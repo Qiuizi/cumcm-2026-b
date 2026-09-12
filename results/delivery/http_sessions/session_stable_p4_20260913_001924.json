@@ -1,0 +1,175 @@
+{
+  "profile": "stable",
+  "profile_label": "stable (稳定版 v3.4.2, 径向实验关闭, 径向开关=OFF)",
+  "prob": "p4",
+  "port": 14026,
+  "robot_id": "team2026",
+  "mock_seed": 9501,
+  "external_port": false,
+  "sources_requested": 10,
+  "code_version": "v3.4.2-guard-upperbound (git-badd8f6, 2026-09-12)",
+  "git_dirty": true,
+  "source_fingerprint": {
+    "src/strategy_engine.py": "8dca0841ba7c45de",
+    "src/local_decision.py": "eac1bdd8a0b3e964",
+    "src/conservative_grid.py": "2908487383308aca",
+    "src/evidence_tracker.py": "4a627a8bb8a236a1",
+    "src/client_runner.py": "e4e6ba0f160d9b94",
+    "src/sim_env.py": "ffa4f33aa5f943de",
+    "local_decision_frozen.py": "6d26e61de9a25fd4",
+    "conservative_grid_frozen.py": "778af8fd986a79b6",
+    "scripts/run_port_test.py": "230606087416c5f1"
+  },
+  "effective_config": {
+    "is_p4": true,
+    "version": "C",
+    "enable_pruning": true,
+    "scan_at_clearance": false,
+    "enable_2opt_head": false,
+    "enable_adaptive_radial_coverage": false,
+    "grid_class": "conservative_grid_frozen.ConservativeGrid",
+    "local_decision_class": "local_decision_frozen.LocalDecisionMaker",
+    "local_decision_module_file": "D:\\桌面\\output\\cumcm2026\\local_decision_frozen.py"
+  },
+  "completion": {
+    "completion_status": "COMPLETED",
+    "completed_successfully": true,
+    "terminal_reason": null,
+    "cleared_count": 10,
+    "absent_count": 10,
+    "unsolved_count": 0,
+    "failed_count": 0,
+    "failed_targets": [],
+    "absent_coverage_count": 10,
+    "absent_upper_bound_count": 0,
+    "real_time_s": 77.9731171131134,
+    "virtual_time_s": 8661.101,
+    "avg_time_per_target": 866.1101000000001
+  },
+  "per_channel_end_evidence": {
+    "1": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "2": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "3": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "4": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "5": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "6": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "7": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "8": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "9": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "10": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "11": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "12": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "13": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "14": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "15": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "16": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "17": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "18": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    },
+    "19": {
+      "status": "CLEARED",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "20": {
+      "status": "ABSENT",
+      "absence_proof_type": "COVERAGE_NEGATIVE",
+      "fail_reason": null
+    }
+  },
+  "billing": {
+    "movement_time_s": 6168.1,
+    "channel_switch_time_s": 308.0,
+    "measure_time_s": 1745.0,
+    "clear_fail_time_s": 390.0,
+    "clear_succ_time_s": 50.0,
+    "total_accounted_virtual_time_s": 8661.1,
+    "final_virtual_time_s": 8661.1,
+    "accounting_discrepancy_s": 0.0001,
+    "unique_accepted_action_count": 491,
+    "total_move_dist_m": 30840.51,
+    "L_dist_m": 30840.51,
+    "M_measures": 349,
+    "S_switches": 308,
+    "F_clear_fail": 130,
+    "N_clear_succ": 10,
+    "closure_formula": "T = L/5 + 5M + S + 3F + 5N",
+    "closure_recomputed_s": 8661.102,
+    "closure_residual_s": 0.002
+  },
+  "candidate": null,
+  "model_stats": null,
+  "observation_census": null,
+  "http_session_file": "D:\\桌面\\output\\cumcm2026\\results\\audit_logs\\http_session_20260913_001806_team2026.jsonl"
+}

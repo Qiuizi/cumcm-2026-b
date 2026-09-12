@@ -1,0 +1,44 @@
+{
+  "release_id": "p4_history_candidate_v1",
+  "release_revision": "r2",
+  "revision_of": "p4_history_candidate_v1 r1（12 局配对验收版）",
+  "revision_changes": [
+    "D1: 修复 best_jq=None（全部候选不可表示）时 reason 文本对 None 做 ':.1f' 格式化抛 TypeError；改为 jq_txt 取值，动作类型/位置/清除计划不变；冻结基类与构建期再生的候选同步携带",
+    "D2: 默认运行产物（HTTP 日志/审计/会话）改写到包外独立目录 runs_config.json → ../p4_official_runs；构建前自动迁出包内遗留产物（不删除、不覆盖）",
+    "（r2 内更早的协议对齐：现实预算以 /enter 的 remaining_real_duration_s 为准；HTTP 错误处理/幂等性按附件2 §5.3 分类）"
+  ],
+  "supersedes_fingerprints（历史身份）": {
+    "candidate/candidate_decision.py": "811ed398758133016ec37e24e56eb01e799660464bd39523f5ccdb3c0c01c4af",
+    "local_decision_frozen.py": "6d26e61de9a25fd4ee82e643ea1a4b6e172cd38a3f52e2e996d4757d06cef642"
+  },
+  "runs_dir": {
+    "config": "runs_config.json",
+    "value": "../p4_official_runs",
+    "resolved": "D:\\桌面\\output\\cumcm2026\\release\\p4_official_runs",
+    "note": "默认运行产物根目录（包外，重建安全）；可被 CUMCM_RUNS_DIR / --runs_dir 覆盖"
+  },
+  "upstream_validated": "stage3 (P4 history_candidate, 12 局配对验收通过；r2 与 r1 数值行为一致)",
+  "build_mode": "self-contained（打包后不依赖实验工作区，也不需要 git）",
+  "files": {
+    "LAUNCH_官方连接命令.md": "3333dc98998b901f3305442043f7fafcb85359829689d6b691733417aa0a2e2a",
+    "README_运行说明.md": "f29abe9561dd7ee1a47c3ea0054edde7335dbe9245dc654c87c09f8893fcc78d",
+    "candidate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "candidate/candidate_decision.py": "8be9f9df647194d8a32a24f37fbebb937ec44b62a9049c01023017e5e24daad6",
+    "candidate/model.py": "ada6c0069ee9b426bb174dba9c59e874c46d72a034b7d70f446a317b8c4b50c2",
+    "candidate/observer.py": "a58d1931ff3334fe578f095632a98af71986dc7463eaf4f9e2e523a616db1261",
+    "candidate/predictor.py": "0fa1753454775cbd0efdd98f7fc98682bd79265fd2aed185420281cb87500006",
+    "candidate/wiring.py": "406038c7ab026f38a35e10d594a961e4ab0836d55323f0fb96bb97f5ca3e9b30",
+    "check_release.py": "3fe53605662ecf73a3f6f4db9a49efde0e0f89cff8924e8c118c87e898e40137",
+    "conservative_grid_frozen.py": "778af8fd986a79b60d690e60b8daeaa21adc40d7b372c2e900d6838babebfd08",
+    "local_decision_frozen.py": "6f9c895357149c974ed9debaeff9284f8f42618076dc5a8c8bb02410689967cb",
+    "run_port_test.py": "2f59f8daf7a41675193c4f7bb3a9acb88ae2eab02168a7d69fc9ebe0b25fc6d6",
+    "runs_config.json": "6e38af97cb192e93030d774925cf640668f9a961f000c807690ea72a1531c252",
+    "src/client_runner.py": "5f221dd4e8a83fad7ff97e722c3a0c1f55aa23c7248eede0ea4ad57aabedfb6d",
+    "src/conservative_grid.py": "2908487383308aca924f321dc0ccfc4961fd57d8df9f14c057bad89709d0c9c3",
+    "src/evidence_tracker.py": "4a627a8bb8a236a1b407a6e27cae28774dd9295ad0b99b0df55de4a99d5ceac3",
+    "src/local_decision.py": "eac1bdd8a0b3e9649e3a97bc8f25602961f82f9820438d770602698b1fd1acbb",
+    "src/mock_server.py": "dff95c5b91e1b5ad1d8627eab4f20a8450ad3fa2feb81ef173758410b8dac761",
+    "src/sim_env.py": "ffa4f33aa5f943ded2ace6ac65fa2aa5d1efc61a563880402a2c876abcd77dcf",
+    "src/strategy_engine.py": "f4f41a97bd24d289730c2f6d02f95b8a585544b38c37f0da6637982a72048747"
+  }
+}

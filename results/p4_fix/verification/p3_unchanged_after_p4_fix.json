@@ -1,0 +1,141 @@
+{
+  "records": [
+    {
+      "case_id": "P3-New-10src-6010",
+      "arm": "baseline(2opt_head=True, radial=off)",
+      "measured": {
+        "cleared": 10,
+        "T": 3006.029,
+        "L": 11115.14297877749,
+        "M": 122,
+        "S": 114,
+        "F": 3,
+        "N": 10,
+        "completion_status": "COMPLETED",
+        "failed": 0
+      },
+      "expected": {
+        "cleared": 10,
+        "T": 3006.03,
+        "L": 11115.1,
+        "M": 122,
+        "S": 114,
+        "F": 3,
+        "N": 10
+      },
+      "checks": {
+        "cleared": true,
+        "M": true,
+        "S": true,
+        "F": true,
+        "N": true,
+        "L(1位小数)": true,
+        "T(2位小数)": true
+      },
+      "pass": true
+    },
+    {
+      "case_id": "P3-New-10src-6010",
+      "arm": "radial_candidate(2opt_head=True, radial=on)",
+      "measured": {
+        "cleared": 10,
+        "T": 3004.324,
+        "L": 11086.62184546091,
+        "M": 121,
+        "S": 114,
+        "F": 6,
+        "N": 10,
+        "completion_status": "COMPLETED",
+        "failed": 0
+      },
+      "expected": {
+        "cleared": 10,
+        "T": 3004.32,
+        "L": 11086.6,
+        "M": 121,
+        "S": 114,
+        "F": 6,
+        "N": 10
+      },
+      "checks": {
+        "cleared": true,
+        "M": true,
+        "S": true,
+        "F": true,
+        "N": true,
+        "L(1位小数)": true,
+        "T(2位小数)": true
+      },
+      "pass": true
+    },
+    {
+      "case_id": "P3-Corr-13src-5013",
+      "arm": "baseline(2opt_head=True, radial=off)",
+      "measured": {
+        "cleared": 13,
+        "T": 3126.831,
+        "L": 11909.154323582357,
+        "M": 107,
+        "S": 103,
+        "F": 14,
+        "N": 13,
+        "completion_status": "COMPLETED",
+        "failed": 0
+      },
+      "expected": {
+        "cleared": 13,
+        "T": 3126.83,
+        "L": 11909.2,
+        "M": 107,
+        "S": 103,
+        "F": 14,
+        "N": 13
+      },
+      "checks": {
+        "cleared": true,
+        "M": true,
+        "S": true,
+        "F": true,
+        "N": true,
+        "L(1位小数)": true,
+        "T(2位小数)": true
+      },
+      "pass": true
+    },
+    {
+      "case_id": "P3-Corr-13src-5013",
+      "arm": "radial_candidate(2opt_head=True, radial=on)",
+      "measured": {
+        "cleared": 13,
+        "T": 3097.307,
+        "L": 11751.533350407588,
+        "M": 108,
+        "S": 103,
+        "F": 13,
+        "N": 13,
+        "completion_status": "COMPLETED",
+        "failed": 0
+      },
+      "expected": {
+        "cleared": 13,
+        "T": 3097.31,
+        "L": 11751.5,
+        "M": 108,
+        "S": 103,
+        "F": 13,
+        "N": 13
+      },
+      "checks": {
+        "cleared": true,
+        "M": true,
+        "S": true,
+        "F": true,
+        "N": true,
+        "L(1位小数)": true,
+        "T(2位小数)": true
+      },
+      "pass": true
+    }
+  ],
+  "overall_pass": true
+}

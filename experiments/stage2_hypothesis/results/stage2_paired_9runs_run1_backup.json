@@ -1,0 +1,2641 @@
+{
+  "summary": {
+    "preregistered": [
+      [
+        8801,
+        10
+      ],
+      [
+        8813,
+        13
+      ],
+      [
+        8816,
+        16
+      ]
+    ],
+    "arms": [
+      "A",
+      "B",
+      "C"
+    ],
+    "acceptance_all_pass": true,
+    "C_vs_A": {
+      "n": 3,
+      "mean_delta": -460.015,
+      "median_delta": -407.548,
+      "worst_regression": -395.739,
+      "best_gain": -576.759,
+      "win": 3,
+      "tie": 0,
+      "loss": 0,
+      "per_case": [
+        {
+          "case": "P4-10src-seed8801",
+          "A": 6773.046,
+          "B": 6365.498,
+          "delta": -407.5480000000007
+        },
+        {
+          "case": "P4-13src-seed8813",
+          "A": 9318.816,
+          "B": 8742.057,
+          "delta": -576.759
+        },
+        {
+          "case": "P4-16src-seed8816",
+          "A": 6928.612,
+          "B": 6532.873,
+          "delta": -395.7390000000005
+        }
+      ]
+    },
+    "C_vs_B": {
+      "n": 3,
+      "mean_delta": -511.309,
+      "median_delta": -270.591,
+      "worst_regression": -155.378,
+      "best_gain": -1107.958,
+      "win": 3,
+      "tie": 0,
+      "loss": 0,
+      "per_case": [
+        {
+          "case": "P4-10src-seed8801",
+          "A": 7473.456,
+          "B": 6365.498,
+          "delta": -1107.9580000000005
+        },
+        {
+          "case": "P4-13src-seed8813",
+          "A": 8897.435,
+          "B": 8742.057,
+          "delta": -155.3779999999988
+        },
+        {
+          "case": "P4-16src-seed8816",
+          "A": 6803.464,
+          "B": 6532.873,
+          "delta": -270.59100000000035
+        }
+      ]
+    },
+    "B_vs_A": {
+      "n": 3,
+      "mean_delta": 51.294,
+      "median_delta": -125.148,
+      "worst_regression": 700.41,
+      "best_gain": -421.381,
+      "win": 2,
+      "tie": 0,
+      "loss": 1,
+      "per_case": [
+        {
+          "case": "P4-10src-seed8801",
+          "A": 6773.046,
+          "B": 7473.456,
+          "delta": 700.4099999999999
+        },
+        {
+          "case": "P4-13src-seed8813",
+          "A": 9318.816,
+          "B": 8897.435,
+          "delta": -421.3810000000012
+        },
+        {
+          "case": "P4-16src-seed8816",
+          "A": 6928.612,
+          "B": 6803.464,
+          "delta": -125.14800000000014
+        }
+      ]
+    },
+    "records": [
+      {
+        "case": "P4-10src-seed8801",
+        "arm": "A",
+        "seed": 8801,
+        "n_src": 10,
+        "T_virtual_s": 6773.046,
+        "L_dist_m": 23425.23,
+        "M_measures": 331,
+        "S_switches": 290,
+        "F_clear_fail": 31,
+        "N_clear_succ": 10,
+        "closure_s": 6773.046,
+        "closure_residual_s": 0.0,
+        "closure_ok": true,
+        "cleared": 10,
+        "absent": 10,
+        "unsolved": 0,
+        "failed": 0,
+        "completion_status": "COMPLETED",
+        "completed_successfully": true,
+        "terminal_reason": null,
+        "avg_time_per_target_s": 677.305,
+        "real_time_s": 81.261,
+        "no_signal_measures_total": 311,
+        "no_signal_followups": 25,
+        "planned_search_points": 25,
+        "visited_search_points": 25,
+        "absent_coverage_count": 10,
+        "absent_upper_bound_count": 0,
+        "action_changed_count": 0,
+        "position_changed_count": 0,
+        "k_rule_triggered": "",
+        "model_decision_fallbacks": "",
+        "model_call_fallbacks": ""
+      },
+      {
+        "case": "P4-10src-seed8801",
+        "arm": "B",
+        "seed": 8801,
+        "n_src": 10,
+        "T_virtual_s": 7473.456,
+        "L_dist_m": 25952.28,
+        "M_measures": 307,
+        "S_switches": 290,
+        "F_clear_fail": 136,
+        "N_clear_succ": 10,
+        "closure_s": 7473.456,
+        "closure_residual_s": 0.0,
+        "closure_ok": true,
+        "cleared": 10,
+        "absent": 10,
+        "unsolved": 0,
+        "failed": 0,
+        "completion_status": "COMPLETED",
+        "completed_successfully": true,
+        "terminal_reason": null,
+        "avg_time_per_target_s": 747.346,
+        "real_time_s": 29.428,
+        "no_signal_measures_total": 289,
+        "no_signal_followups": 3,
+        "planned_search_points": 25,
+        "visited_search_points": 25,
+        "absent_coverage_count": 10,
+        "absent_upper_bound_count": 0,
+        "action_changed_count": 3,
+        "position_changed_count": 0,
+        "k_rule_triggered": 3,
+        "model_decision_fallbacks": "",
+        "model_call_fallbacks": ""
+      },
+      {
+        "case": "P4-10src-seed8801",
+        "arm": "C",
+        "seed": 8801,
+        "n_src": 10,
+        "T_virtual_s": 6365.498,
+        "L_dist_m": 22162.49,
+        "M_measures": 312,
+        "S_switches": 290,
+        "F_clear_fail": 11,
+        "N_clear_succ": 10,
+        "closure_s": 6365.498,
+        "closure_residual_s": 0.0,
+        "closure_ok": true,
+        "cleared": 10,
+        "absent": 10,
+        "unsolved": 0,
+        "failed": 0,
+        "completion_status": "COMPLETED",
+        "completed_successfully": true,
+        "terminal_reason": null,
+        "avg_time_per_target_s": 636.55,
+        "real_time_s": 62.235,
+        "no_signal_measures_total": 289,
+        "no_signal_followups": 3,
+        "planned_search_points": 25,
+        "visited_search_points": 25,
+        "absent_coverage_count": 10,
+        "absent_upper_bound_count": 0,
+        "action_changed_count": 0,
+        "position_changed_count": 7,
+        "k_rule_triggered": "",
+        "model_decision_fallbacks": 2,
+        "model_call_fallbacks": 0,
+        "model_decisions_used": 24,
+        "fallback_reason_hist": "{}"
+      },
+      {
+        "case": "P4-13src-seed8813",
+        "arm": "A",
+        "seed": 8813,
+        "n_src": 13,
+        "T_virtual_s": 9318.816,
+        "L_dist_m": 35039.08,
+        "M_measures": 298,
+        "S_switches": 234,
+        "F_clear_fail": 174,
+        "N_clear_succ": 13,
+        "closure_s": 9318.816,
+        "closure_residual_s": -0.0,
+        "closure_ok": true,
+        "cleared": 13,
+        "absent": 7,
+        "unsolved": 0,
+        "failed": 0,
+        "completion_status": "COMPLETED",
+        "completed_successfully": true,
+        "terminal_reason": null,
+        "avg_time_per_target_s": 716.832,
+        "real_time_s": 132.003,
+        "no_signal_measures_total": 275,
+        "no_signal_followups": 48,
+        "planned_search_points": 25,
+        "visited_search_points": 25,
+        "absent_coverage_count": 7,
+        "absent_upper_bound_count": 0,
+        "action_changed_count": 0,
+        "position_changed_count": 0,
+        "k_rule_triggered": "",
+        "model_decision_fallbacks": "",
+        "model_call_fallbacks": ""
+      },
+      {
+        "case": "P4-13src-seed8813",
+        "arm": "B",
+        "seed": 8813,
+        "n_src": 13,
+        "T_virtual_s": 8897.435,
+        "L_dist_m": 33187.18,
+        "M_measures": 253,
+        "S_switches": 234,
+        "F_clear_fail": 232,
+        "N_clear_succ": 13,
+        "closure_s": 8897.435,
+        "closure_residual_s": -0.0,
+        "closure_ok": true,
+        "cleared": 13,
+        "absent": 7,
+        "unsolved": 0,
+        "failed": 0,
+        "completion_status": "COMPLETED",
+        "completed_successfully": true,
+        "terminal_reason": null,
+        "avg_time_per_target_s": 684.418,
+        "real_time_s": 47.469,
+        "no_signal_measures_total": 233,
+        "no_signal_followups": 6,
+        "planned_search_points": 25,
+        "visited_search_points": 25,
+        "absent_coverage_count": 7,
+        "absent_upper_bound_count": 0,
+        "action_changed_count": 6,
+        "position_changed_count": 0,
+        "k_rule_triggered": 6,
+        "model_decision_fallbacks": "",
+        "model_call_fallbacks": ""
+      },
+      {
+        "case": "P4-13src-seed8813",
+        "arm": "C",
+        "seed": 8813,
+        "n_src": 13,
+        "T_virtual_s": 8742.057,
+        "L_dist_m": 33665.29,
+        "M_measures": 259,
+        "S_switches": 235,
+        "F_clear_fail": 138,
+        "N_clear_succ": 13,
+        "closure_s": 8742.057,
+        "closure_residual_s": 0.0,
+        "closure_ok": true,
+        "cleared": 13,
+        "absent": 7,
+        "unsolved": 0,
+        "failed": 0,
+        "completion_status": "COMPLETED",
+        "completed_successfully": true,
+        "terminal_reason": null,
+        "avg_time_per_target_s": 672.466,
+        "real_time_s": 86.557,
+        "no_signal_measures_total": 233,
+        "no_signal_followups": 6,
+        "planned_search_points": 25,
+        "visited_search_points": 25,
+        "absent_coverage_count": 7,
+        "absent_upper_bound_count": 0,
+        "action_changed_count": 4,
+        "position_changed_count": 10,
+        "k_rule_triggered": "",
+        "model_decision_fallbacks": 2,
+        "model_call_fallbacks": 250,
+        "model_decisions_used": 30,
+        "fallback_reason_hist": "{\"all_hypotheses_incompatible_after_3_observations\": 250}"
+      },
+      {
+        "case": "P4-16src-seed8816",
+        "arm": "A",
+        "seed": 8816,
+        "n_src": 16,
+        "T_virtual_s": 6928.612,
+        "L_dist_m": 26478.06,
+        "M_measures": 237,
+        "S_switches": 176,
+        "F_clear_fail": 64,
+        "N_clear_succ": 16,
+        "closure_s": 6928.612,
+        "closure_residual_s": -0.0,
+        "closure_ok": true,
+        "cleared": 16,
+        "absent": 4,
+        "unsolved": 0,
+        "failed": 0,
+        "completion_status": "COMPLETED",
+        "completed_successfully": true,
+        "terminal_reason": null,
+        "avg_time_per_target_s": 433.038,
+        "real_time_s": 145.057,
+        "no_signal_measures_total": 206,
+        "no_signal_followups": 52,
+        "planned_search_points": 25,
+        "visited_search_points": 25,
+        "absent_coverage_count": 0,
+        "absent_upper_bound_count": 4,
+        "action_changed_count": 0,
+        "position_changed_count": 0,
+        "k_rule_triggered": "",
+        "model_decision_fallbacks": "",
+        "model_call_fallbacks": ""
+      },
+      {
+        "case": "P4-16src-seed8816",
+        "arm": "B",
+        "seed": 8816,
+        "n_src": 16,
+        "T_virtual_s": 6803.464,
+        "L_dist_m": 25272.32,
+        "M_measures": 187,
+        "S_switches": 176,
+        "F_clear_fail": 186,
+        "N_clear_succ": 16,
+        "closure_s": 6803.464,
+        "closure_residual_s": -0.0,
+        "closure_ok": true,
+        "cleared": 16,
+        "absent": 4,
+        "unsolved": 0,
+        "failed": 0,
+        "completion_status": "COMPLETED",
+        "completed_successfully": true,
+        "terminal_reason": null,
+        "avg_time_per_target_s": 425.216,
+        "real_time_s": 52.383,
+        "no_signal_measures_total": 160,
+        "no_signal_followups": 6,
+        "planned_search_points": 25,
+        "visited_search_points": 25,
+        "absent_coverage_count": 0,
+        "absent_upper_bound_count": 4,
+        "action_changed_count": 6,
+        "position_changed_count": 0,
+        "k_rule_triggered": 6,
+        "model_decision_fallbacks": "",
+        "model_call_fallbacks": ""
+      },
+      {
+        "case": "P4-16src-seed8816",
+        "arm": "C",
+        "seed": 8816,
+        "n_src": 16,
+        "T_virtual_s": 6532.873,
+        "L_dist_m": 24834.36,
+        "M_measures": 192,
+        "S_switches": 175,
+        "F_clear_fail": 117,
+        "N_clear_succ": 16,
+        "closure_s": 6532.873,
+        "closure_residual_s": -0.0,
+        "closure_ok": true,
+        "cleared": 16,
+        "absent": 4,
+        "unsolved": 0,
+        "failed": 0,
+        "completion_status": "COMPLETED",
+        "completed_successfully": true,
+        "terminal_reason": null,
+        "avg_time_per_target_s": 408.305,
+        "real_time_s": 140.053,
+        "no_signal_measures_total": 160,
+        "no_signal_followups": 6,
+        "planned_search_points": 25,
+        "visited_search_points": 25,
+        "absent_coverage_count": 0,
+        "absent_upper_bound_count": 4,
+        "action_changed_count": 4,
+        "position_changed_count": 14,
+        "k_rule_triggered": "",
+        "model_decision_fallbacks": 0,
+        "model_call_fallbacks": 0,
+        "model_decisions_used": 38,
+        "fallback_reason_hist": "{}"
+      }
+    ]
+  },
+  "records": [
+    {
+      "case": "P4-10src-seed8801",
+      "arm": "A",
+      "seed": 8801,
+      "n_src": 10,
+      "T_virtual_s": 6773.046,
+      "L_dist_m": 23425.23,
+      "M_measures": 331,
+      "S_switches": 290,
+      "F_clear_fail": 31,
+      "N_clear_succ": 10,
+      "closure_s": 6773.046,
+      "closure_residual_s": 0.0,
+      "closure_ok": true,
+      "cleared": 10,
+      "absent": 10,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "completed_successfully": true,
+      "terminal_reason": null,
+      "avg_time_per_target_s": 677.305,
+      "real_time_s": 81.261,
+      "no_signal_measures_total": 311,
+      "no_signal_followups": 25,
+      "planned_search_points": 25,
+      "visited_search_points": 25,
+      "absent_coverage_count": 10,
+      "absent_upper_bound_count": 0,
+      "per_channel_end_evidence": {
+        "1": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "2": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "3": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "4": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "5": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "6": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "7": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "8": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "9": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "10": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "11": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "12": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "13": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "14": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "15": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "16": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "17": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "18": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "19": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "20": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        }
+      },
+      "action_changed_count": 0,
+      "position_changed_count": 0,
+      "decision_records": [],
+      "model_update_records": [],
+      "k_rule_triggered": "",
+      "model_decision_fallbacks": "",
+      "model_call_fallbacks": ""
+    },
+    {
+      "case": "P4-10src-seed8801",
+      "arm": "B",
+      "seed": 8801,
+      "n_src": 10,
+      "T_virtual_s": 7473.456,
+      "L_dist_m": 25952.28,
+      "M_measures": 307,
+      "S_switches": 290,
+      "F_clear_fail": 136,
+      "N_clear_succ": 10,
+      "closure_s": 7473.456,
+      "closure_residual_s": 0.0,
+      "closure_ok": true,
+      "cleared": 10,
+      "absent": 10,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "completed_successfully": true,
+      "terminal_reason": null,
+      "avg_time_per_target_s": 747.346,
+      "real_time_s": 29.428,
+      "no_signal_measures_total": 289,
+      "no_signal_followups": 3,
+      "planned_search_points": 25,
+      "visited_search_points": 25,
+      "absent_coverage_count": 10,
+      "absent_upper_bound_count": 0,
+      "per_channel_end_evidence": {
+        "1": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "2": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "3": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "4": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "5": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "6": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "7": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "8": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "9": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "10": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "11": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "12": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "13": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "14": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "15": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "16": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "17": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "18": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "19": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "20": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        }
+      },
+      "action_changed_count": 3,
+      "position_changed_count": 0,
+      "decision_records": [
+        {
+          "channel": 4,
+          "grid_count": 10941,
+          "base_action": "measure",
+          "base_pos": [
+            609.84,
+            743.22
+          ],
+          "base_j0": 817.0172032423505,
+          "base_jq": 304.4270193362473,
+          "b_action": "clear",
+          "b_pos": [
+            155.23,
+            896.89
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 3,
+          "grid_count": 10941,
+          "base_action": "measure",
+          "base_pos": [
+            -497.04,
+            617.06
+          ],
+          "base_j0": 580.287247613711,
+          "base_jq": 290.39236766314434,
+          "b_action": "clear",
+          "b_pos": [
+            -857.04,
+            495.96
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 15,
+          "grid_count": 10941,
+          "base_action": "measure",
+          "base_pos": [
+            -673.39,
+            274.2
+          ],
+          "base_j0": 733.8880570378435,
+          "base_jq": 289.044776153495,
+          "b_action": "clear",
+          "b_pos": [
+            -606.51,
+            65.14
+          ],
+          "action_changed": true
+        }
+      ],
+      "model_update_records": [],
+      "k_rule_triggered": 3,
+      "model_decision_fallbacks": "",
+      "model_call_fallbacks": ""
+    },
+    {
+      "case": "P4-10src-seed8801",
+      "arm": "C",
+      "seed": 8801,
+      "n_src": 10,
+      "T_virtual_s": 6365.498,
+      "L_dist_m": 22162.49,
+      "M_measures": 312,
+      "S_switches": 290,
+      "F_clear_fail": 11,
+      "N_clear_succ": 10,
+      "closure_s": 6365.498,
+      "closure_residual_s": 0.0,
+      "closure_ok": true,
+      "cleared": 10,
+      "absent": 10,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "completed_successfully": true,
+      "terminal_reason": null,
+      "avg_time_per_target_s": 636.55,
+      "real_time_s": 62.235,
+      "no_signal_measures_total": 289,
+      "no_signal_followups": 3,
+      "planned_search_points": 25,
+      "visited_search_points": 25,
+      "absent_coverage_count": 10,
+      "absent_upper_bound_count": 0,
+      "per_channel_end_evidence": {
+        "1": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "2": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "3": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "4": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "5": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "6": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "7": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "8": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "9": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "10": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "11": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "12": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "13": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "14": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "15": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "16": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "17": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "18": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "19": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "20": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        }
+      },
+      "action_changed_count": 0,
+      "position_changed_count": 7,
+      "decision_records": [],
+      "model_update_records": [
+        {
+          "channel": 11,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 11,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 12,
+          "eliminated": 500,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 8,
+          "n_obs": 4,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 8,
+          "n_obs": 5,
+          "n_alive_before": 512,
+          "n_alive_after": 47,
+          "eliminated": 465,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 5,
+          "n_obs": 5,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 5,
+          "n_obs": 6,
+          "n_alive_before": 512,
+          "n_alive_after": 16,
+          "eliminated": 496,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 4,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 4,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 88,
+          "eliminated": 424,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 4,
+          "n_obs": 3,
+          "n_alive_before": 88,
+          "n_alive_after": 2,
+          "eliminated": 86,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 7,
+          "n_obs": 8,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 7,
+          "n_obs": 9,
+          "n_alive_before": 512,
+          "n_alive_after": 16,
+          "eliminated": 496,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 3,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 3,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 79,
+          "eliminated": 433,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 3,
+          "n_obs": 3,
+          "n_alive_before": 79,
+          "n_alive_after": 29,
+          "eliminated": 50,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 3,
+          "n_obs": 4,
+          "n_alive_before": 29,
+          "n_alive_after": 0,
+          "eliminated": 29,
+          "exhausted": true,
+          "exhausted_reason": "all_hypotheses_incompatible_after_4_observations"
+        },
+        {
+          "channel": 15,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 15,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 69,
+          "eliminated": 443,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 15,
+          "n_obs": 3,
+          "n_alive_before": 69,
+          "n_alive_after": 33,
+          "eliminated": 36,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 15,
+          "n_obs": 4,
+          "n_alive_before": 33,
+          "n_alive_after": 1,
+          "eliminated": 32,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 2,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 2,
+          "n_obs": 3,
+          "n_alive_before": 512,
+          "n_alive_after": 23,
+          "eliminated": 489,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 16,
+          "n_obs": 13,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 16,
+          "n_obs": 14,
+          "n_alive_before": 512,
+          "n_alive_after": 15,
+          "eliminated": 497,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 12,
+          "n_obs": 10,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 12,
+          "n_obs": 11,
+          "n_alive_before": 512,
+          "n_alive_after": 7,
+          "eliminated": 505,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 12,
+          "n_obs": 12,
+          "n_alive_before": 7,
+          "n_alive_after": 0,
+          "eliminated": 7,
+          "exhausted": true,
+          "exhausted_reason": "all_hypotheses_incompatible_after_12_observations"
+        }
+      ],
+      "k_rule_triggered": "",
+      "model_decision_fallbacks": 2,
+      "model_call_fallbacks": 0,
+      "model_decisions_used": 24,
+      "fallback_reason_hist": "{}"
+    },
+    {
+      "case": "P4-13src-seed8813",
+      "arm": "A",
+      "seed": 8813,
+      "n_src": 13,
+      "T_virtual_s": 9318.816,
+      "L_dist_m": 35039.08,
+      "M_measures": 298,
+      "S_switches": 234,
+      "F_clear_fail": 174,
+      "N_clear_succ": 13,
+      "closure_s": 9318.816,
+      "closure_residual_s": -0.0,
+      "closure_ok": true,
+      "cleared": 13,
+      "absent": 7,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "completed_successfully": true,
+      "terminal_reason": null,
+      "avg_time_per_target_s": 716.832,
+      "real_time_s": 132.003,
+      "no_signal_measures_total": 275,
+      "no_signal_followups": 48,
+      "planned_search_points": 25,
+      "visited_search_points": 25,
+      "absent_coverage_count": 7,
+      "absent_upper_bound_count": 0,
+      "per_channel_end_evidence": {
+        "1": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "2": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "3": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "4": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "5": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "6": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "7": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "8": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "9": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "10": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "11": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "12": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "13": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "14": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "15": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "16": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "17": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "18": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "19": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "20": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        }
+      },
+      "action_changed_count": 0,
+      "position_changed_count": 0,
+      "decision_records": [],
+      "model_update_records": [],
+      "k_rule_triggered": "",
+      "model_decision_fallbacks": "",
+      "model_call_fallbacks": ""
+    },
+    {
+      "case": "P4-13src-seed8813",
+      "arm": "B",
+      "seed": 8813,
+      "n_src": 13,
+      "T_virtual_s": 8897.435,
+      "L_dist_m": 33187.18,
+      "M_measures": 253,
+      "S_switches": 234,
+      "F_clear_fail": 232,
+      "N_clear_succ": 13,
+      "closure_s": 8897.435,
+      "closure_residual_s": -0.0,
+      "closure_ok": true,
+      "cleared": 13,
+      "absent": 7,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "completed_successfully": true,
+      "terminal_reason": null,
+      "avg_time_per_target_s": 684.418,
+      "real_time_s": 47.469,
+      "no_signal_measures_total": 233,
+      "no_signal_followups": 6,
+      "planned_search_points": 25,
+      "visited_search_points": 25,
+      "absent_coverage_count": 7,
+      "absent_upper_bound_count": 0,
+      "per_channel_end_evidence": {
+        "1": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "2": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "3": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "4": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "5": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "6": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "7": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "8": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "9": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "10": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "11": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "12": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "13": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "14": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "15": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "16": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "17": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "18": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "19": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "20": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        }
+      },
+      "action_changed_count": 6,
+      "position_changed_count": 0,
+      "decision_records": [
+        {
+          "channel": 14,
+          "grid_count": 10917,
+          "base_action": "measure",
+          "base_pos": [
+            668.01,
+            25.03
+          ],
+          "base_j0": 402.6214464791072,
+          "base_jq": 223.996301394309,
+          "b_action": "clear",
+          "b_pos": [
+            652.77,
+            234.5
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 8,
+          "grid_count": 10941,
+          "base_action": "measure",
+          "base_pos": [
+            615.13,
+            752.87
+          ],
+          "base_j0": 791.4352010966616,
+          "base_jq": 283.2519010293599,
+          "b_action": "clear",
+          "b_pos": [
+            371.22,
+            831.08
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 7,
+          "grid_count": 10941,
+          "base_action": "measure",
+          "base_pos": [
+            252.96,
+            848.97
+          ],
+          "base_j0": 768.5774083758696,
+          "base_jq": 291.77579138672945,
+          "b_action": "clear",
+          "b_pos": [
+            224.26,
+            627.81
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 20,
+          "grid_count": 10916,
+          "base_action": "measure",
+          "base_pos": [
+            602.77,
+            -723.25
+          ],
+          "base_j0": 769.5004793355081,
+          "base_jq": 202.48874921517478,
+          "b_action": "clear",
+          "b_pos": [
+            593.54,
+            -715.93
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 12,
+          "grid_count": 10941,
+          "base_action": "measure",
+          "base_pos": [
+            -525.03,
+            -277.53
+          ],
+          "base_j0": 801.0477708586293,
+          "base_jq": 304.0458922026343,
+          "b_action": "clear",
+          "b_pos": [
+            -780.34,
+            -609.23
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 18,
+          "grid_count": 10941,
+          "base_action": "measure",
+          "base_pos": [
+            -274.88,
+            433.04
+          ],
+          "base_j0": 640.9705846219094,
+          "base_jq": 244.91613101705374,
+          "b_action": "clear",
+          "b_pos": [
+            -115.65,
+            372.46
+          ],
+          "action_changed": true
+        }
+      ],
+      "model_update_records": [],
+      "k_rule_triggered": 6,
+      "model_decision_fallbacks": "",
+      "model_call_fallbacks": ""
+    },
+    {
+      "case": "P4-13src-seed8813",
+      "arm": "C",
+      "seed": 8813,
+      "n_src": 13,
+      "T_virtual_s": 8742.057,
+      "L_dist_m": 33665.29,
+      "M_measures": 259,
+      "S_switches": 235,
+      "F_clear_fail": 138,
+      "N_clear_succ": 13,
+      "closure_s": 8742.057,
+      "closure_residual_s": 0.0,
+      "closure_ok": true,
+      "cleared": 13,
+      "absent": 7,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "completed_successfully": true,
+      "terminal_reason": null,
+      "avg_time_per_target_s": 672.466,
+      "real_time_s": 86.557,
+      "no_signal_measures_total": 233,
+      "no_signal_followups": 6,
+      "planned_search_points": 25,
+      "visited_search_points": 25,
+      "absent_coverage_count": 7,
+      "absent_upper_bound_count": 0,
+      "per_channel_end_evidence": {
+        "1": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "2": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "3": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "4": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "5": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "6": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "7": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "8": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "9": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "10": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "11": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "12": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "13": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "14": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "15": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "16": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "17": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "18": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "19": {
+          "status": "ABSENT",
+          "absence_proof_type": "COVERAGE_NEGATIVE"
+        },
+        "20": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        }
+      },
+      "action_changed_count": 4,
+      "position_changed_count": 10,
+      "decision_records": [],
+      "model_update_records": [
+        {
+          "channel": 11,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 11,
+          "n_obs": 3,
+          "n_alive_before": 512,
+          "n_alive_after": 10,
+          "eliminated": 502,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 9,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 9,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 15,
+          "eliminated": 497,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 14,
+          "n_obs": 3,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 8,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 8,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 89,
+          "eliminated": 423,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 8,
+          "n_obs": 3,
+          "n_alive_before": 89,
+          "n_alive_after": 0,
+          "eliminated": 89,
+          "exhausted": true,
+          "exhausted_reason": "all_hypotheses_incompatible_after_3_observations"
+        },
+        {
+          "channel": 7,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 7,
+          "n_obs": 3,
+          "n_alive_before": 512,
+          "n_alive_after": 215,
+          "eliminated": 297,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 7,
+          "n_obs": 4,
+          "n_alive_before": 215,
+          "n_alive_after": 18,
+          "eliminated": 197,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 20,
+          "n_obs": 16,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 20,
+          "n_obs": 17,
+          "n_alive_before": 512,
+          "n_alive_after": 138,
+          "eliminated": 374,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 20,
+          "n_obs": 18,
+          "n_alive_before": 138,
+          "n_alive_after": 2,
+          "eliminated": 136,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 1,
+          "n_obs": 18,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 1,
+          "n_obs": 19,
+          "n_alive_before": 512,
+          "n_alive_after": 20,
+          "eliminated": 492,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 4,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 4,
+          "n_obs": 3,
+          "n_alive_before": 512,
+          "n_alive_after": 14,
+          "eliminated": 498,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 6,
+          "n_obs": 16,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 6,
+          "n_obs": 17,
+          "n_alive_before": 512,
+          "n_alive_after": 18,
+          "eliminated": 494,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 6,
+          "n_obs": 18,
+          "n_alive_before": 18,
+          "n_alive_after": 7,
+          "eliminated": 11,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 15,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 15,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 12,
+          "eliminated": 500,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 12,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 12,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 100,
+          "eliminated": 412,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 12,
+          "n_obs": 3,
+          "n_alive_before": 100,
+          "n_alive_after": 6,
+          "eliminated": 94,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 16,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 16,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 16,
+          "eliminated": 496,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 16,
+          "n_obs": 3,
+          "n_alive_before": 16,
+          "n_alive_after": 2,
+          "eliminated": 14,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 18,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 18,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 29,
+          "eliminated": 483,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 18,
+          "n_obs": 3,
+          "n_alive_before": 29,
+          "n_alive_after": 0,
+          "eliminated": 29,
+          "exhausted": true,
+          "exhausted_reason": "all_hypotheses_incompatible_after_3_observations"
+        }
+      ],
+      "k_rule_triggered": "",
+      "model_decision_fallbacks": 2,
+      "model_call_fallbacks": 250,
+      "model_decisions_used": 30,
+      "fallback_reason_hist": "{\"all_hypotheses_incompatible_after_3_observations\": 250}"
+    },
+    {
+      "case": "P4-16src-seed8816",
+      "arm": "A",
+      "seed": 8816,
+      "n_src": 16,
+      "T_virtual_s": 6928.612,
+      "L_dist_m": 26478.06,
+      "M_measures": 237,
+      "S_switches": 176,
+      "F_clear_fail": 64,
+      "N_clear_succ": 16,
+      "closure_s": 6928.612,
+      "closure_residual_s": -0.0,
+      "closure_ok": true,
+      "cleared": 16,
+      "absent": 4,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "completed_successfully": true,
+      "terminal_reason": null,
+      "avg_time_per_target_s": 433.038,
+      "real_time_s": 145.057,
+      "no_signal_measures_total": 206,
+      "no_signal_followups": 52,
+      "planned_search_points": 25,
+      "visited_search_points": 25,
+      "absent_coverage_count": 0,
+      "absent_upper_bound_count": 4,
+      "per_channel_end_evidence": {
+        "1": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "2": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "3": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "4": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "5": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "6": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "7": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "8": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "9": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "10": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "11": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "12": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "13": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "14": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "15": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "16": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "17": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "18": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "19": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "20": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        }
+      },
+      "action_changed_count": 0,
+      "position_changed_count": 0,
+      "decision_records": [],
+      "model_update_records": [],
+      "k_rule_triggered": "",
+      "model_decision_fallbacks": "",
+      "model_call_fallbacks": ""
+    },
+    {
+      "case": "P4-16src-seed8816",
+      "arm": "B",
+      "seed": 8816,
+      "n_src": 16,
+      "T_virtual_s": 6803.464,
+      "L_dist_m": 25272.32,
+      "M_measures": 187,
+      "S_switches": 176,
+      "F_clear_fail": 186,
+      "N_clear_succ": 16,
+      "closure_s": 6803.464,
+      "closure_residual_s": -0.0,
+      "closure_ok": true,
+      "cleared": 16,
+      "absent": 4,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "completed_successfully": true,
+      "terminal_reason": null,
+      "avg_time_per_target_s": 425.216,
+      "real_time_s": 52.383,
+      "no_signal_measures_total": 160,
+      "no_signal_followups": 6,
+      "planned_search_points": 25,
+      "visited_search_points": 25,
+      "absent_coverage_count": 0,
+      "absent_upper_bound_count": 4,
+      "per_channel_end_evidence": {
+        "1": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "2": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "3": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "4": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "5": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "6": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "7": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "8": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "9": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "10": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "11": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "12": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "13": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "14": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "15": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "16": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "17": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "18": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "19": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "20": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        }
+      },
+      "action_changed_count": 6,
+      "position_changed_count": 0,
+      "decision_records": [
+        {
+          "channel": 9,
+          "grid_count": 10941,
+          "base_action": "measure",
+          "base_pos": [
+            -1069.15,
+            729.37
+          ],
+          "base_j0": 655.5312892172121,
+          "base_jq": 306.3079133505954,
+          "b_action": "clear",
+          "b_pos": [
+            -1101.49,
+            814.87
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 12,
+          "grid_count": 10909,
+          "base_action": "measure",
+          "base_pos": [
+            -728.43,
+            827.04
+          ],
+          "base_j0": 434.33087030313175,
+          "base_jq": 228.542323788446,
+          "b_action": "clear",
+          "b_pos": [
+            -715.26,
+            808.55
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 10,
+          "grid_count": 10941,
+          "base_action": "measure",
+          "base_pos": [
+            -444.78,
+            -1274.87
+          ],
+          "base_j0": 565.3094735329645,
+          "base_jq": 313.2261673000254,
+          "b_action": "clear",
+          "b_pos": [
+            -667.53,
+            -1393.31
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 13,
+          "grid_count": 10910,
+          "base_action": "measure",
+          "base_pos": [
+            896.32,
+            -205.89
+          ],
+          "base_j0": 391.76948862536966,
+          "base_jq": 238.62227541120419,
+          "b_action": "clear",
+          "b_pos": [
+            807.59,
+            -361.8
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 16,
+          "grid_count": 10917,
+          "base_action": "measure",
+          "base_pos": [
+            762.17,
+            86.93
+          ],
+          "base_j0": 365.42908680331993,
+          "base_jq": 246.06364097962964,
+          "b_action": "clear",
+          "b_pos": [
+            490.56,
+            50.65
+          ],
+          "action_changed": true
+        },
+        {
+          "channel": 4,
+          "grid_count": 10865,
+          "base_action": "measure",
+          "base_pos": [
+            505.59,
+            1324.07
+          ],
+          "base_j0": 581.3606823390594,
+          "base_jq": 169.28445154072634,
+          "b_action": "clear",
+          "b_pos": [
+            608.01,
+            1455.23
+          ],
+          "action_changed": true
+        }
+      ],
+      "model_update_records": [],
+      "k_rule_triggered": 6,
+      "model_decision_fallbacks": "",
+      "model_call_fallbacks": ""
+    },
+    {
+      "case": "P4-16src-seed8816",
+      "arm": "C",
+      "seed": 8816,
+      "n_src": 16,
+      "T_virtual_s": 6532.873,
+      "L_dist_m": 24834.36,
+      "M_measures": 192,
+      "S_switches": 175,
+      "F_clear_fail": 117,
+      "N_clear_succ": 16,
+      "closure_s": 6532.873,
+      "closure_residual_s": -0.0,
+      "closure_ok": true,
+      "cleared": 16,
+      "absent": 4,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "completed_successfully": true,
+      "terminal_reason": null,
+      "avg_time_per_target_s": 408.305,
+      "real_time_s": 140.053,
+      "no_signal_measures_total": 160,
+      "no_signal_followups": 6,
+      "planned_search_points": 25,
+      "visited_search_points": 25,
+      "absent_coverage_count": 0,
+      "absent_upper_bound_count": 4,
+      "per_channel_end_evidence": {
+        "1": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "2": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "3": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "4": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "5": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "6": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "7": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "8": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "9": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "10": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "11": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "12": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "13": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "14": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "15": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "16": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "17": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "18": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        },
+        "19": {
+          "status": "ABSENT",
+          "absence_proof_type": "UPPER_BOUND_EXCLUSION"
+        },
+        "20": {
+          "status": "CLEARED",
+          "absence_proof_type": null
+        }
+      },
+      "action_changed_count": 4,
+      "position_changed_count": 14,
+      "decision_records": [],
+      "model_update_records": [
+        {
+          "channel": 5,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 5,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 278,
+          "eliminated": 234,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 5,
+          "n_obs": 3,
+          "n_alive_before": 278,
+          "n_alive_after": 17,
+          "eliminated": 261,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 5,
+          "n_obs": 4,
+          "n_alive_before": 17,
+          "n_alive_after": 6,
+          "eliminated": 11,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 20,
+          "n_obs": 3,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 20,
+          "n_obs": 4,
+          "n_alive_before": 512,
+          "n_alive_after": 10,
+          "eliminated": 502,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 11,
+          "n_obs": 3,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 11,
+          "n_obs": 4,
+          "n_alive_before": 512,
+          "n_alive_after": 26,
+          "eliminated": 486,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 9,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 9,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 156,
+          "eliminated": 356,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 9,
+          "n_obs": 3,
+          "n_alive_before": 156,
+          "n_alive_after": 66,
+          "eliminated": 90,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 9,
+          "n_obs": 4,
+          "n_alive_before": 66,
+          "n_alive_after": 10,
+          "eliminated": 56,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 9,
+          "n_obs": 5,
+          "n_alive_before": 10,
+          "n_alive_after": 2,
+          "eliminated": 8,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 12,
+          "n_obs": 6,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 12,
+          "n_obs": 7,
+          "n_alive_before": 512,
+          "n_alive_after": 340,
+          "eliminated": 172,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 12,
+          "n_obs": 8,
+          "n_alive_before": 340,
+          "n_alive_after": 14,
+          "eliminated": 326,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 17,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 17,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 4,
+          "eliminated": 508,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 18,
+          "n_obs": 7,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 18,
+          "n_obs": 8,
+          "n_alive_before": 512,
+          "n_alive_after": 14,
+          "eliminated": 498,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 15,
+          "n_obs": 9,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 15,
+          "n_obs": 10,
+          "n_alive_before": 512,
+          "n_alive_after": 8,
+          "eliminated": 504,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 3,
+          "n_obs": 15,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 3,
+          "n_obs": 16,
+          "n_alive_before": 512,
+          "n_alive_after": 2,
+          "eliminated": 510,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 7,
+          "n_obs": 16,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 7,
+          "n_obs": 17,
+          "n_alive_before": 512,
+          "n_alive_after": 32,
+          "eliminated": 480,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 8,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 8,
+          "n_obs": 3,
+          "n_alive_before": 512,
+          "n_alive_after": 14,
+          "eliminated": 498,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 10,
+          "n_obs": 3,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 1,
+          "n_obs": 1,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 1,
+          "n_obs": 2,
+          "n_alive_before": 512,
+          "n_alive_after": 5,
+          "eliminated": 507,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 13,
+          "n_obs": 14,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 13,
+          "n_obs": 15,
+          "n_alive_before": 512,
+          "n_alive_after": 332,
+          "eliminated": 180,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 16,
+          "n_obs": 13,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 16,
+          "n_obs": 14,
+          "n_alive_before": 512,
+          "n_alive_after": 245,
+          "eliminated": 267,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 16,
+          "n_obs": 15,
+          "n_alive_before": 245,
+          "n_alive_after": 157,
+          "eliminated": 88,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 4,
+          "n_obs": 13,
+          "n_alive_before": 512,
+          "n_alive_after": 512,
+          "eliminated": 0,
+          "exhausted": false,
+          "exhausted_reason": null
+        },
+        {
+          "channel": 4,
+          "n_obs": 14,
+          "n_alive_before": 512,
+          "n_alive_after": 16,
+          "eliminated": 496,
+          "exhausted": false,
+          "exhausted_reason": null
+        }
+      ],
+      "k_rule_triggered": "",
+      "model_decision_fallbacks": 0,
+      "model_call_fallbacks": 0,
+      "model_decisions_used": 38,
+      "fallback_reason_hist": "{}"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+﻿case,arm,seed,n_src,T_virtual_s,L_dist_m,M_measures,S_switches,F_clear_fail,N_clear_succ,closure_s,closure_residual_s,closure_ok,cleared,absent,unsolved,failed,completion_status,completed_successfully,terminal_reason,avg_time_per_target_s,real_time_s,no_signal_measures_total,no_signal_followups,action_changed_count,position_changed_count,k_rule_triggered,model_decisions_used,model_decision_fallbacks,model_call_fallbacks,fallback_reason_hist,visited_search_points,absent_coverage_count,absent_upper_bound_count
+P4-10src-seed8801,A,8801,10,6773.046,23425.23,331,290,31,10,6773.046,0.0,True,10,10,0,0,COMPLETED,True,,677.305,209.838,311,25,0,0,,,,,,25,10,0
+P4-10src-seed8801,B,8801,10,7473.456,25952.28,307,290,136,10,7473.456,0.0,True,10,10,0,0,COMPLETED,True,,747.346,79.645,289,3,3,0,3,,,,,25,10,0
+P4-10src-seed8801,C,8801,10,6365.498,22162.49,312,290,11,10,6365.498,0.0,True,10,10,0,0,COMPLETED,True,,636.55,144.514,289,3,0,7,,24,2,0,{},25,10,0
+P4-13src-seed8813,A,8813,13,9318.816,35039.08,298,234,174,13,9318.816,-0.0,True,13,7,0,0,COMPLETED,True,,716.832,269.898,275,48,0,0,,,,,,25,7,0
+P4-13src-seed8813,B,8813,13,8897.435,33187.18,253,234,232,13,8897.435,-0.0,True,13,7,0,0,COMPLETED,True,,684.418,78.513,233,6,6,0,6,,,,,25,7,0
+P4-13src-seed8813,C,8813,13,8742.057,33665.29,259,235,138,13,8742.057,0.0,True,13,7,0,0,COMPLETED,True,,672.466,171.661,233,6,4,10,,30,2,250,"{""all_hypotheses_incompatible_after_3_observations"": 250}",25,7,0
+P4-16src-seed8816,A,8816,16,6928.612,26478.06,237,176,64,16,6928.612,-0.0,True,16,4,0,0,COMPLETED,True,,433.038,332.667,206,52,0,0,,,,,,25,0,4
+P4-16src-seed8816,B,8816,16,6803.464,25272.32,187,176,186,16,6803.464,-0.0,True,16,4,0,0,COMPLETED,True,,425.216,124.904,160,6,6,0,6,,,,,25,0,4
+P4-16src-seed8816,C,8816,16,6532.873,24834.36,192,175,117,16,6532.873,-0.0,True,16,4,0,0,COMPLETED,True,,408.305,260.104,160,6,4,14,,38,0,0,{},25,0,4

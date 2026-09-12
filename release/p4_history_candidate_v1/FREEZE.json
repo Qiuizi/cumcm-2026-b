@@ -1,0 +1,80 @@
+{
+  "release_id": "p4_history_candidate_v1",
+  "release_revision": "r2",
+  "revision_of": "p4_history_candidate_v1 r1（12 局配对验收版）",
+  "revision_changes": [
+    "D1: 修复 best_jq=None（全部候选不可表示）时 reason 文本对 None 做 ':.1f' 格式化抛 TypeError；改为 jq_txt 取值，动作类型/位置/清除计划不变；冻结基类与构建期再生的候选同步携带",
+    "D2: 默认运行产物（HTTP 日志/审计/会话）改写到包外独立目录 runs_config.json → ../p4_official_runs；构建前自动迁出包内遗留产物（不删除、不覆盖）",
+    "（r2 内更早的协议对齐：现实预算以 /enter 的 remaining_real_duration_s 为准；HTTP 错误处理/幂等性按附件2 §5.3 分类）"
+  ],
+  "supersedes_fingerprints（历史身份，见 experiments/_archive_pre_d1_20260913/）": {
+    "candidate/candidate_decision.py": "811ed398758133016ec37e24e56eb01e799660464bd39523f5ccdb3c0c01c4af",
+    "local_decision_frozen.py": "6d26e61de9a25fd4ee82e643ea1a4b6e172cd38a3f52e2e996d4757d06cef642"
+  },
+  "说明": "独立发布包：自包含 src/ + 冻结组件 + candidate/；不依赖原实验工作区路径",
+  "frozen_baseline_components": {
+    "local_decision_frozen.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\release\\p4_history_candidate_v1\\local_decision_frozen.py",
+      "sha256": "6f9c895357149c974ed9debaeff9284f8f42618076dc5a8c8bb02410689967cb"
+    },
+    "conservative_grid_frozen.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\release\\p4_history_candidate_v1\\conservative_grid_frozen.py",
+      "sha256": "778af8fd986a79b60d690e60b8daeaa21adc40d7b372c2e900d6838babebfd08"
+    }
+  },
+  "candidate_files": {
+    "candidate/candidate_decision.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\release\\p4_history_candidate_v1\\candidate\\candidate_decision.py",
+      "sha256": "8be9f9df647194d8a32a24f37fbebb937ec44b62a9049c01023017e5e24daad6"
+    },
+    "candidate/predictor.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\release\\p4_history_candidate_v1\\candidate\\predictor.py",
+      "sha256": "0fa1753454775cbd0efdd98f7fc98682bd79265fd2aed185420281cb87500006"
+    },
+    "candidate/model.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\release\\p4_history_candidate_v1\\candidate\\model.py",
+      "sha256": "ada6c0069ee9b426bb174dba9c59e874c46d72a034b7d70f446a317b8c4b50c2"
+    },
+    "candidate/observer.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\release\\p4_history_candidate_v1\\candidate\\observer.py",
+      "sha256": "a58d1931ff3334fe578f095632a98af71986dc7463eaf4f9e2e523a616db1261"
+    },
+    "candidate/wiring.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\release\\p4_history_candidate_v1\\candidate\\wiring.py",
+      "sha256": "406038c7ab026f38a35e10d594a961e4ab0836d55323f0fb96bb97f5ca3e9b30"
+    }
+  },
+  "frozen_model_spec": {
+    "n_hyp": 512,
+    "p_dir": 0.5,
+    "r_prior": [
+      1000.0,
+      1500.0
+    ],
+    "u_prior": "uniform[0,2pi)",
+    "eps_deg": "inherit_from_safety_grid",
+    "pool_factor": 40,
+    "max_rounds": 6,
+    "seed_base": 20260912,
+    "seed_stride": 131,
+    "update_rule": "refilter_all_compatible_hypotheses_with_full_history",
+    "fallback_rule": "empty_hypothesis_set -> reception_probability returns None -> decision maker falls back to frozen_recv_prob verbatim",
+    "note_on_priors": "p_dir / R 区间 / 朝向均匀分布均为建模假设，不是题面事实"
+  },
+  "upstream_validated": {
+    "candidate_decision.py": "8be9f9df647194d8a32a24f37fbebb937ec44b62a9049c01023017e5e24daad6",
+    "predictor.py": "0fa1753454775cbd0efdd98f7fc98682bd79265fd2aed185420281cb87500006",
+    "model.py": "ada6c0069ee9b426bb174dba9c59e874c46d72a034b7d70f446a317b8c4b50c2",
+    "observer.py": "a58d1931ff3334fe578f095632a98af71986dc7463eaf4f9e2e523a616db1261",
+    "local_decision_frozen.py": "6f9c895357149c974ed9debaeff9284f8f42618076dc5a8c8bb02410689967cb",
+    "conservative_grid_frozen.py": "778af8fd986a79b60d690e60b8daeaa21adc40d7b372c2e900d6838babebfd08"
+  },
+  "constraints": [
+    "不调用官方模拟器；不另建模拟器（只用本地参考环境 src/sim_env.py）",
+    "P3、P4 覆盖布局、扫描规则、全局调度、候选补点、清除计划、结束判据均不变",
+    "概率模型只影响决策评分；不删除安全网格、不丢源、不参与判空与结束判据",
+    "运行期不读取也不 exec 外部源码（candidate_decision.py 为构建期一次性生成）",
+    "official 模式不生成场景、不自动拉起 Mock；连不上直接退出",
+    "启动不修改自身源码、不执行 git apply、不依赖补丁重放"
+  ]
+}

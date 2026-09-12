@@ -1,0 +1,746 @@
+{
+  "baseline": [
+    {
+      "n_src": 10,
+      "seed": 3001,
+      "T": 5949.86,
+      "cleared": 10,
+      "absent": 10,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 10,
+      "seed": 4001,
+      "T": 9135.72,
+      "cleared": 10,
+      "absent": 10,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 10,
+      "seed": 5001,
+      "T": 7799.88,
+      "cleared": 10,
+      "absent": 10,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 10,
+      "seed": 6001,
+      "T": 6793.46,
+      "cleared": 10,
+      "absent": 10,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 13,
+      "seed": 3101,
+      "T": 7011.09,
+      "cleared": 13,
+      "absent": 7,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 13,
+      "seed": 4101,
+      "T": 7414.97,
+      "cleared": 13,
+      "absent": 7,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 13,
+      "seed": 5101,
+      "T": 8062.37,
+      "cleared": 13,
+      "absent": 7,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 13,
+      "seed": 6101,
+      "T": 7031.86,
+      "cleared": 13,
+      "absent": 7,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 16,
+      "seed": 3201,
+      "T": 7095.48,
+      "cleared": 16,
+      "absent": 4,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 16,
+      "seed": 4201,
+      "T": 6426.73,
+      "cleared": 16,
+      "absent": 4,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 16,
+      "seed": 5201,
+      "T": 7428.79,
+      "cleared": 16,
+      "absent": 4,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    },
+    {
+      "n_src": 16,
+      "seed": 6201,
+      "T": 6198.6,
+      "cleared": 16,
+      "absent": 4,
+      "unsolved": 0,
+      "failed": 0,
+      "gated_force": 0,
+      "gate_hold": 0
+    }
+  ],
+  "arms": [
+    {
+      "theta": 150.0,
+      "mean_T": 7182.23,
+      "mean_dT": -13.5,
+      "win_tie_loss": [
+        2,
+        9,
+        1
+      ],
+      "worst_dT": 91.95,
+      "best_dT": -238.92,
+      "median_dT": 0.0,
+      "cleared_total": 156,
+      "absent_total": 84,
+      "sources_total": 156,
+      "gated_force_total": 4,
+      "gate_hold_total": 256,
+      "rows": [
+        {
+          "n_src": 10,
+          "seed": 3001,
+          "T": 5949.86,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 0
+        },
+        {
+          "n_src": 10,
+          "seed": 4001,
+          "T": 9135.72,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 33
+        },
+        {
+          "n_src": 10,
+          "seed": 5001,
+          "T": 7799.88,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 5
+        },
+        {
+          "n_src": 10,
+          "seed": 6001,
+          "T": 6793.46,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 6
+        },
+        {
+          "n_src": 13,
+          "seed": 3101,
+          "T": 6996.06,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 9
+        },
+        {
+          "n_src": 13,
+          "seed": 4101,
+          "T": 7414.97,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 24
+        },
+        {
+          "n_src": 13,
+          "seed": 5101,
+          "T": 8062.37,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 36
+        },
+        {
+          "n_src": 13,
+          "seed": 6101,
+          "T": 7031.86,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 33
+        },
+        {
+          "n_src": 16,
+          "seed": 3201,
+          "T": 6856.56,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 2,
+          "gate_hold": 35
+        },
+        {
+          "n_src": 16,
+          "seed": 4201,
+          "T": 6426.73,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 15
+        },
+        {
+          "n_src": 16,
+          "seed": 5201,
+          "T": 7428.79,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 31
+        },
+        {
+          "n_src": 16,
+          "seed": 6201,
+          "T": 6290.55,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 29
+        }
+      ]
+    },
+    {
+      "theta": 250.0,
+      "mean_T": 7174.15,
+      "mean_dT": -21.58,
+      "win_tie_loss": [
+        3,
+        8,
+        1
+      ],
+      "worst_dT": 91.95,
+      "best_dT": -256.86,
+      "median_dT": 0.0,
+      "cleared_total": 156,
+      "absent_total": 84,
+      "sources_total": 156,
+      "gated_force_total": 5,
+      "gate_hold_total": 252,
+      "rows": [
+        {
+          "n_src": 10,
+          "seed": 3001,
+          "T": 5949.86,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 0
+        },
+        {
+          "n_src": 10,
+          "seed": 4001,
+          "T": 9135.72,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 33
+        },
+        {
+          "n_src": 10,
+          "seed": 5001,
+          "T": 7720.83,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 3
+        },
+        {
+          "n_src": 10,
+          "seed": 6001,
+          "T": 6793.46,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 6
+        },
+        {
+          "n_src": 13,
+          "seed": 3101,
+          "T": 6996.06,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 9
+        },
+        {
+          "n_src": 13,
+          "seed": 4101,
+          "T": 7414.97,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 24
+        },
+        {
+          "n_src": 13,
+          "seed": 5101,
+          "T": 8062.37,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 36
+        },
+        {
+          "n_src": 13,
+          "seed": 6101,
+          "T": 7031.86,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 33
+        },
+        {
+          "n_src": 16,
+          "seed": 3201,
+          "T": 6838.62,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 2,
+          "gate_hold": 33
+        },
+        {
+          "n_src": 16,
+          "seed": 4201,
+          "T": 6426.73,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 15
+        },
+        {
+          "n_src": 16,
+          "seed": 5201,
+          "T": 7428.79,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 31
+        },
+        {
+          "n_src": 16,
+          "seed": 6201,
+          "T": 6290.55,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 29
+        }
+      ]
+    },
+    {
+      "theta": 350.0,
+      "mean_T": 7086.24,
+      "mean_dT": -109.49,
+      "win_tie_loss": [
+        7,
+        4,
+        1
+      ],
+      "worst_dT": 285.57,
+      "best_dT": -599.77,
+      "median_dT": -13.27,
+      "cleared_total": 156,
+      "absent_total": 84,
+      "sources_total": 156,
+      "gated_force_total": 10,
+      "gate_hold_total": 217,
+      "rows": [
+        {
+          "n_src": 10,
+          "seed": 3001,
+          "T": 5949.86,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 0
+        },
+        {
+          "n_src": 10,
+          "seed": 4001,
+          "T": 9124.2,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 32
+        },
+        {
+          "n_src": 10,
+          "seed": 5001,
+          "T": 7200.11,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 0
+        },
+        {
+          "n_src": 10,
+          "seed": 6001,
+          "T": 6793.46,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 6
+        },
+        {
+          "n_src": 13,
+          "seed": 3101,
+          "T": 6996.06,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 9
+        },
+        {
+          "n_src": 13,
+          "seed": 4101,
+          "T": 7382.65,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 20
+        },
+        {
+          "n_src": 13,
+          "seed": 5101,
+          "T": 8062.37,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 36
+        },
+        {
+          "n_src": 13,
+          "seed": 6101,
+          "T": 7317.43,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 32
+        },
+        {
+          "n_src": 16,
+          "seed": 3201,
+          "T": 6929.26,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 3,
+          "gate_hold": 24
+        },
+        {
+          "n_src": 16,
+          "seed": 4201,
+          "T": 6426.73,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 15
+        },
+        {
+          "n_src": 16,
+          "seed": 5201,
+          "T": 6960.44,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 20
+        },
+        {
+          "n_src": 16,
+          "seed": 6201,
+          "T": 5892.31,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 23
+        }
+      ]
+    },
+    {
+      "theta": 600.0,
+      "mean_T": 6992.9,
+      "mean_dT": -202.84,
+      "win_tie_loss": [
+        7,
+        1,
+        4
+      ],
+      "worst_dT": 373.52,
+      "best_dT": -771.23,
+      "median_dT": -162.51,
+      "cleared_total": 156,
+      "absent_total": 84,
+      "sources_total": 156,
+      "gated_force_total": 27,
+      "gate_hold_total": 65,
+      "rows": [
+        {
+          "n_src": 10,
+          "seed": 3001,
+          "T": 5949.86,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 0,
+          "gate_hold": 0
+        },
+        {
+          "n_src": 10,
+          "seed": 4001,
+          "T": 8364.49,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 3,
+          "gate_hold": 2
+        },
+        {
+          "n_src": 10,
+          "seed": 5001,
+          "T": 7200.11,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 0
+        },
+        {
+          "n_src": 10,
+          "seed": 6001,
+          "T": 6811.67,
+          "cleared": 10,
+          "absent": 10,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 0
+        },
+        {
+          "n_src": 13,
+          "seed": 3101,
+          "T": 7081.68,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 2,
+          "gate_hold": 6
+        },
+        {
+          "n_src": 13,
+          "seed": 4101,
+          "T": 7066.57,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 1,
+          "gate_hold": 14
+        },
+        {
+          "n_src": 13,
+          "seed": 5101,
+          "T": 7479.94,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 3,
+          "gate_hold": 12
+        },
+        {
+          "n_src": 13,
+          "seed": 6101,
+          "T": 7405.38,
+          "cleared": 13,
+          "absent": 7,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 3,
+          "gate_hold": 11
+        },
+        {
+          "n_src": 16,
+          "seed": 3201,
+          "T": 6755.19,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 6,
+          "gate_hold": 1
+        },
+        {
+          "n_src": 16,
+          "seed": 4201,
+          "T": 6399.91,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 2,
+          "gate_hold": 0
+        },
+        {
+          "n_src": 16,
+          "seed": 5201,
+          "T": 7499.57,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 3,
+          "gate_hold": 6
+        },
+        {
+          "n_src": 16,
+          "seed": 6201,
+          "T": 5900.4,
+          "cleared": 16,
+          "absent": 4,
+          "unsolved": 0,
+          "failed": 0,
+          "gated_force": 2,
+          "gate_hold": 13
+        }
+      ]
+    }
+  ]
+}

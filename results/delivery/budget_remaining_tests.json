@@ -1,0 +1,59 @@
+{
+  "T1_budget_60s": {
+    "ok": true,
+    "real_budget_s": 60.0,
+    "max_real_duration_s": 1200.0,
+    "deadline_offset_s": 60.0,
+    "dispatched": 6,
+    "dispatched_elapsed_s": [
+      0.0,
+      10.0,
+      20.0,
+      30.0,
+      40.0,
+      50.0
+    ],
+    "dispatched_at_or_after_deadline": 0,
+    "wall_clock_used_s": 0.0,
+    "completion_status": "SAFE_EXIT_BUDGET",
+    "completed_successfully": false,
+    "terminal_reason": "REAL_BUDGET_EXHAUSTED",
+    "summary_budget_fields": {
+      "real_budget_s": 60.0,
+      "real_budget_elapsed_monotonic_s": 60.0,
+      "real_budget_source": "min(/enter.remaining_real_duration_s, /enter.max_real_duration_s)",
+      "max_real_duration_s": 1200.0
+    }
+  },
+  "T2_no_dispatch_after_deadline": {
+    "ok": true,
+    "remaining0": {
+      "measure": 0,
+      "clear": 0,
+      "completion_status": "SAFE_EXIT_BUDGET",
+      "completed_successfully": false,
+      "terminal_reason": "REAL_BUDGET_EXHAUSTED"
+    },
+    "remaining60": {
+      "late_dispatches": 0,
+      "completion_status": "SAFE_EXIT_BUDGET",
+      "completed_successfully": false
+    }
+  },
+  "T3_remaining_1200_and_retry": {
+    "ok": true,
+    "remaining1200": {
+      "real_budget_s": 1200.0,
+      "max_real_duration_s": 1200.0,
+      "dispatched": 120,
+      "completion_status": "SAFE_EXIT_BUDGET"
+    },
+    "retry_consumes_budget": {
+      "dispatched": 3,
+      "deadline_fixed": true,
+      "deadline_offset_s": 60.0,
+      "completion_status": "SAFE_EXIT_BUDGET"
+    }
+  },
+  "all_pass": true
+}

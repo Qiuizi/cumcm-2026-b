@@ -1,0 +1,13 @@
+﻿case,version,seed,n_src,T_virtual_s,L_dist_m,M_measures,S_switches,F_clear_fail,N_clear_succ,closure_s,closure_residual_s,closure_ok,completion_status,completed_successfully,cleared,absent,unsolved,failed,terminal_reason,real_time_s,no_signal_total,no_signal_followup,no_signal_grid_exists,no_signal_grid_not_shrunk,no_signal_grid_shrunk,model_decisions_used,model_decision_fallbacks,model_call_fallbacks,model_score_count,fallback_reason_hist,action_changed_count,position_changed_count
+P4-10src-seed9501,stable,9501,10,8661.102,30840.51,349,308,130,10,8661.102,0.0,True,COMPLETED,True,10,10,0,0,,74.482,330,27,27,27,0,,,,,,,
+P4-10src-seed9501,history_candidate,9501,10,7454.341,26851.71,329,308,27,10,7454.341,0.0,True,COMPLETED,True,10,10,0,0,,67.038,306,3,3,3,0,26,0,0,4369,{},0,11
+P4-10src-seed9502,stable,9502,10,7951.175,27765.87,347,307,102,10,7951.175,-0.0,True,COMPLETED,True,10,10,0,0,,59.886,329,24,24,24,0,,,,,,,
+P4-10src-seed9502,history_candidate,9502,10,8002.267,28246.33,326,307,122,10,8002.267,-0.0,True,COMPLETED,True,10,10,0,0,,52.736,308,3,3,3,0,20,0,0,3263,{},2,4
+P4-13src-seed9513,stable,9513,13,7379.996,28484.98,241,200,71,13,7379.996,-0.0,True,COMPLETED,True,13,7,0,0,,78.329,217,25,25,25,0,,,,,,,
+P4-13src-seed9513,history_candidate,9513,13,6909.451,27202.25,233,200,13,13,6909.451,0.0,True,COMPLETED,True,13,7,0,0,,83.228,203,11,11,11,0,29,9,1337,4716,"{""all_hypotheses_incompatible_after_5_observations"": 1000, ""all_hypotheses_incompatible_after_7_observations"": 148, ""all_hypotheses_incompatible_after_4_observations"": 189}",0,14
+P4-13src-seed9514,stable,9514,13,7429.725,29028.62,257,214,20,13,7429.725,0.0,True,COMPLETED,True,13,7,0,0,,72.707,229,25,25,25,0,,,,,,,
+P4-13src-seed9514,history_candidate,9514,13,6933.271,27156.35,235,214,16,13,6933.271,0.0,True,COMPLETED,True,13,7,0,0,,75.993,206,2,2,2,0,28,0,0,4656,{},0,12
+P4-16src-seed9521,stable,9521,16,6294.641,23633.21,236,197,37,16,6294.641,-0.0,True,COMPLETED,True,16,4,0,0,,50.676,203,24,24,24,0,,,,,,,
+P4-16src-seed9521,history_candidate,9521,16,6309.018,24040.09,216,197,48,16,6309.018,0.0,True,COMPLETED,True,16,4,0,0,,70.048,183,4,4,4,0,32,0,0,5323,{},2,16
+P4-16src-seed9522,stable,9522,16,4795.08,19490.4,122,87,40,16,4795.08,0.0,True,COMPLETED,True,16,4,0,0,,81.801,86,26,26,26,0,,,,,,,
+P4-16src-seed9522,history_candidate,9522,16,4534.692,18908.46,101,87,27,16,4534.692,-0.0,True,COMPLETED,True,16,4,0,0,,102.794,64,4,4,4,0,39,1,109,6402,"{""all_hypotheses_incompatible_after_12_observations"": 109}",1,18

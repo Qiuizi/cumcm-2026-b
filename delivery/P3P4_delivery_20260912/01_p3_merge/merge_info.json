@@ -1,0 +1,44 @@
+{
+  "p3_merge": {
+    "mainline_branch": "master",
+    "merge_commit": "3a7491206c16acaa8c363b483679d9ab2a09da2f",
+    "merge_commit_short": "3a74912",
+    "merge_message": "merge(p3): merge verified P3 adaptive radial coverage candidate into mainline",
+    "pre_merge_mainline": "160d2652280cd0c9aa69e511f3ea2ac45a641a14",
+    "merged_feature_tip": "7a51d32dfb152c9382d941326c867c2b7e0ccb31",
+    "merged_feature_branch": "feature/p3-adaptive-radial-coverage",
+    "p3_feature_commits": [
+      "7a51d32 feat(p3): wire --profile radial switch into launch entry and add delivery audit tooling",
+      "d4ca8bd feat(p3): complete 9-case rigorous evaluation with enable_2opt_head=True",
+      "757e1b1 feat(p3): implement adaptive radial search point selection on independent branch"
+    ],
+    "merge_strategy": "git merge --no-ff (保留完整分支历史与原始结果)",
+    "default_profile_after_merge": "stable (径向开关默认关闭)",
+    "radial_candidate_requires": "--profile radial_candidate",
+    "statement": "这是代码合入：径向策略没有被设为默认配置。"
+  },
+  "p4_experiment": {
+    "branch": "feature/p4-head-2opt-experiment",
+    "branch_point": "3a7491206c16acaa8c363b483679d9ab2a09da2f",
+    "head": "24585d149036ee6576a8c0ce35852bf5c001b3bf",
+    "commits": [
+      "24585d1 exp(p4): bounded paired trial, chain verification and non-termination diagnosis",
+      "cf48fbc exp(p4): remove P4 force-override on enable_2opt_head and add head-dispatch audit"
+    ],
+    "single_variable": "enable_2opt_head for P4 (False -> True): allow open-route 2-opt to change the dispatched head task",
+    "default_still_off": true,
+    "unchanged_components": {
+      "P4_coverage_point_count": 25,
+      "frozen_components_diff_vs_master": "EMPTY (byte-identical)"
+    },
+    "source_diff_scope": "scripts/diagnose_p4_nontermination.py   | 182 +++++++++++++\n scripts/summarize_p4_head_2opt.py       | 129 ++++++++++\n scripts/verify_p4_head_2opt_chain.py    | 142 ++++++++++\n scripts/verify_p4_head_2opt_rigorous.py | 441 ++++++++++++++++++++++++++++++++\n src/strategy_engine.py                  |  39 ++-\n 5 files changed, 930 insertions(+), 3 deletions(-)"
+  },
+  "verified_facts": {
+    "paired_runs_completed": 0,
+    "paired_runs_total": 6,
+    "all_runs_non_terminating": true,
+    "targets_cleared_total": 0,
+    "head_change_events_in_candidate_arm": 3,
+    "head_gain_conclusion": "无法给出（不满足完整清除与结束证据成立的前提）"
+  }
+}

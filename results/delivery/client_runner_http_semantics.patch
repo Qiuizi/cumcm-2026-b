@@ -1,0 +1,271 @@
+diff --git a/src/client_runner.py b/src/client_runner.py
+index 86823a5..5b892c2 100644
+--- a/src/client_runner.py
++++ b/src/client_runner.py
+@@ -18,7 +18,38 @@ import requests
+ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ 
+ 
++class HttpActionError(RuntimeError):
++    """带分类的 HTTP 动作错误（便于上层如实标记"未完成"，不伪造 COMPLETED）"""
++
++    def __init__(self, message: str, kind: str, path: str = None,
++                 status_code: int = None, attempts: int = None):
++        super().__init__(message)
++        self.kind = kind                  # rejected | fatal_status | retry_exhausted
++        self.path = path
++        self.status_code = status_code
++        self.attempts = attempts
++
++
+ class HttpSimDriver:
++    # ---- 附件2 §5.3 错误分类（只影响失败分支，不改变正常动作序列）----
++    # 可重试：动作未执行或执行结果不明，且同一 request_id + 同一内容具备幂等保护
++    #   （§5.3：同一ID、同一内容返回第一次的完整响应，不重复移动/检测/清除/推进时间）
++    RETRYABLE_STATUS = (429, 500)
++    # 确定性错误：重试相同内容不可能成功，且**不得靠更换 request_id 掩盖内容冲突**
++    #   400 结构错误 / 404 路径 / 405 方法 / 409 同一ID对应不同动作 / 413 体积 / 415 头
++    FATAL_STATUS = (400, 404, 405, 409, 413, 415)
++
++    STATUS_MEANING = {
++        400: "请求结构错误（JSON语法/字段/范围）",
++        404: "路径未知或不精确",
++        405: "已知路径使用了非POST方法",
++        409: "同一 request_id 对应了不同动作，或并发发送了不同动作",
++        413: "请求体超过65536字节",
++        415: "Content-Type 或 Content-Encoding 不受支持",
++        429: "连接/无效流量保护触发，或本局幂等记录达到上限",
++        500: "模拟器内部错误",
++    }
++
+     def __init__(
+         self,
+         base_url: str = "http://127.0.0.1:2026",
+@@ -51,6 +82,22 @@ class HttpSimDriver:
+         self.remaining_real_duration_s = 1200
+         self.start_timestamp = 0.0
+ 
++    def _require_accepted(self, path: str, res: dict):
++        """
++        附件2 §5.3 末条与 §12：**必须同时检查 HTTP 状态和 accepted**；
++        `accepted=false` 表示动作**没有生效**，其 `virtual_time_s=0` **不是当前虚拟时刻**。
++
++        这里直接抛错而不是返回，因此调用方（引擎）不会用 0 覆盖
++        已知的虚拟时钟、当前位置或测量频道。
++        """
++        if res.get("accepted") is True:
++            return res
++        raise HttpActionError(
++            f"{path} 未被执行（accepted=false）：动作没有生效；响应中的 virtual_time_s="
++            f"{res.get('virtual_time_s')!r} 不是当前虚拟时刻 —— "
++            f"不更新虚拟时钟 / 位置 / 测量频道。完整响应={res}",
++            kind="rejected", path=path)
++
+     def _next_request_id(self, prefix: str = "req") -> str:
+         self.req_seq += 1
+         return f"{prefix}-{self.req_seq:06d}"
+@@ -63,37 +110,122 @@ class HttpSimDriver:
+             with open(self.log_file, "a", encoding="utf-8") as f:
+                 f.write(line)
+ 
++    def _write_diagnostic(self, path: str, payload: dict, attempt: int,
++                          kind: str, detail: str = None, status_code: int = None):
++        """
++        诊断记录：把**已发出但未取得 HTTP 200 的请求**如实写入会话日志。
++
++        必要性（本轮断点定位的直接结论）：原先只有 `status_code == 200` 才写日志，
++        因此一旦某条请求拿不到 200，"会话日志停在上一成功请求"与"程序卡住"在事后
++        完全无法区分。该记录**不改变任何请求内容、重试次数与计费**，
++        `audit_http_action_log` 亦会因 `response.accepted` 缺失而跳过它。
++        """
++        entry = {
++            "timestamp": time.time(),
++            "path": path,
++            "request": payload,
++            "response": None,
++            "diagnostic": kind,
++            "attempt": attempt,
++        }
++        if detail is not None:
++            entry["error"] = detail
++        if status_code is not None:
++            entry["status_code"] = status_code
++        self._write_log_entry(entry)
++
+     def _post_with_retry(self, path: str, payload: dict, max_retries: int = 3):
++        """
++        按附件2 §5.3 分类处理失败（**只改失败分支**，正常动作序列不变）：
++
++        | 情形                                   | 处理 |
++        |---|---|
++        | 200（含 accepted 由调用方判定）         | 记录并返回 |
++        | 网络超时/连接中断（无 JSON 体）        | 复用**原 request_id 与原请求内容**重试（§5.3 唯一允许的复用场景） |
++        | 429 / 500（动作未执行，可重试）         | 退避后重试，**同样复用原 id 与原内容**（幂等保护保证不重复执行） |
++        | 400/404/405/409/413/415（确定性错误）  | **立即失败，不重试、不换 id**（换 id 会掩盖内容/幂等冲突） |
++        | 重试耗尽                               | 抛出 `HttpActionError(kind='retry_exhausted')` 并如实标记未完成 |
++        """
+         url = f"{self.base_url}{path}"
+         headers = {"Content-Type": "application/json; charset=utf-8"}
+         body = json.dumps(payload)
+ 
+-        for attempt in range(max_retries):
++        last_status = None
++        for attempt in range(1, max_retries + 1):
+             try:
+                 resp = requests.post(url, data=body, headers=headers, timeout=self.timeout_s)
+-                if resp.status_code == 200:
+-                    data = resp.json()
+-                    # 记录明文 HTTP 请求与响应到每局归档日志
+-                    log_entry = {
+-                        "timestamp": time.time(),
+-                        "path": path,
+-                        "request": payload,
+-                        "response": data,
+-                    }
+-                    self._write_log_entry(log_entry)
+-
+-                    if data.get("accepted"):
+-                        return data
+-                    else:
+-                        print(f"[WARN] 模拟器拒绝动作 accepted=false: {data}")
+-                        return data
+-                else:
+-                    print(f"[WARN] HTTP 状态码 {resp.status_code}: {resp.text}")
+             except requests.exceptions.RequestException as e:
+-                print(f"[RETRY] 网络请求超时或异常 (尝试 {attempt+1}/{max_retries}): {e}")
++                # 执行结果不明（连接被关闭、超时）：§5.3 允许复用原 id 与原内容重试
++                print(f"[RETRY] 网络超时/连接中断 (尝试 {attempt}/{max_retries}): {e}")
++                self._write_diagnostic(path, payload, attempt, "transport_error", detail=repr(e))
++                if attempt < max_retries:
++                    time.sleep(0.5)
++                    continue
++                break
++
++            if resp.status_code == 200:
++                try:
++                    data = resp.json()
++                except ValueError as e:
++                    # 200 但响应体不是合法 JSON：不得当作成功
++                    self._write_diagnostic(path, payload, attempt, "malformed_json",
++                                           detail=repr(e), status_code=200)
++                    raise HttpActionError(
++                        f"{path} 返回 200 但响应体不是合法 JSON：{e}",
++                        kind="fatal_status", path=path, status_code=200, attempts=attempt)
++                self._write_log_entry({
++                    "timestamp": time.time(), "path": path,
++                    "request": payload, "response": data,
++                })
++                return data          # accepted 由调用方按 §5.3 另行判定
++
++            last_status = resp.status_code
++            if resp.status_code in self.FATAL_STATUS:
++                # 确定性错误：重试相同内容不可能成功；换 id 会掩盖内容/幂等冲突
++                meaning = self.STATUS_MEANING.get(resp.status_code, "确定性错误")
++                self._write_diagnostic(path, payload, attempt, "fatal_status",
++                                       detail=(resp.text or "")[:500],
++                                       status_code=resp.status_code)
++                raise HttpActionError(
++                    f"{path} 收到 HTTP {resp.status_code}（{meaning}）—— "
++                    f"按附件2 §5.3 属确定性错误，不重试、不更换 request_id；"
++                    f"请修正请求内容或 request_id 冲突后重发。",
++                    kind="fatal_status", path=path,
++                    status_code=resp.status_code, attempts=attempt)
++
++            if resp.status_code in self.RETRYABLE_STATUS:
++                meaning = self.STATUS_MEANING.get(resp.status_code, "可重试")
++                print(f"[RETRY] HTTP {resp.status_code}（{meaning}）"
++                      f" (尝试 {attempt}/{max_retries})")
++                self._write_diagnostic(path, payload, attempt, "retryable_status",
++                                       detail=(resp.text or "")[:500],
++                                       status_code=resp.status_code)
++                if attempt < max_retries:
++                    time.sleep(0.5)
++                    continue
++                break
++
++            # 未在附件2 §5.3 表2 中列出的状态码：保守按可重试处理，但仍有次数上限
++            print(f"[RETRY] HTTP {resp.status_code} 未在附件2 §5.3 列表中 "
++                  f"(尝试 {attempt}/{max_retries}): {resp.text[:200]}")
++            self._write_diagnostic(path, payload, attempt, "unexpected_status",
++                                   detail=(resp.text or "")[:500],
++                                   status_code=resp.status_code)
++            if attempt < max_retries:
+                 time.sleep(0.5)
+-
+-        raise RuntimeError(f"HTTP 请求失败: {path}")
++                continue
++            break
++
++        self._write_diagnostic(path, payload, max_retries, "retry_exhausted",
++                               detail=f"no HTTP 200 after all attempts (last_status={last_status})",
++                               status_code=last_status)
++        print(f"[ABORT] {path} 在 {max_retries} 次尝试后仍未取得 HTTP 200 —— "
++              f"本次运行**未完成**（已如实写入会话日志，未伪造完成）。")
++        raise HttpActionError(
++            f"HTTP 请求失败: {path}（{max_retries} 次尝试均未取得 HTTP 200"
++            + (f"，最后状态码 {last_status}" if last_status else "，均为网络层失败") + "）",
++            kind="retry_exhausted", path=path,
++            status_code=last_status, attempts=max_retries)
+ 
+     def enter(self):
+         req_id = self._next_request_id("enter")
+@@ -114,7 +246,7 @@ class HttpSimDriver:
+                 f"{'='*75}"
+             )
+             print(err_msg)
+-            raise RuntimeError(f"模拟器拒绝进入赛场 (accepted=False): {res}")
++            self._require_accepted("/enter", res)   # 抛 HttpActionError(kind='rejected')
+ 
+         self.remaining_real_duration_s = res.get("remaining_real_duration_s", 1200)
+         self.start_timestamp = time.time()
+@@ -131,9 +263,7 @@ class HttpSimDriver:
+             "channel": int(channel),
+         }
+         res = self._post_with_retry("/measure", payload)
+-        if not res.get("accepted", False):
+-            raise RuntimeError(f"模拟器拒绝执行 /measure 动作 (accepted=false): {res}")
+-        return res
++        return self._require_accepted("/measure", res)
+ 
+     def clear(self, pos: tuple, channel: int):
+         req_id = self._next_request_id("clear")
+@@ -145,9 +275,7 @@ class HttpSimDriver:
+             "channel": int(channel),
+         }
+         res = self._post_with_retry("/clear", payload)
+-        if not res.get("accepted", False):
+-            raise RuntimeError(f"模拟器拒绝执行 /clear 动作 (accepted=false): {res}")
+-        return res
++        return self._require_accepted("/clear", res)
+ 
+     def exit(self):
+         req_id = self._next_request_id("exit")
+@@ -157,6 +285,10 @@ class HttpSimDriver:
+             "request_id": req_id,
+         }
+         res = self._post_with_retry("/exit", payload)
++        # §5.3 要求同时检查 HTTP 状态与 accepted：/exit 被拒时如实告警（不改变退出流程）
++        if res.get("accepted") is not True:
++            print(f"[WARN] /exit 未被执行（accepted=false）：{res} —— "
++                  f"本次退出原因以模拟器侧记录为准，不由客户端事后声明。")
+         elapsed = time.time() - self.start_timestamp
+         print(f"[PORT] 成功调用 /exit 退出目标区域！本次程序实际运行时间: {elapsed:.2f} 秒")
+         
+@@ -209,7 +341,7 @@ def audit_http_action_log(log_path: str) -> dict:
+             except json.JSONDecodeError:
+                 continue
+ 
+-            resp = entry.get("response", {})
++            resp = entry.get("response") or {}
+             if not resp.get("accepted"):
+                 continue
+ 
+@@ -241,7 +373,7 @@ def audit_http_action_log(log_path: str) -> dict:
+     for e in valid_entries:
+         p = e.get("path")
+         req = e.get("request", {})
+-        resp = e.get("response", {})
++        resp = e.get("response") or {}
+         vt = float(resp.get("virtual_time_s", 0.0))
+         final_vt = max(final_vt, vt)
+ 

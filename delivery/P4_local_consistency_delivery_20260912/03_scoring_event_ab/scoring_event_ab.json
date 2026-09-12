@@ -1,0 +1,276 @@
+{
+  "old_rev": "58037a3",
+  "states": [
+    {
+      "label": "S1 大网格/多步计划 cur=(1200,200)",
+      "p1": [
+        999.0,
+        0.0
+      ],
+      "theta1": 0.0,
+      "prunes": [],
+      "cur_p": [
+        1200.0,
+        200.0
+      ],
+      "channel": 14,
+      "followup_count": 1,
+      "followup_time_s": 50.0,
+      "p1_arg": [
+        999.0,
+        0.0
+      ],
+      "is_p4": true
+    },
+    {
+      "label": "S2 大网格/多步计划 cur=(1500,0)",
+      "p1": [
+        999.0,
+        0.0
+      ],
+      "theta1": 0.0,
+      "prunes": [],
+      "cur_p": [
+        1500.0,
+        0.0
+      ],
+      "channel": 9,
+      "followup_count": 1,
+      "followup_time_s": 50.0,
+      "p1_arg": [
+        999.0,
+        0.0
+      ],
+      "is_p4": true
+    },
+    {
+      "label": "S3 大网格/多步计划 cur=(2400,20)",
+      "p1": [
+        999.0,
+        0.0
+      ],
+      "theta1": 0.0,
+      "prunes": [],
+      "cur_p": [
+        2400.0,
+        20.0
+      ],
+      "channel": 11,
+      "followup_count": 0,
+      "followup_time_s": 0.0,
+      "p1_arg": [
+        999.0,
+        0.0
+      ],
+      "is_p4": true
+    },
+    {
+      "label": "S4 Ch14 实测网格 cur=(1840,0)",
+      "p1": [
+        999.0,
+        0.0
+      ],
+      "theta1": 36.96,
+      "prunes": [
+        {
+          "method": "prune_by_direction",
+          "args": [
+            [
+              1840.0,
+              0.0
+            ],
+            140.06
+          ]
+        }
+      ],
+      "cur_p": [
+        1840.0,
+        0.0
+      ],
+      "channel": 14,
+      "followup_count": 1,
+      "followup_time_s": 50.0,
+      "p1_arg": [
+        999.0,
+        0.0
+      ],
+      "is_p4": true
+    },
+    {
+      "label": "S5 大网格 两次测向后 cur=(1600,0)",
+      "p1": [
+        999.0,
+        0.0
+      ],
+      "theta1": 0.0,
+      "prunes": [
+        {
+          "method": "prune_by_direction",
+          "args": [
+            [
+              2200.0,
+              0.0
+            ],
+            178.0
+          ]
+        },
+        {
+          "method": "prune_by_direction",
+          "args": [
+            [
+              1400.0,
+              900.0
+            ],
+            268.0
+          ]
+        }
+      ],
+      "cur_p": [
+        1600.0,
+        0.0
+      ],
+      "channel": 15,
+      "followup_count": 1,
+      "followup_time_s": 50.0,
+      "p1_arg": [
+        999.0,
+        0.0
+      ],
+      "is_p4": true
+    }
+  ],
+  "rows": [
+    {
+      "state": "S1 大网格/多步计划 cur=(1200,200)",
+      "old": {
+        "action_type": "measure",
+        "position": [
+          1284.228,
+          146.097
+        ],
+        "reason": "followup_promising (Jq=123.2s vs J0=244.3s)",
+        "j0": 244.2742,
+        "best_jq": 123.2016,
+        "surviving_cells": 3396
+      },
+      "new": {
+        "action_type": "measure",
+        "position": [
+          1284.228,
+          146.097
+        ],
+        "reason": "followup_promising (Jq=126.8s vs J0=244.3s)",
+        "j0": 244.2742,
+        "best_jq": 126.83,
+        "surviving_cells": 3396
+      },
+      "action_changed": false
+    },
+    {
+      "state": "S2 大网格/多步计划 cur=(1500,0)",
+      "old": {
+        "action_type": "measure",
+        "position": [
+          1512.516,
+          20.0
+        ],
+        "reason": "followup_promising (Jq=97.1s vs J0=135.6s)",
+        "j0": 135.5627,
+        "best_jq": 97.1231,
+        "surviving_cells": 3396
+      },
+      "new": {
+        "action_type": "measure",
+        "position": [
+          1512.516,
+          20.0
+        ],
+        "reason": "followup_promising (Jq=110.5s vs J0=135.6s)",
+        "j0": 135.5627,
+        "best_jq": 110.541,
+        "surviving_cells": 3396
+      },
+      "action_changed": false
+    },
+    {
+      "state": "S3 大网格/多步计划 cur=(2400,20)",
+      "old": {
+        "action_type": "measure",
+        "position": [
+          2100.076,
+          13.241
+        ],
+        "reason": "followup_promising (Jq=199.9s vs J0=210.5s)",
+        "j0": 210.5282,
+        "best_jq": 199.8865,
+        "surviving_cells": 3396
+      },
+      "new": {
+        "action_type": "clear",
+        "position": [
+          1789.0,
+          0.0
+        ],
+        "reason": "direct_clear_better (J0=210.5s vs Jq=216.6s)",
+        "j0": 210.5282,
+        "best_jq": 216.6337,
+        "surviving_cells": 3396
+      },
+      "action_changed": true
+    },
+    {
+      "state": "S4 Ch14 实测网格 cur=(1840,0)",
+      "old": {
+        "action_type": "clear",
+        "position": [
+          1441.727,
+          333.282
+        ],
+        "reason": "safe_clear_guaranteed",
+        "j0": 5.0,
+        "best_jq": 1000000000.0,
+        "surviving_cells": 119
+      },
+      "new": {
+        "action_type": "clear",
+        "position": [
+          1441.727,
+          333.282
+        ],
+        "reason": "safe_clear_guaranteed",
+        "j0": 5.0,
+        "best_jq": null,
+        "surviving_cells": 119
+      },
+      "action_changed": false
+    },
+    {
+      "state": "S5 大网格 两次测向后 cur=(1600,0)",
+      "old": {
+        "action_type": "fail",
+        "position": [
+          1600.0,
+          0.0
+        ],
+        "reason": "model_contradiction_observation_conflicts_with_grid",
+        "j0": 0.0,
+        "best_jq": 1000000000.0,
+        "surviving_cells": 359
+      },
+      "new": {
+        "action_type": "fail",
+        "position": [
+          1600.0,
+          0.0
+        ],
+        "reason": "model_contradiction_observation_conflicts_with_grid",
+        "j0": 0.0,
+        "best_jq": null,
+        "surviving_cells": 359
+      },
+      "action_changed": false
+    }
+  ],
+  "n_states": 5,
+  "n_action_changed": 1
+}

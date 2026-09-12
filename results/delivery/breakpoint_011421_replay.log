@@ -1,0 +1,40 @@
+已载入记录 279 条（最后一条 measure-000279）
+
+[WATCHDOG] 停滞 45.0s（阶段 init）线程栈：
+  replay_011421_breakpoint.py:140 in _loop <- threading.py:1012 in run <- threading.py:1075 in _bootstrap_inner <- threading.py:1032 in _bootstrap
+  conservative_grid_frozen.py:320 in build_clear_plan <- replay_011421_breakpoint.py:166 in timed_plan <- local_decision_frozen.py:233 in decide_action <- replay_011421_breakpoint.py:184 in timed_decide <- strategy_engine.py:374 in service_found_target <- strategy_engine.py:853 in run_version_c_openroute <- strategy_engine.py:927 in execute <- replay_011421_breakpoint.py:226 in main <- replay_011421_breakpoint.py:276 in <module>
+
+================================================================================================
+回放结果
+================================================================================================
+  结局: crossed_breakpoint
+  已回放记录: 279 / 279
+  墙钟耗时: 69.26s
+  已越过断点：引擎在记录用尽后仍要发起 -> {"path": "/measure", "channel": 16, "pos": [-112.71, -126.36], "after_recorded": 279}
+  决策调用: 21 次，累计 68.91s，单次最大 7.11s
+  build_clear_plan: 3584 次，累计 63.60s，单次最大 0.25s
+  按网格规模（存活单元数）统计 build_clear_plan：
+    cells= 10941  calls= 115  合计    26.20s  均    227.8 ms
+    cells= 10354  calls= 146  合计    15.34s  均    105.1 ms
+    cells=  7813  calls=   6  合计     0.47s  均     77.9 ms
+    cells=  7707  calls=   6  合计     0.49s  均     81.0 ms
+    cells=  7423  calls=   8  合计     0.41s  均     51.5 ms
+    cells=  7362  calls=   8  合计     0.55s  均     68.9 ms
+    cells=  7312  calls=   6  合计     0.39s  均     64.2 ms
+    cells=  7297  calls=   8  合计     0.53s  均     66.2 ms
+  慢决策 (>0.5s) 明细：
+    {'channel': 19, 'followup': 3, 'cells': 10354, 'action': 'measure', 'plan_len': 123, 'j0': 346.48741677188593, 'jq': 190.52066463605072, 'reason': 'followup_promising (Jq=190.5s vs J0=346.5s)', 'seconds': 3.393}
+    {'channel': 19, 'followup': 4, 'cells': 10354, 'action': 'measure', 'plan_len': 123, 'j0': 327.16393697751806, 'jq': 174.17025070213498, 'reason': 'followup_promising (Jq=174.2s vs J0=327.2s)', 'seconds': 4.704}
+    {'channel': 19, 'followup': 5, 'cells': 10354, 'action': 'measure', 'plan_len': 123, 'j0': 308.32769799467434, 'jq': 164.2892910146151, 'reason': 'followup_promising (Jq=164.3s vs J0=308.3s)', 'seconds': 4.793}
+    {'channel': 19, 'followup': 6, 'cells': 10354, 'action': 'measure', 'plan_len': 123, 'j0': 296.7890063581381, 'jq': 155.6981145228903, 'reason': 'followup_promising (Jq=155.7s vs J0=296.8s)', 'seconds': 4.244}
+    {'channel': 19, 'followup': 7, 'cells': 10354, 'action': 'measure', 'plan_len': 123, 'j0': 276.87205989818847, 'jq': 151.93922671961735, 'reason': 'followup_promising (Jq=151.9s vs J0=276.9s)', 'seconds': 4.506}
+    {'channel': 19, 'followup': 8, 'cells': 618, 'action': 'measure', 'plan_len': 20, 'j0': 72.0419590683405, 'jq': 64.4298468792159, 'reason': 'followup_promising (Jq=64.4s vs J0=72.0s)', 'seconds': 0.565}
+    {'channel': 20, 'followup': 0, 'cells': 10941, 'action': 'measure', 'plan_len': 120, 'j0': 781.4996705943048, 'jq': 330.2997365325235, 'reason': 'followup_promising (Jq=330.3s vs J0=781.5s)', 'seconds': 6.728}
+    {'channel': 16, 'followup': 0, 'cells': 10941, 'action': 'measure', 'plan_len': 120, 'j0': 555.4675403098779, 'jq': 405.0595006326816, 'reason': 'followup_promising (Jq=405.1s vs J0=555.5s)', 'seconds': 7.114}
+    {'channel': 16, 'followup': 1, 'cells': 10941, 'action': 'measure', 'plan_len': 120, 'j0': 473.9781232852503, 'jq': 310.2186300232995, 'reason': 'followup_promising (Jq=310.2s vs J0=474.0s)', 'seconds': 6.32}
+    {'channel': 16, 'followup': 2, 'cells': 10941, 'action': 'measure', 'plan_len': 120, 'j0': 519.4805479782358, 'jq': 285.5274465714414, 'reason': 'followup_promising (Jq=285.5s vs J0=519.5s)', 'seconds': 6.297}
+    {'channel': 16, 'followup': 3, 'cells': 10941, 'action': 'measure', 'plan_len': 120, 'j0': 760.5413193534274, 'jq': 288.38024992882504, 'reason': 'followup_promising (Jq=288.4s vs J0=760.5s)', 'seconds': 5.956}
+    {'channel': 16, 'followup': 4, 'cells': 10941, 'action': 'measure', 'plan_len': 120, 'j0': 799.5573885163141, 'jq': 291.42048282778285, 'reason': 'followup_promising (Jq=291.4s vs J0=799.6s)', 'seconds': 5.712}
+  停滞栈 dump 次数: 1
+
+报告已写入 D:\桌面\output\cumcm2026\results\delivery\breakpoint_011421_replay.json

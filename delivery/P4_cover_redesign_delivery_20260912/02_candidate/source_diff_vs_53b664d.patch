@@ -1,0 +1,120 @@
+diff --git a/src/evidence_tracker.py b/src/evidence_tracker.py
+index 59de298..19cea4b 100644
+--- a/src/evidence_tracker.py
++++ b/src/evidence_tracker.py
+@@ -101,38 +101,47 @@ class EvidenceTrackerP3:
+ 
+ 
+ class EvidenceTrackerP4:
+-    def __init__(self):
+-        # 25 个固定点
+-        self.origin = (0.0, 0.0)
+-        self.A_points = []
+-        for i in range(8):
+-            ang = i * math.pi / 4.0
+-            self.A_points.append((999.0 * math.cos(ang), 999.0 * math.sin(ang)))
++    """P4 覆盖点集、访问任务与结束证据（局部凸包证书）。
++
++    本轮覆盖组织改造（分支 exp/p4-cover-redesign）：
++    1. 覆盖网参数化 (n1, r1, n2, r2)，默认 (8, 990, 16, 1840)。内环半径由 999 调整为 990：
++       在 72072 组 Delaunay 构型扫描中，25 点是合法覆盖网的最小点数，而 r1=990 是
++       使该 25 点网仍满足全部证书约束、且开放路线最短的取值。
++    2. 三角剖分由点集按扇面规则**生成**，不再逐条硬编码。
++    3. 证书为局部凸包证书的精确实例：三角形三顶点同频道静默，且三边 <= 1000 m，
++       则三角形内任意 x 满足 x ∈ conv{q ∈ Q_j^- : ||q-x|| <= 1000}
++       （因为 conv 上到各顶点的最大距离在顶点处取得，顶点间距 <= 1000 即保证成立）。
++    """
++
++    def __init__(self, n1: int = 8, r1: float = 990.0, n2: int = 16, r2: float = 1840.0):
++        assert n2 == 2 * n1, "扇面三角剖分要求外环点数 = 2×内环点数"
++        self.n1, self.r1, self.n2, self.r2 = n1, float(r1), n2, float(r2)
+ 
+-        self.B_points = []
+-        for k in range(16):
+-            ang = k * math.pi / 8.0
+-            self.B_points.append((1840.0 * math.cos(ang), 1840.0 * math.sin(ang)))
++        self.origin = (0.0, 0.0)
++        self.A_points = [
++            (self.r1 * math.cos(2.0 * math.pi * i / n1),
++             self.r1 * math.sin(2.0 * math.pi * i / n1)) for i in range(n1)
++        ]
++        self.B_points = [
++            (self.r2 * math.cos(2.0 * math.pi * k / n2),
++             self.r2 * math.sin(2.0 * math.pi * k / n2)) for k in range(n2)
++        ]
+ 
+         # 全部 25 个点序列：O, A0..A7, B0..B15
+         self.all_points = [self.origin] + self.A_points + self.B_points
+ 
+-        # 构造 32 个无盲区三角形
++        # 构造无盲区三角形（扇面规则，由参数生成）
+         self.triangles = []
+-        for i in range(8):
++        for i in range(n1):
+             ai = self.A_points[i]
+-            ai_next = self.A_points[(i + 1) % 8]
++            ai_next = self.A_points[(i + 1) % n1]
+             b_2i = self.B_points[2 * i]
+-            b_2i_1 = self.B_points[2 * i + 1]
+-            b_2i_2 = self.B_points[(2 * i + 2) % 16]
++            b_2i_1 = self.B_points[(2 * i + 1) % n2]
++            b_2i_2 = self.B_points[(2 * i + 2) % n2]
+ 
+-            # 1. (O, Ai, Ai+1)
+             self.triangles.append({"id": len(self.triangles), "vertices": [self.origin, ai, ai_next]})
+-            # 2. (Ai, B_2i, B_2i+1)
+             self.triangles.append({"id": len(self.triangles), "vertices": [ai, b_2i, b_2i_1]})
+-            # 3. (Ai, B_2i+1, Ai+1)
+             self.triangles.append({"id": len(self.triangles), "vertices": [ai, b_2i_1, ai_next]})
+-            # 4. (Ai+1, B_2i+1, B_2i+2)
+             self.triangles.append({"id": len(self.triangles), "vertices": [ai_next, b_2i_1, b_2i_2]})
+ 
+         # 每个频道记录各固定点是否已测过 no_signal
+@@ -141,6 +150,47 @@ class EvidenceTrackerP4:
+         # 每个频道维护 32 个三角形的排除状态
+         self.channel_excluded_triangles = {c: np.zeros(32, dtype=bool) for c in range(1, 21)}
+ 
++    def certificate_geometry(self) -> dict:
++        """精确核验覆盖证书（不采样）：边长、剖分无缝、外边界内切半径、是否覆盖 Ω。
++
++        覆盖保证：三角形并集 = 外环 B 的凸包（凸 12/16 边形），
++        只要它包含 Ω = B((0,0),1800)，且每个三角形三边 <= 1000，
++        则对每个 x ∈ Ω，存在包含 x 的三角形 T，其三个顶点都在 x 的 1000m 内，
++        于是 x ∈ conv{静默测站}，证书成立。
++        """
++        P = self.all_points
++
++        def d(a, b):
++            return math.hypot(P[a][0] - P[b][0], P[a][1] - P[b][1])
++
++        max_edge = 0.0
++        area_tri = 0.0
++        for tri in self.triangles:
++            vs = [self._find_point_idx(v) for v in tri["vertices"]]
++            for a, b in ((0, 1), (1, 2), (0, 2)):
++                max_edge = max(max_edge, d(vs[a], vs[b]))
++            (x1, y1), (x2, y2), (x3, y3) = tri["vertices"]
++            area_tri += abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2.0
++
++        # 外环凸多边形面积与内切半径（正 n2 边形，顶点半径 r2）
++        area_poly = 0.5 * self.n2 * self.r2 ** 2 * math.sin(2.0 * math.pi / self.n2)
++        inradius = self.r2 * math.cos(math.pi / self.n2)
++
++        return {
++            "n_points": len(self.all_points),
++            "n_triangles": len(self.triangles),
++            "max_triangle_edge_m": round(max_edge, 6),
++            "edges_within_1000": bool(max_edge <= 1000.0 + 1e-9),
++            "area_triangles": round(area_tri, 3),
++            "area_outer_polygon": round(area_poly, 3),
++            "tiles_without_gap_or_overlap": bool(abs(area_tri - area_poly) <= max(1.0, 1e-9 * area_poly)),
++            "outer_polygon_inradius_m": round(inradius, 4),
++            "covers_omega_1800": bool(inradius >= 1800.0 - 1e-9),
++            "certificate_valid": bool(max_edge <= 1000.0 + 1e-9
++                                      and abs(area_tri - area_poly) <= max(1.0, 1e-9 * area_poly)
++                                      and inradius >= 1800.0 - 1e-9),
++        }
++
+     def _find_point_idx(self, pos: tuple) -> int:
+         for idx, pt in enumerate(self.all_points):
+             if math.hypot(pt[0] - pos[0], pt[1] - pos[1]) <= 5.0:

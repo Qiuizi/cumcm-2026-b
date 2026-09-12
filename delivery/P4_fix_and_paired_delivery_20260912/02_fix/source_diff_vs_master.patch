@@ -1,0 +1,440 @@
+diff --git a/conservative_grid_frozen.py b/conservative_grid_frozen.py
+index 86d25f6..b31cabd 100644
+--- a/conservative_grid_frozen.py
++++ b/conservative_grid_frozen.py
+@@ -33,6 +33,11 @@ class ConservativeGrid:
+             + self.b_grid[:, None] * self.v[None, :]
+         )
+         self.alive = np.ones(self.total_cells, dtype=bool)
++        # 模型矛盾与裁剪拒绝记录：
++        # 空存活集不构成任何"目标不存在/已清除"或"可安全清除"的依据，必须显式留痕。
++        self.contradiction = False
++        self.contradiction_events = []
++        self.rejected_prune_count = 0
+         self._initial_prune()
+ 
+     def clone(self):
+@@ -49,8 +54,36 @@ class ConservativeGrid:
+         new_grid.total_cells = self.total_cells
+         new_grid.z_grid = self.z_grid
+         new_grid.alive = np.copy(self.alive)
++        new_grid.contradiction = self.contradiction
++        new_grid.contradiction_events = list(self.contradiction_events)
++        new_grid.rejected_prune_count = self.rejected_prune_count
+         return new_grid
+ 
++    def _apply_observation_prune(self, mask, kind: str, detail: dict) -> bool:
++        """统一的观测裁剪入口（保守语义，修正"整集被清空"的错误状态变化）。
++
++        规则：
++        - 合法观测只允许在存活集内部收缩，绝不把存活集裁成空集；
++        - 若某次观测会导致存活集被完全清空，说明模型与观测矛盾，
++          此时**不应用**该次裁剪（保留上一版有效状态）并留痕；
++        - 矛盾绝不被解释为"目标不存在"或"目标已清除"。
++        """
++        new_alive = self.alive & mask
++        if not np.any(new_alive):
++            self.rejected_prune_count += 1
++            self.contradiction_events.append({
++                "kind": kind,
++                "detail": detail,
++                "alive_before": int(np.sum(self.alive)),
++                "action": "prune_rejected_keep_last_consistent_state",
++            })
++            if kind == "direction":
++                # 测向观测与全部存活单元矛盾：标记模型矛盾，交由上层显式判失败
++                self.contradiction = True
++            return False
++        self.alive = new_alive
++        return True
++
+     def _initial_prune(self):
+         z = self.z_grid
+         dist_orig = np.linalg.norm(z, axis=1)
+@@ -76,32 +109,49 @@ class ConservativeGrid:
+         th_min = th_rad - e_rad
+         th_max = th_rad + e_rad
+ 
+-        n_cw = np.array([-math.sin(th_min), math.cos(th_min)])
+-        n_ccw = np.array([math.sin(th_max), -math.cos(th_max)])
++        # 【修复】角域楔形检验的外法向与比较方向：
++        # 旧实现在此处把两个法向写反并用 <= 比较，等价于检验"楔形之外"，
++        # 导致任意一次合法测向观测都把存活集清空（包含真实位置所在单元）。
++        # 现与共享实现 src/conservative_grid.py 及本模块内的预测模型保持一致：
++        #   n1 = ( sin(th_min), -cos(th_min))
++        #   n2 = (-sin(th_max),  cos(th_max))
++        #   nf = (-cos(th_rad), -sin(th_rad))
++        # 并统一使用 dot(...) <= d_g 作为"位于楔形内"的保守判据。
++        n1 = np.array([math.sin(th_min), -math.cos(th_min)])
++        n2 = np.array([-math.sin(th_max), math.cos(th_max)])
++        nf = np.array([-math.cos(th_rad), -math.sin(th_rad)])
+ 
+         in_cone = (
+-            (np.dot(rel, n_cw) <= self.d_g)
+-            & (np.dot(rel, n_ccw) <= self.d_g)
+-            & (np.dot(rel, np.array([math.cos(th_rad), math.sin(th_rad)])) > -self.d_g)
++            (np.dot(rel, n1) <= self.d_g)
++            & (np.dot(rel, n2) <= self.d_g)
++            & (np.dot(rel, nf) <= self.d_g)
+         )
+         in_range = (dists - self.d_g <= 1500.0)
+         not_near = (dists + self.d_g > 5.0)
+ 
+-        self.alive &= (in_cone & in_range & not_near)
++        self._apply_observation_prune(
++            in_cone & in_range & not_near,
++            "direction",
++            {"p": [round(float(p_arr[0]), 3), round(float(p_arr[1]), 3)],
++             "theta_deg": round(float(theta_deg), 4), "eps_deg": round(float(eps_deg), 4)},
++        )
+ 
+     def prune_by_no_signal_omni(self, p: tuple):
+         if not np.any(self.alive):
+             return
+         p_arr = np.array(p, dtype=float)
+         dists = np.linalg.norm(self.z_grid - p_arr[None, :], axis=1)
+-        self.alive &= (dists + self.d_g > 1000.0)
++        self._apply_observation_prune(dists + self.d_g > 1000.0, "no_signal",
++                                      {"p": [round(float(p_arr[0]), 3), round(float(p_arr[1]), 3)]})
+ 
+     def prune_by_clear_fail(self, q: tuple):
+         if not np.any(self.alive):
+             return
+         q_arr = np.array(q, dtype=float)
+         dists = np.linalg.norm(self.z_grid - q_arr[None, :], axis=1)
+-        self.alive &= (dists + self.d_g > 20.0)
++        # 清除失败只是"20m 内无目标"，同样不允许把存活集裁空（裁空即模型矛盾）
++        self._apply_observation_prune(dists + self.d_g > 20.0, "clear_fail",
++                                      {"q": [round(float(q_arr[0]), 3), round(float(q_arr[1]), 3)]})
+ 
+     def count(self) -> int:
+         return int(np.sum(self.alive))
+@@ -123,7 +173,10 @@ class ConservativeGrid:
+     def check_safe_clear_at(self, q: tuple) -> bool:
+         cells = self.get_surviving_cells()
+         if len(cells) == 0:
+-            return True
++            # 【修复】空集不构成任何安全清除依据。
++            # 旧实现返回 True，使 find_safe_clear_position 直接返回当前点，
++            # 决策器给出 reason='safe_clear_guaranteed' 的固定点清除并无限重试。
++            return False
+         q_arr = np.array(q, dtype=float)
+         dists = np.linalg.norm(cells - q_arr[None, :], axis=1)
+         return bool(np.max(dists) + self.d_g <= 20.0)
+@@ -134,7 +187,8 @@ class ConservativeGrid:
+ 
+         cells = self.get_surviving_cells()
+         if len(cells) == 0:
+-            return cur_p
++            # 【修复】无有效状态可用，返回 None 交由上层显式判失败，不伪造"可安全清除"
++            return None
+ 
+         mu = np.mean(cells, axis=0)
+         dists = np.linalg.norm(cells - mu[None, :], axis=1)
+@@ -163,7 +217,8 @@ class ConservativeGrid:
+ 
+         cells = self.get_surviving_cells()
+         if len(cells) == 0:
+-            return [cur_p]
++            # 【修复】空集下不存在合法清除计划，返回空计划（不是"原地清除"）
++            return []
+ 
+         i_idx = np.arange(75)
+         k_idx = np.array([-1.0, 0.0, 1.0])
+diff --git a/local_decision_frozen.py b/local_decision_frozen.py
+index 506c3a9..d99b61a 100644
+--- a/local_decision_frozen.py
++++ b/local_decision_frozen.py
+@@ -187,6 +187,25 @@ class LocalDecisionMaker:
+         if cur_channel is None:
+             cur_channel = channel
+ 
++        # 0. 【修复】空网格 / 模型矛盾：显式判失败，绝不伪造"可安全清除"
++        #    旧实现会经 check_safe_clear_at(空集)=True 走到 reason='safe_clear_guaranteed'，
++        #    在固定位置无限重试同一失败清除；这里改为返回 fail 动作，交由引擎显式标记失败，
++        #    既不解释为"目标不存在/已清除"，也不伪造完成。
++        if grid.count() == 0 or getattr(grid, "contradiction", False):
++            reason = ("empty_grid_no_valid_state" if grid.count() == 0
++                      else "model_contradiction_observation_conflicts_with_grid")
++            return {
++                "action_type": "fail",
++                "position": tuple(cur_p),
++                "reason": reason,
++                "force_clear": False,
++                "clear_plan": [],
++                "j0": 0.0,
++                "best_jq": 1e9,
++                "predicted_feedback": "none",
++                "surviving_cells": int(grid.count()),
++            }
++
+         # 1. 检查是否满足安全清除条件
+         safe_pos = grid.find_safe_clear_position(cur_p)
+         if safe_pos is not None:
+@@ -205,6 +224,20 @@ class LocalDecisionMaker:
+         # 始终准备有限清除计划
+         clear_plan = grid.build_clear_plan(cur_p, anchor_a)
+ 
++        # 1b. 【修复】无合法清除计划时显式判失败，不用 clear_plan[0] 制造假动作
++        if not clear_plan:
++            return {
++                "action_type": "fail",
++                "position": tuple(cur_p),
++                "reason": "no_valid_clear_plan",
++                "force_clear": False,
++                "clear_plan": [],
++                "j0": 0.0,
++                "best_jq": 1e9,
++                "predicted_feedback": "none",
++                "surviving_cells": int(grid.count()),
++            }
++
+         # 2. 检查硬性停止条件
+         if force_clear:
+             return {
+diff --git a/src/strategy_engine.py b/src/strategy_engine.py
+index 6ba521f..8d763c1 100644
+--- a/src/strategy_engine.py
++++ b/src/strategy_engine.py
+@@ -19,7 +19,9 @@ from src.evidence_tracker import EvidenceTrackerP3, EvidenceTrackerP4
+ class ChannelState:
+     def __init__(self, channel: int):
+         self.channel = channel
+-        self.status = "UNKNOWN"  # UNKNOWN, FOUND, CLEARED, ABSENT
++        self.status = "UNKNOWN"  # UNKNOWN, FOUND, CLEARED, ABSENT, FAILED
++        # FAILED 表示"已按合法路径显式判失败"，不等于 ABSENT(不存在) 也不等于 CLEARED(已清除)
++        self.fail_reason = None
+         self.absence_proof_type = None  # None, "COVERAGE_NEGATIVE", "UPPER_BOUND_EXCLUSION"
+         self.grid = None
+         self.followup_count = 0
+@@ -28,6 +30,8 @@ class ChannelState:
+         self.clear_plan = []
+         self.measured_positions = []
+         self.first_bearing = None
++        self.last_failed_clear_pos = None      # 最近一次清除失败的位置（用于重复失败熔断）
++        self.repeat_clear_fail_count = 0       # 同位置同频道且状态不变的连续清除失败次数
+ 
+ 
+ class StrategyEngine:
+@@ -41,6 +45,7 @@ class StrategyEngine:
+         scan_at_clearance: bool = False,  # 普通清除点额外扫未知频道开关 (实证表明关闭可省~223s扫描时间)
+         enable_2opt_head: bool = False,  # 允许2-opt优化改变首任务的独立开关
+         enable_adaptive_radial_coverage: bool = False,  # P3沿原射线可移动检测点独立开关
++        max_repeat_clear_fail: int = 3,  # 同位置同频道且状态不变的连续清除失败熔断阈值
+     ):
+         self.driver = driver
+         self.is_p4 = is_p4
+@@ -65,6 +70,13 @@ class StrategyEngine:
+         self.total_2opt_swaps = 0              # 统计2-opt内部交换/翻转的总次数
+         self.radial_adjustments_count = 0      # 统计沿射线调整覆盖检测位置的次数
+         self.radial_events = []                # 记录详细径向覆盖调点审计快照
++        # 终止与完成状态：区分"成功完成"与"预算安全退出"，不伪造完成
++        self.completion_status = "NOT_STARTED"     # COMPLETED / SAFE_EXIT_BUDGET / INCOMPLETE
++        self.terminal_reason = None
++        self.max_virtual_duration_s = None
++        self.max_real_duration_s = None
++        self.failed_targets = []                   # 显式判失败的目标记录
++        self.max_repeat_clear_fail = int(max_repeat_clear_fail)
+ 
+         if not is_p4:
+             self.evidence_tracker = EvidenceTrackerP3()
+@@ -268,6 +280,42 @@ class StrategyEngine:
+                     cov_desc = "168单元覆盖完备" if not self.is_p4 else "三角形网格覆盖完备"
+                     self._log(f"频道 {ch} 实际阴性观测完成覆盖 ({cov_desc})，判定为 ABSENT！")
+ 
++    def _budget_exhausted(self):
++        """现实/虚拟预算检查。返回 (是否耗尽, 终止原因)。"""
++        if self.max_virtual_duration_s is not None and self.virtual_time_s >= self.max_virtual_duration_s:
++            return True, "VIRTUAL_BUDGET_EXHAUSTED"
++        if self.max_real_duration_s is not None and (time.time() - self.start_real_time) >= self.max_real_duration_s:
++            return True, "REAL_BUDGET_EXHAUSTED"
++        return False, None
++
++    def _check_budget_or_stop(self) -> bool:
++        """预算耗尽时记录终止原因并返回 True（调用方应 break，按合法退出路径结束）"""
++        exhausted, reason = self._budget_exhausted()
++        if exhausted:
++            self.terminal_reason = reason
++            self._log(
++                f"【预算终止】{reason}: 虚拟时间 {self.virtual_time_s:.1f}s / "
++                f"现实耗时 {time.time() - self.start_real_time:.1f}s —— 安全退出（非成功完成）"
++            )
++            return True
++        return False
++
++    def _fail_channel(self, channel: int, reason: str):
++        """显式判失败：不以 ABSENT/CLEARED 伪造完成，保留已有观测与有效状态。"""
++        st = self.channels[channel]
++        st.status = "FAILED"
++        st.fail_reason = reason
++        self.failed_targets.append({
++            "channel": channel,
++            "reason": reason,
++            "virtual_time_s": round(self.virtual_time_s, 2),
++            "measured_positions": len(st.measured_positions),
++            "followup_count": st.followup_count,
++            "surviving_cells": (st.grid.count() if st.grid is not None else None),
++            "grid_contradiction": bool(getattr(st.grid, "contradiction", False)) if st.grid is not None else None,
++        })
++        self._log(f"【目标失败】频道 {channel}: {reason} —— 显式标记失败，不伪造 ABSENT/CLEARED")
++
+     def service_found_target(self, channel: int):
+         """对 FOUND 目标持续服务直到清除成功"""
+         st = self.channels[channel]
+@@ -280,6 +328,12 @@ class StrategyEngine:
+         p1 = st.measured_positions[0] if st.measured_positions else (0.0, 0.0)
+ 
+         while st.status == "FOUND":
++            # 现实/虚拟预算检查：耗尽即显式判失败并按合法路径结束，不伪造完成
++            exhausted, budget_reason = self._budget_exhausted()
++            if exhausted:
++                self._fail_channel(channel, f"budget_exhausted:{budget_reason}")
++                break
++
+             dec = self.local_decision.decide_action(
+                 cur_p=self.cur_pos,
+                 channel=channel,
+@@ -295,9 +349,29 @@ class StrategyEngine:
+             )
+ 
+             act_type = dec["action_type"]
+-            target_pos = dec["position"]
++            target_pos = tuple(dec["position"])
+             st.force_clear = dec["force_clear"]
+ 
++            # 决策器显式判失败（空网格 / 模型矛盾 / 无合法清除计划）：
++            # 该状态不得被解释为"目标不存在"或"目标已清除"，也不得伪造完成。
++            if act_type == "fail":
++                d_log_entry = {
++                    "virtual_time_s": round(self.virtual_time_s, 2),
++                    "channel": channel,
++                    "action_type": "fail",
++                    "position": (round(target_pos[0], 2), round(target_pos[1], 2)),
++                    "reason": dec["reason"],
++                    "j0": 0.0,
++                    "best_jq": None,
++                    "predicted_feedback": "none",
++                    "cells_before": dec.get("surviving_cells", grid.count()),
++                    "followup_count": st.followup_count,
++                    "actual_result": "model_failure",
++                }
++                self.decision_logs.append(d_log_entry)
++                self._fail_channel(channel, dec.get("reason", "decision_failure"))
++                break
++
+             # 记录详细决策日志
+             d_log_entry = {
+                 "virtual_time_s": round(self.virtual_time_s, 2),
+@@ -358,6 +432,7 @@ class StrategyEngine:
+                 d_log_entry["plan_len"] = len(plan)
+                 self.decision_logs.append(d_log_entry)
+ 
++                cells_before_plan = grid.count()
+                 for pt in plan:
+                     self.record_movement(self.cur_pos, pt, purpose="TARGET_CLEAR", channel=channel)
+                     t_before = self.virtual_time_s
+@@ -377,7 +452,23 @@ class StrategyEngine:
+                 if st.status == "CLEARED":
+                     break
+ 
+-        # 清除成功后，在当前清除点顺路批量扫描 UNKNOWN 频道 (受 scan_at_clearance 开关控制)
++                # 重复失败熔断：同位置、同频道清除失败且状态（存活集）不变时，不再无限重复
++                if len(plan) == 1:
++                    sign = (round(float(plan[0][0]), 2), round(float(plan[0][1]), 2))
++                    unchanged = (grid.count() == cells_before_plan)
++                    if unchanged and st.last_failed_clear_pos == sign:
++                        st.repeat_clear_fail_count += 1
++                    else:
++                        st.repeat_clear_fail_count = 1 if unchanged else 0
++                    st.last_failed_clear_pos = sign
++                    if st.repeat_clear_fail_count >= self.max_repeat_clear_fail:
++                        self._fail_channel(channel, "repeated_clear_fail_no_state_change")
++                        break
++                else:
++                    st.repeat_clear_fail_count = 0
++                    st.last_failed_clear_pos = None
++
++        # 清除成功后，在当前清除点顺路批量扫描 UNKNOWN 频道 (受 scan_at_clearance 控制)
+         if not self.is_p4 and st.status == "CLEARED" and self.scan_at_clearance:
+             self.scan_channels_at_station(self.cur_pos)
+             if self.enable_pruning:
+@@ -392,6 +483,8 @@ class StrategyEngine:
+ 
+         # 2. 循环处理直至全部解决
+         while not self.check_completion():
++            if self._check_budget_or_stop():
++                break
+             # 优先处理所有已发现目标
+             found_channels = [
+                 c for c, st in self.channels.items() if st.status == "FOUND"
+@@ -424,6 +517,9 @@ class StrategyEngine:
+         self.scan_channels_at_station((0.0, 0.0))
+ 
+         while not self.check_completion():
++            if self._check_budget_or_stop():
++                break
++
+             found_channels = [
+                 c for c, st in self.channels.items() if st.status == "FOUND"
+             ]
+@@ -578,6 +674,9 @@ class StrategyEngine:
+             self.prune_redundant_search_points()
+ 
+         while not self.check_completion():
++            if self._check_budget_or_stop():
++                break
++
+             if self.enable_pruning:
+                 self.prune_redundant_search_points()
+ 
+@@ -757,7 +856,16 @@ class StrategyEngine:
+     def execute(self):
+         """执行完整求解任务并退出"""
+         self.start_real_time = time.time()
+-        self.driver.enter()
++        enter_res = self.driver.enter() or {}
++        # 现实/虚拟预算：以模拟器返回为准，缺失时退回赛题默认值
++        self.max_virtual_duration_s = float(
++            enter_res.get("max_virtual_duration_s",
++                          enter_res.get("remaining_virtual_duration_s", 360000.0)) or 360000.0
++        )
++        self.max_real_duration_s = float(
++            enter_res.get("max_real_duration_s",
++                          enter_res.get("remaining_real_duration_s", 1200.0)) or 1200.0
++        )
+ 
+         if self.version == "B":
+             self.run_version_b()
+@@ -781,8 +889,18 @@ class StrategyEngine:
+             if st.status == "ABSENT" and getattr(st, "absence_proof_type", None) == "UPPER_BOUND_EXCLUSION"
+         )
+         unsolved_count = sum(1 for st in self.channels.values() if st.status in ["UNKNOWN", "FOUND"])
++        failed_count = sum(1 for st in self.channels.values() if st.status == "FAILED")
+         real_time_s = self.end_real_time - self.start_real_time
+ 
++        # 终止/完成状态：区分"成功完成"与"预算安全退出"，不伪造完成
++        all_channels_ok = all(st.status in ("CLEARED", "ABSENT") for st in self.channels.values())
++        if self.terminal_reason in ("VIRTUAL_BUDGET_EXHAUSTED", "REAL_BUDGET_EXHAUSTED"):
++            self.completion_status = "SAFE_EXIT_BUDGET"
++        elif all_channels_ok:
++            self.completion_status = "COMPLETED"
++        else:
++            self.completion_status = "INCOMPLETE"
++
+         summary = {
+             "version": self.version,
+             "is_p4": self.is_p4,
+@@ -804,6 +922,13 @@ class StrategyEngine:
+             "absent_coverage_count": absent_coverage_count,
+             "absent_upper_bound_count": absent_upper_bound_count,
+             "unsolved_count": unsolved_count,
++            "failed_count": failed_count,
++            "failed_targets": self.failed_targets,
++            "completion_status": self.completion_status,
++            "completed_successfully": self.completion_status == "COMPLETED",
++            "terminal_reason": self.terminal_reason,
++            "max_virtual_duration_s": self.max_virtual_duration_s,
++            "max_real_duration_s": self.max_real_duration_s,
+             "avg_time_per_target": (self.virtual_time_s / cleared_count) if cleared_count > 0 else 0.0,
+             "decision_count": len(self.decision_logs),
+             "search_points_visited_count": len(self.search_points_visited),

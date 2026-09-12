@@ -1,0 +1,68 @@
+[PORT] 本局明文通信日志单独归档绝对路径: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_031257_semtest.jsonl
+[PORT] 成功进入目标区域！剩余可用现实运行时间: 1200 秒
+[RETRY] 网络超时/连接中断 (尝试 1/3): ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+================================================================================================
+T1 服务端已执行但响应丢失（原 ID 重试 / 只执行一次 / 只记一次）
+================================================================================================
+  服务端执行次数: 1 (期望 1)
+  服务端计费累计: 5.0 s (期望 5.0)
+  服务端收到的 measure request_id: ['measure-000002', 'measure-000002'] (期望同一 id 出现 2 次)
+  客户端拿到: accepted=True virtual_time_s=5.0
+  客户端计账: 有效唯一动作=2 (enter+measure=2)，measure=1 (期望 1)，最终虚拟时间=5.0 (期望 5.0)
+  T1 结论: 通过
+
+[PORT] 本局明文通信日志单独归档绝对路径: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_031258_semtest.jsonl
+[PORT] 成功进入目标区域！剩余可用现实运行时间: 1200 秒
+[PORT] 本局明文通信日志单独归档绝对路径: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_031259_semtest.jsonl
+[PORT] 成功进入目标区域！剩余可用现实运行时间: 1200 秒
+================================================================================================
+T2 HTTP 200 且 accepted=false（不当作成功 / 不更新业务状态 / 不用 0 覆盖时钟）
+================================================================================================
+  驱动层: 抛出 HttpActionError kind=rejected
+  accepted=false 时动作未计入计账: measure=0 (期望 0)，有效动作=1 (期望 1=仅 /enter)
+  真实引擎在拒绝响应后状态: virtual_time_s=0.0 (期望 0.0)，cur_pos=(0.0, 0.0) (期望 (0.0,0.0))，cur_channel=1 (期望 1)
+  T2 结论: 通过
+
+[PORT] 本局明文通信日志单独归档绝对路径: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_031300_semtest.jsonl
+[PORT] 成功进入目标区域！剩余可用现实运行时间: 1200 秒
+================================================================================================
+T2b 拒绝响应（200 + accepted=false + virtual_time_s=0）的状态保持（非平凡初态）
+================================================================================================
+  拒绝前已建立: virtual_time_s=15.0 (非 0)，cur_pos=(990.0, 0.0) (非原点)，cur_channel=3 (非 1)
+  第 4 次 /measure 返回: HTTP 200 accepted=false virtual_time_s=0
+  驱动层: kind=rejected
+  拒绝后引擎状态: virtual_time_s=15.0，cur_pos=(990.0, 0.0)，cur_channel=3 —— 逐项保持原值
+  计账: measure=3 (期望 3，拒绝动作不计账)，最终虚拟时间=15.0 (期望 15.0)
+  T2b 结论: 通过
+
+[PORT] 本局明文通信日志单独归档绝对路径: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_031300_semtest.jsonl
+[PORT] 成功进入目标区域！剩余可用现实运行时间: 1200 秒
+================================================================================================
+T3 结构错误(400) 与 409 冲突（不重试、不换 ID 掩盖冲突）
+================================================================================================
+  400: 尝试次数=1 (期望 1，不重试)，kind=fatal_status，status=400
+  409: 尝试次数=1 (期望 1，不重试)，kind=fatal_status，status=409
+  服务端看到的全部 request_id: ['clear-000003', 'enter-000001', 'measure-000002'] (各动作 1 个，未因错误另换 id)
+  409 未被当作成功、也未被换 id 掩盖: True
+  T3 结论: 通过
+
+[PORT] 本局明文通信日志单独归档绝对路径: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_031301_semtest.jsonl
+[PORT] 成功进入目标区域！剩余可用现实运行时间: 1200 秒
+[RETRY] 网络超时/连接中断 (尝试 1/3): ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+[RETRY] 网络超时/连接中断 (尝试 2/3): ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+[RETRY] 网络超时/连接中断 (尝试 3/3): ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+[ABORT] /measure 在 3 次尝试后仍未取得 HTTP 200 —— 本次运行**未完成**（已如实写入会话日志，未伪造完成）。
+================================================================================================
+T4 重试耗尽（异常 / 退出码 / 未完成状态，不得伪造 COMPLETED）
+================================================================================================
+  单元层: kind=retry_exhausted attempts=3 (期望 retry_exhausted / 3)
+  会话日志 diagnostic 记录: ['transport_error', 'transport_error', 'transport_error', 'retry_exhausted']
+  入口层 run_port_test.py 退出码: 3 (期望 3)
+  stdout 含『运行未完成』: True
+  未完成会话文件 completion_status: ABORTED_HTTP_NO_COMPLETION (期望 ABORTED_HTTP_NO_COMPLETION)，completed_successfully=False (期望 False)
+  abort 记录: {"error_type": "HttpActionError", "error": "HTTP 请求失败: /measure（3 次尝试均未取得 HTTP 200，均为网络层失败）", "kind": "retry_exhausted", "path": "/measure", "status_c
+  T4 结论: 通过
+
+================================================================================================
+T1–T4（含 T2b）总判定：全部通过
+================================================================================================

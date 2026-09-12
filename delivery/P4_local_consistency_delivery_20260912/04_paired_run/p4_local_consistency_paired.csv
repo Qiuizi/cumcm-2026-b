@@ -1,0 +1,4 @@
+﻿Case_ID,Sources,Seed,Dir_Ratio,Omni,Directional,Base_Status,New_Status,Base_Cleared,New_Cleared,Base_Unsolved,New_Unsolved,Base_Failed,New_Failed,Base_T_s,New_T_s,Saved_T_s,Saved_Pct,Base_L_m,New_L_m,Base_M,New_M,Base_S,New_S,Base_F,New_F,Base_N,New_N,Base_RealTime_s,New_RealTime_s,Base_Residual_s,New_Residual_s,New_Unrepr_Pred,New_Empty_Pred,Comparable
+P4H-10src-7210,10,7210,0.5,1,9,COMPLETED,COMPLETED,10,10,0,0,0,0,7040.560,7177.305,-136.745,-1.942%,24112.798,24546.525,356,357,319,319,23,38,10,10,5.701,56.129,4.40e-04,1.65e-05,0,0,True
+P4H-13src-7213,13,7213,0.5,6,7,COMPLETED,COMPLETED,13,13,0,0,0,0,7840.015,7904.584,-64.569,-0.824%,28915.075,28852.920,310,323,274,274,56,60,13,13,8.107,98.880,8.60e-05,8.49e-05,0,0,True
+P4H-16src-7216,16,7216,0.5,7,9,COMPLETED,COMPLETED,16,16,0,0,0,0,8147.650,7919.461,+228.189,+2.801%,31973.252,30692.305,213,218,146,146,154,155,16,16,14.385,108.999,3.53e-04,8.06e-06,0,0,True

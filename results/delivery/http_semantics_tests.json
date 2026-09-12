@@ -1,0 +1,139 @@
+{
+  "T1": {
+    "ok": true,
+    "executions": 1,
+    "billed_s": 5.0,
+    "ids": [
+      "measure-000002",
+      "measure-000002"
+    ],
+    "audit": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\scratch\\_http_tests\\t1.jsonl",
+      "unique_accepted_action_count": 2,
+      "total_move_dist_m": 22.36,
+      "movement_time_s": 4.47,
+      "movement_pct": 42.71,
+      "channel_switch_count": 1,
+      "channel_switch_time_s": 1.0,
+      "measure_count": 1,
+      "measure_time_s": 5.0,
+      "clear_fail_count": 0,
+      "clear_fail_time_s": 0.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 10.47,
+      "final_virtual_time_s": 5.0,
+      "accounting_discrepancy_s": 5.4721,
+      "time_last_clear_to_exit_s": 5.0
+    }
+  },
+  "T2": {
+    "ok": true,
+    "kind": "rejected",
+    "engine_state": {
+      "virtual_time_s": 0.0,
+      "cur_pos": [
+        0.0,
+        0.0
+      ],
+      "cur_channel": 1
+    },
+    "audit": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\scratch\\_http_tests\\t2.jsonl",
+      "unique_accepted_action_count": 1,
+      "total_move_dist_m": 0.0,
+      "movement_time_s": 0.0,
+      "movement_pct": 0.0,
+      "channel_switch_count": 0,
+      "channel_switch_time_s": 0.0,
+      "measure_count": 0,
+      "measure_time_s": 0.0,
+      "clear_fail_count": 0,
+      "clear_fail_time_s": 0.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 0.0,
+      "final_virtual_time_s": 0.0,
+      "accounting_discrepancy_s": 0.0,
+      "time_last_clear_to_exit_s": 0.0
+    }
+  },
+  "T2b": {
+    "ok": true,
+    "kind": "rejected",
+    "nontrivial_state": true,
+    "state_before": {
+      "virtual_time_s": 15.0,
+      "cur_pos": [
+        990.0,
+        0.0
+      ],
+      "cur_channel": 3
+    },
+    "state_after": {
+      "virtual_time_s": 15.0,
+      "cur_pos": [
+        990.0,
+        0.0
+      ],
+      "cur_channel": 3
+    },
+    "state_preserved": true,
+    "audit": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\scratch\\_http_tests\\t2b.jsonl",
+      "unique_accepted_action_count": 4,
+      "total_move_dist_m": 990.0,
+      "movement_time_s": 198.0,
+      "movement_pct": 92.09,
+      "channel_switch_count": 2,
+      "channel_switch_time_s": 2.0,
+      "measure_count": 3,
+      "measure_time_s": 15.0,
+      "clear_fail_count": 0,
+      "clear_fail_time_s": 0.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 215.0,
+      "final_virtual_time_s": 15.0,
+      "accounting_discrepancy_s": 200.0,
+      "time_last_clear_to_exit_s": 15.0
+    },
+    "server_measure_requests": 4
+  },
+  "T3": {
+    "ok": true,
+    "measure_attempts": 1,
+    "clear_attempts": 1,
+    "kinds": {
+      "/measure": "fatal_status",
+      "/clear": "fatal_status"
+    },
+    "status": {
+      "/measure": 400,
+      "/clear": 409
+    }
+  },
+  "T4": {
+    "ok": true,
+    "unit_kind": "retry_exhausted",
+    "entry_returncode": 3,
+    "entry_stdout_has_abort": true,
+    "completion": {
+      "completion_status": "ABORTED_HTTP_NO_COMPLETION",
+      "completed_successfully": false,
+      "real_budget_s": 1200.0,
+      "max_real_duration_s": 1200.0,
+      "abort": {
+        "error_type": "HttpActionError",
+        "error": "HTTP 请求失败: /measure（3 次尝试均未取得 HTTP 200，均为网络层失败）",
+        "kind": "retry_exhausted",
+        "path": "/measure",
+        "status_code": null,
+        "attempts": 3
+      },
+      "note": "运行在 HTTP 动作失败后中止；未完成状态如实记录，未伪造 COMPLETED"
+    },
+    "session_file": "D:\\桌面\\output\\cumcm2026\\results\\audit_logs\\http_session_20260913_031302_semtest.jsonl"
+  },
+  "all_pass": true
+}

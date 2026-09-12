@@ -1,0 +1,171 @@
+{
+  "profile": "stable",
+  "profile_label": "stable (稳定版 v3.4.2, 径向实验关闭, 径向开关=OFF)",
+  "prob": "p4",
+  "port": 14512,
+  "robot_id": "d2test",
+  "mock_seed": null,
+  "external_port": true,
+  "code_version": "p4_history_candidate_v1 (upstream-validated: stage3 (P4 history_candidate, 12 局配对验收通过；r2 与 r1 数值行为一致))",
+  "git_dirty": false,
+  "source_fingerprint": {
+    "src/strategy_engine.py": "f4f41a97bd24d289",
+    "src/local_decision.py": "eac1bdd8a0b3e964",
+    "src/conservative_grid.py": "2908487383308aca",
+    "src/evidence_tracker.py": "4a627a8bb8a236a1",
+    "src/client_runner.py": "5f221dd4e8a83fad",
+    "src/sim_env.py": "ffa4f33aa5f943de",
+    "local_decision_frozen.py": "6f9c895357149c97",
+    "conservative_grid_frozen.py": "778af8fd986a79b6",
+    "run_port_test.py": "2f59f8daf7a41675"
+  },
+  "effective_config": {
+    "is_p4": true,
+    "version": "C",
+    "enable_pruning": true,
+    "scan_at_clearance": false,
+    "enable_2opt_head": false,
+    "enable_adaptive_radial_coverage": false,
+    "grid_class": "conservative_grid_frozen.ConservativeGrid",
+    "local_decision_class": "local_decision_frozen.LocalDecisionMaker"
+  },
+  "completion": {
+    "completion_status": "ABORTED_HTTP_NO_COMPLETION",
+    "completed_successfully": false,
+    "real_budget_s": null,
+    "max_real_duration_s": null,
+    "abort": {
+      "error_type": "HttpActionError",
+      "error": "HTTP 请求失败: /enter（3 次尝试均未取得 HTTP 200，均为网络层失败）",
+      "kind": "retry_exhausted",
+      "path": "/enter",
+      "status_code": null,
+      "attempts": 3
+    },
+    "note": "运行在 HTTP 动作失败后中止；未完成状态如实记录，未伪造 COMPLETED"
+  },
+  "per_channel_end_evidence": {
+    "1": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "2": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "3": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "4": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "5": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "6": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "7": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "8": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "9": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "10": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "11": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "12": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "13": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "14": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "15": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "16": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "17": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "18": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "19": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    },
+    "20": {
+      "status": "UNKNOWN",
+      "absence_proof_type": null,
+      "fail_reason": null
+    }
+  },
+  "billing_partial": {
+    "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\release\\p4_official_runs\\audit_logs\\http_session_20260913_040231_d2test.jsonl",
+    "unique_accepted_action_count": 0,
+    "total_move_dist_m": 0.0,
+    "movement_time_s": 0.0,
+    "movement_pct": 0.0,
+    "channel_switch_count": 0,
+    "channel_switch_time_s": 0.0,
+    "measure_count": 0,
+    "measure_time_s": 0.0,
+    "clear_fail_count": 0,
+    "clear_fail_time_s": 0.0,
+    "clear_succ_count": 0,
+    "clear_succ_time_s": 0.0,
+    "total_accounted_virtual_time_s": 0.0,
+    "final_virtual_time_s": 0.0,
+    "accounting_discrepancy_s": 0.0,
+    "time_last_clear_to_exit_s": 0.0
+  },
+  "candidate": null,
+  "observation_census": null,
+  "http_session_file": "D:\\桌面\\output\\cumcm2026\\release\\p4_official_runs\\audit_logs\\http_session_20260913_040231_d2test.jsonl"
+}

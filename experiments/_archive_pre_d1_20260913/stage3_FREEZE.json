@@ -1,0 +1,78 @@
+{
+  "stage": "stage3_candidate",
+  "frozen_at": "P4 历史接收模型候选版（第三阶段）",
+  "frozen_baseline_components": {
+    "local_decision_frozen.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\local_decision_frozen.py",
+      "sha256": "6d26e61de9a25fd4ee82e643ea1a4b6e172cd38a3f52e2e996d4757d06cef642"
+    },
+    "conservative_grid_frozen.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\conservative_grid_frozen.py",
+      "sha256": "778af8fd986a79b60d690e60b8daeaa21adc40d7b372c2e900d6838babebfd08"
+    },
+    "src/sim_env.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\src/sim_env.py",
+      "sha256": "ffa4f33aa5f943ded2ace6ac65fa2aa5d1efc61a563880402a2c876abcd77dcf"
+    },
+    "src/strategy_engine.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\src/strategy_engine.py",
+      "sha256": "8dca0841ba7c45de03b05f1e0d4fbfaf28e0deb237acb74ee6b697900d213e45"
+    },
+    "src/evidence_tracker.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\src/evidence_tracker.py",
+      "sha256": "4a627a8bb8a236a1b407a6e27cae28774dd9295ad0b99b0df55de4a99d5ceac3"
+    }
+  },
+  "candidate_files": {
+    "experiments/stage3_candidate/model.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\experiments/stage3_candidate/model.py",
+      "sha256": "ada6c0069ee9b426bb174dba9c59e874c46d72a034b7d70f446a317b8c4b50c2"
+    },
+    "experiments/stage3_candidate/predictor.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\experiments/stage3_candidate/predictor.py",
+      "sha256": "0fa1753454775cbd0efdd98f7fc98682bd79265fd2aed185420281cb87500006"
+    },
+    "experiments/stage3_candidate/candidate_decision.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\experiments/stage3_candidate/candidate_decision.py",
+      "sha256": "811ed398758133016ec37e24e56eb01e799660464bd39523f5ccdb3c0c01c4af"
+    },
+    "experiments/stage3_candidate/observer.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\experiments/stage3_candidate/observer.py",
+      "sha256": "a58d1931ff3334fe578f095632a98af71986dc7463eaf4f9e2e523a616db1261"
+    },
+    "experiments/stage3_candidate/launch.py": {
+      "path": "D:\\桌面\\output\\cumcm2026\\experiments/stage3_candidate/launch.py",
+      "sha256": "95330f69f79983c7da6029c856eb3c6a8e47015e99e24e0bb0098e9f8cd7b012"
+    }
+  },
+  "frozen_model_spec": {
+    "n_hyp": 512,
+    "p_dir": 0.5,
+    "r_prior": [
+      1000.0,
+      1500.0
+    ],
+    "u_prior": "uniform[0,2pi)",
+    "eps_deg": "inherit_from_safety_grid",
+    "pool_factor": 40,
+    "max_rounds": 6,
+    "seed_base": 20260912,
+    "seed_stride": 131,
+    "update_rule": "refilter_all_compatible_hypotheses_with_full_history",
+    "fallback_rule": "empty_hypothesis_set -> reception_probability returns None -> decision maker falls back to frozen_recv_prob verbatim",
+    "note_on_priors": "p_dir / R 区间 / 朝向均匀分布均为建模假设，不是题面事实"
+  },
+  "identity_checks": {
+    "stage2_model_vs_stage3_model": {
+      "stage2": "ada6c0069ee9b426bb174dba9c59e874c46d72a034b7d70f446a317b8c4b50c2",
+      "stage3": "ada6c0069ee9b426bb174dba9c59e874c46d72a034b7d70f446a317b8c4b50c2",
+      "identical": true
+    }
+  },
+  "constraints": [
+    "不调用官方模拟器；不另建模拟器（只用本地参考环境 src/sim_env.py）",
+    "P3、P4 覆盖布局、扫描规则、全局调度、候选补点、清除计划、结束判据均不变",
+    "概率模型只影响决策评分；不删除安全网格、不丢源、不参与判空与结束判据",
+    "运行期不读取也不 exec 外部源码（candidate_decision.py 为构建期一次性生成）"
+  ]
+}

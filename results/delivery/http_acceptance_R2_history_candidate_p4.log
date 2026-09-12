@@ -1,0 +1,130 @@
+
+[候选前置核对] 冻结源码指纹与实际加载模块一致性：一致
+    experiments/stage3_candidate/model.py                ada6c0069ee9b426 OK
+    experiments/stage3_candidate/predictor.py            0fa1753454775cbd OK
+    experiments/stage3_candidate/candidate_decision.py   811ed39875813301 OK
+    experiments/stage3_candidate/observer.py             a58d1931ff3334fe OK
+    experiments/stage3_candidate/launch.py               95330f69f79983c7 OK
+    local_decision_frozen.py                             6d26e61de9a25fd4 OK   [候选决策主体的生成来源 / 基类]
+    conservative_grid_frozen.py                          778af8fd986a79b6 OK   [候选决策主体的生成来源 / 基类]
+    模型先验规格一致性：一致
+[候选前置核对] 真值隔离静态检查：通过（无禁止字段访问）
+
+[本地模拟运行] 端口 14027 空闲，在本地拉起高真 Mock 服务器 (源数=10, seed=9501)...
+Mock Simulator Server running at http://127.0.0.1:14027 (Sources: 10, is_p4: True)...
+[PORT] 本局明文通信日志单独归档绝对路径: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_004236_team2026.jsonl
+=====================================================================================
+【2026 数模国赛 B 题】HTTP 端口通信与官方演练实测系统
+=====================================================================================
+运行档位 (Profile):      history_candidate (P4 历史接收模型候选版, 模型与回退规则冻结, 直接复用已验证模块)
+代码版本:               v3.4.2-guard-upperbound (git-badd8f6, 2026-09-12)
+机器狗标识 (队号):      team2026
+目标服务端口:           14027
+任务模式:               问题四 (含未知定向源 - 依赖严格隔离冻结模式)
+调度策略版本:           版本 C (开放路线重排+动态剪枝)
+-------------------------------------------------------------------------------------
+【最终生效配置 (Effective Config，以下为引擎对象实际取值)】
+  1. is_p4:                              True
+  2. version:                            C
+  3. enable_pruning:                     True
+  4. scan_at_clearance:                  False
+  5. enable_2opt_head:                   False
+  6. enable_adaptive_radial_coverage:    False
+  7. enable_reschedule_after_followup:   不存在于当前代码 (等效关闭, 未实现该实验路径)
+  8. 底层决策与网格依赖:                 conservative_grid_frozen.ConservativeGrid / candidate_decision.HistoryCandidateDecision
+-------------------------------------------------------------------------------------
+【源码标识 (Source Identity, sha256 前16位)】
+  git HEAD:                (工作区存在未提交改动, 以文件指纹为准)
+  src/strategy_engine.py                 8dca0841ba7c45de
+  src/local_decision.py                  eac1bdd8a0b3e964
+  src/conservative_grid.py               2908487383308aca
+  src/evidence_tracker.py                4a627a8bb8a236a1
+  src/client_runner.py                   e4e6ba0f160d9b94
+  src/sim_env.py                         ffa4f33aa5f943de
+  local_decision_frozen.py               6d26e61de9a25fd4
+  conservative_grid_frozen.py            778af8fd986a79b6
+  scripts/run_port_test.py               230606087416c5f1
+  experiments/stage3_candidate/candidate_decision.py 811ed39875813301
+  experiments/stage3_candidate/predictor.py 0fa1753454775cbd
+  experiments/stage3_candidate/model.py  ada6c0069ee9b426
+  experiments/stage3_candidate/observer.py a58d1931ff3334fe
+  experiments/stage3_candidate/wiring.py a327f47beabd2640
+-------------------------------------------------------------------------------------
+【候选接线信息 (history_candidate，直接复用已验证模块)】
+  决策器实现:             candidate_decision.HistoryCandidateDecision
+  决策器源码文件:         D:\桌面\output\cumcm2026\experiments\stage3_candidate\candidate_decision.py
+  接收预测接口实现:       predictor.HistoryReceptionPredictor
+  预测器源码文件:         D:\桌面\output\cumcm2026\experiments\stage3_candidate\predictor.py
+  观测来源:               observer.RecordingObserverDriver (包在 HttpSimDriver 外层)
+  观测字段白名单:         ['kind', 'p', 'svd']
+  冻结先验:               {'n_hyp': 512, 'p_dir': 0.5, 'r_range': [1000.0, 1500.0], 'u_prior': 'uniform[0,2pi)', 'eps_deg': 'inherit_from_grid', 'pool_factor': 40, 'max_rounds': 6, 'seed_base': 20260912, 'seed_stride': 131}
+  更新规则:               refilter_all_compatible_hypotheses_with_full_history
+  回退规则:               empty_hypothesis_set -> return None -> frozen_recv_prob
+  决策器限值:             {'max_followups': 12, 'max_followup_time_s': 600.0, 'margin_s': 5.0}
+  冻结源码指纹核对:       一致
+  真值隔离静态检查:       通过
+  本地实例真值访问:       无（决策器只拿到 HTTP 接口返回的 measure_result / svd_deg）
+-------------------------------------------------------------------------------------
+本局明文 HTTP 日志归档: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_004236_team2026.jsonl
+
+>>> 开始执行自动搜索、定位与清除主策略 <<<
+[PORT] 成功进入目标区域！剩余可用现实运行时间: 1200 秒
+[PORT] 成功调用 /exit 退出目标区域！本次程序实际运行时间: 160.18 秒
+
+=================================================================
+【HTTP 通信计账与耗时分解审计报告 (唯一有效动作计账)】
+=================================================================
+归档日志绝对路径:         D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_004236_team2026.jsonl
+有效唯一请求数:           368 条 (重试重复请求已去重)
+1. 移动耗时 (L/5):        5370.35 秒 (路程: 26851.8m, 占比 72.0%)
+2. 切频道耗时 (1s/次):    308.00 秒 (切换次数: 308)
+3. 检测耗时 (5s/次):      1645.00 秒 (检测次数: 329)
+4. 失败清除耗时 (3s/次):  81.00 秒 (失败次数: 27)
+5. 成功清除耗时 (5s/次):  50.00 秒 (成功清除: 10)
+-----------------------------------------------------------------
+五类耗时计算总和:         7454.35 秒
+模拟器最终虚拟总耗时:     7454.35 秒 (校核差值: 0.0004 秒)
+最后一次成功清除至退出耗时: 441.87 秒
+=================================================================
+
+=====================================================================================
+【官方演练执行总结与五类耗时闭合审计报告】
+=====================================================================================
+演练策略与版本:         C | 代码版本: v3.4.2-guard-upperbound (git-badd8f6, 2026-09-12)
+运行档位:               history_candidate (P4 历史接收模型候选版, 模型与回退规则冻结, 直接复用已验证模块)
+径向自适应覆盖开关:     OFF (径向实验关闭)
+径向调点次数:           0 次
+首任务 2-opt 优化状态:  OFF (派发首任务变更: 0 轮, 内部交换: 15 次)
+清除点额外扫描开关:     OFF
+证明空频道总数:         10 个 (实际阴性覆盖: 10 个 [三角形网格完备覆盖] | 16源上限直接排除: 0 个)
+未决频道数:             0 个 (成功清除 10 个, 场景已决率 100.0%)
+总虚拟时间 T:           7454.35 秒 (平均单目标耗时 T/N: 745.44 秒/目标)
+预测网格空集异常计数:   5 次
+计划未覆盖异常计数:     0 次
+最大单次决策现实耗时:   0.00 毫秒
+现实运行总时间:         160.19 秒 (距离1200秒硬时限安全退出余量: 1039.81 秒)
+-------------------------------------------------------------------------------------
+【五类成本完整会计核算闭环】
+  1. 移动耗时 (T_move):        5370.35 秒 | 实际移动距离: 26851.8 m (占比 72.04%)
+  2. 切频道耗时 (T_switch):     308.00 秒 | 切频道次数:   308 次
+  3. 测量检测耗时 (T_meas):    1645.00 秒 | 检测采样次数: 329 次
+  4. 失败清除耗时 (T_fail):      81.00 秒 | 失败清除次数: 27 次
+  5. 成功清除耗时 (T_succ):      50.00 秒 | 成功清除次数: 10 次
+  --> 五类成本直接求和:        7454.35 秒
+  --> 模拟器最终反馈时间:      7454.35 秒
+  --> 会计核算闭合差值:         0.0004 秒 (严格闭合)
+  末次成功清除至退出耗时:       441.87 秒
+-------------------------------------------------------------------------------------
+已接受的唯一实际动作总数:   368 次
+本局明文日志绝对路径:       D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_004236_team2026.jsonl
+-------------------------------------------------------------------------------------
+【特别警示说明】
+  * 本地评测录得的 6.44% (平均 222.9s) 改善幅度属于本地模拟器基准数据，
+    官方演练受具体随机源分布、真值信噪比和交互开销影响，不能直接等同于官方改善幅度！
+  * 官方演练的真实改善情况必须以本次官方实际输出指标为准。
+=====================================================================================
+
+[会话落盘] 独立会话文件（不覆盖前局）: D:\桌面\output\cumcm2026\results\delivery\http_sessions\session_history_candidate_p4_20260913_004517.json
+
+正在停止本地 Mock 服务器...
+本地 Mock 服务器已关闭。

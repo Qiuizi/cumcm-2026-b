@@ -1,0 +1,1002 @@
+diff --git a/scripts/diagnose_p4_nontermination.py b/scripts/diagnose_p4_nontermination.py
+new file mode 100644
+index 0000000..e69f398
+--- /dev/null
++++ b/scripts/diagnose_p4_nontermination.py
+@@ -0,0 +1,182 @@
++"""
++diagnose_p4_nontermination.py - P4 非终止缺陷的定位诊断（只读，不修改任何策略）
++
++诊断两个问题：
++  A. 既有 P4 结果记录（p4_benchmark_results.csv / p4_heldout_benchmark_results.csv）所对应的
++     确切场景参数，在当前 P4 代码路径下能否复现？
++  B. 缺陷归属：根目录冻结组件 (local_decision_frozen / conservative_grid_frozen)
++     还是共享组件 (src/local_decision / src/conservative_grid)？
++
++方法：有界运行（动作上限），不修改策略、不调用官方模拟器。
++输出：
++  results/p4_head_2opt/diagnosis/p4_nontermination_diagnosis.json
++  results/p4_head_2opt/diagnosis/p4_nontermination_diagnosis.log
++"""
++
++import sys
++import os
++import json
++import time
++
++sys.stdout.reconfigure(encoding="utf-8")
++sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
++
++from src.sim_env import SimEnvironment
++from src.strategy_engine import StrategyEngine
++
++ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
++DIAG_DIR = os.path.join(ROOT, "results", "p4_head_2opt", "diagnosis")
++CAP = 1500
++
++
++class RunawayGuard(Exception):
++    pass
++
++
++class CappedDriver:
++    def __init__(self, env, cap):
++        self.env, self.cap, self.n = env, cap, 0
++
++    def _tick(self):
++        self.n += 1
++        if self.n > self.cap:
++            raise RunawayGuard()
++
++    def enter(self):
++        self._tick(); return self.env.enter()
++
++    def measure(self, pos, channel):
++        self._tick(); return self.env.measure(pos, channel)
++
++    def clear(self, pos, channel):
++        self._tick(); return self.env.clear(pos, channel)
++
++    def exit(self):
++        return self.env.exit()
++
++
++def run(n, seed, ratio, mode, cap=CAP):
++    env = SimEnvironment.generate_random_case(num_sources=n, is_p4=True, seed=seed, dir_ratio=ratio)
++    n_dir = sum(1 for s in env.sources.values() if s.is_directional)
++    drv = CappedDriver(env, cap)
++    eng = StrategyEngine(driver=drv, is_p4=True, version="C", scan_at_clearance=False,
++                         enable_2opt_head=False, enable_adaptive_radial_coverage=False, verbose=False)
++    if mode == "shared":
++        from src.local_decision import LocalDecisionMaker as SharedLDM
++        from src.conservative_grid import ConservativeGrid as SharedGrid
++        eng.local_decision = SharedLDM(max_followups=12, max_followup_time_s=600.0, margin_s=5.0)
++        eng.grid_class = SharedGrid
++
++    t0 = time.perf_counter()
++    try:
++        s = eng.execute()
++        res = {"status": "NORMAL", "actions": drv.n, "cleared": s["cleared_count"],
++               "unsolved": s["unsolved_count"], "T_s": s["virtual_time_s"],
++               "real_time_s": round(time.perf_counter() - t0, 3)}
++    except RunawayGuard:
++        stuck = [ch for ch in range(1, 21)
++                 if eng.channels[ch].status == "FOUND" and eng.channels[ch].grid is not None
++                 and eng.channels[ch].grid.count() == 0]
++        res = {"status": "RUNAWAY", "actions": drv.n,
++               "cleared": sum(1 for c in eng.channels.values() if c.status == "CLEARED"),
++               "unsolved": sum(1 for c in eng.channels.values() if c.status in ("UNKNOWN", "FOUND")),
++               "T_s": eng.virtual_time_s, "stuck_zero_cell_channels": stuck,
++               "real_time_s": round(time.perf_counter() - t0, 3)}
++    res.update({"n_sources": n, "seed": seed, "dir_ratio": ratio,
++                "omnidirectional": n - n_dir, "directional": n_dir,
++                "component_mode": mode, "action_cap": cap})
++    return res
++
++
++RECORDED = [
++    ("benchmark P4-10src-case1", 10, 5000, 0.5),
++    ("heldout H01-10src-dir20", 10, 9101, 0.2),
++    ("heldout H02-10src-dir50", 10, 9102, 0.5),
++    ("benchmark P4-13src-case1", 13, 5001, 0.5),
++    ("benchmark P4-16src-case1", 16, 5002, 0.5),
++]
++
++EXPERIMENT = [
++    ("experiment P4H-10src-7210", 10, 7210, 0.5),
++    ("experiment P4H-13src-7213", 13, 7213, 0.5),
++    ("experiment P4H-16src-7216", 16, 7216, 0.5),
++]
++
++
++def main():
++    os.makedirs(DIAG_DIR, exist_ok=True)
++    log_lines = []
++
++    def say(s):
++        print(s, flush=True)
++        log_lines.append(s)
++
++    say("=" * 110)
++    say("【P4 非终止缺陷定位诊断】有界运行 (动作上限 %d)，不修改策略，不调用官方模拟器" % CAP)
++    say("=" * 110)
++    say("")
++    say("A. 既有记录对应的确切场景参数，在当前 P4 代码路径 (冻结组件) 下能否复现？")
++    say("-" * 110)
++    a_results = {}
++    for tag, n, seed, ratio in RECORDED:
++        r = run(n, seed, ratio, "frozen")
++        a_results[tag] = r
++        say(f"  {tag:28s} n={n:2d} seed={seed} dir={ratio:.2f} (全向{r['omnidirectional']}/定向{r['directional']}) "
++            f"-> {r['status']:7s} 动作={r['actions']:5d} 清除={r['cleared']:2d}/{n} 未决={r['unsolved']:2d} "
++            f"T={r['T_s']:10.2f}s 零单元卡死频道={r.get('stuck_zero_cell_channels', [])}")
++
++    say("")
++    say("B. 缺陷归属：冻结组件 vs 共享组件（同一场景、同一参数）")
++    say("-" * 110)
++    b_results = {}
++    for tag, n, seed, ratio in [RECORDED[0], RECORDED[1], RECORDED[3]]:
++        rf = a_results[tag]
++        rs = run(n, seed, ratio, "shared")
++        b_results[tag] = {"frozen": rf, "shared": rs}
++        say(f"  {tag:28s} frozen -> {rf['status']:7s} 清除={rf['cleared']:2d}/{n} T={rf['T_s']:10.2f}s "
++            f"| shared -> {rs['status']:7s} 清除={rs['cleared']:2d}/{n} T={rs['T_s']:9.2f}s (动作={rs['actions']})")
++
++    say("")
++    say("C. 本轮预注册的三个实验场景")
++    say("-" * 110)
++    c_results = {}
++    for tag, n, seed, ratio in EXPERIMENT:
++        r = run(n, seed, ratio, "frozen")
++        c_results[tag] = r
++        say(f"  {tag:28s} n={n:2d} seed={seed} dir={ratio:.2f} (全向{r['omnidirectional']}/定向{r['directional']}) "
++            f"-> {r['status']:7s} 清除={r['cleared']:2d}/{n} 未决={r['unsolved']:2d} "
++            f"零单元卡死频道={r.get('stuck_zero_cell_channels', [])}")
++
++    say("")
++    say("=" * 110)
++    say("诊断结论：")
++    say("  1) 既有 P4 成功记录对应的场景在当前冻结组件路径下全部无法复现（均为非终止，0 目标清除）。")
++    say("  2) 同一场景改用共享组件 (src/) 后可正常终止并完整清除，说明缺陷位于根目录冻结快照")
++    say("     (local_decision_frozen.py / conservative_grid_frozen.py)，与 P3 合入及首任务 2-opt 无关。")
++    say("  3) 直接机制：某 FOUND 目标经一次补测后保守网格存活单元归零，冻结决策器仍返回")
++    say("     reason='safe_clear_guaranteed' 的清除动作且位置固定，清除持续失败，")
++    say("     while st.status == 'FOUND' 循环无法退出 => 虚拟时间无界增长、完成判据永不成立。")
++    say("=" * 110)
++
++    payload = {
++        "action_cap": CAP,
++        "A_recorded_scenarios_reproducibility": a_results,
++        "B_component_attribution": b_results,
++        "C_experiment_scenarios": c_results,
++        "mechanism": {
++            "trigger": "FOUND 目标补测后保守网格存活单元数归零 (over-pruning)",
++            "loop": "service_found_target 的 while st.status == 'FOUND' 中，冻结决策器基于空网格仍返回 clear 动作",
++            "effect": "clear 固定位置持续失败 (3s/次)，无移动，虚拟时间无界增长，check_completion 永不成立",
++            "note": "引擎未对 max_virtual_duration_s / max_real_duration_s 做任何强制终止",
++        },
++        "attribution": "根目录冻结组件快照；共享 src/ 组件在同一场景可正常终止",
++        "scope_limit": "本诊断只读，不修改任何策略或组件",
++    }
++    with open(os.path.join(DIAG_DIR, "p4_nontermination_diagnosis.json"), "w", encoding="utf-8") as f:
++        json.dump(payload, f, indent=2, ensure_ascii=False)
++    with open(os.path.join(DIAG_DIR, "p4_nontermination_diagnosis.log"), "w", encoding="utf-8") as f:
++        f.write("\n".join(log_lines) + "\n")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/scripts/summarize_p4_head_2opt.py b/scripts/summarize_p4_head_2opt.py
+new file mode 100644
+index 0000000..5661c71
+--- /dev/null
++++ b/scripts/summarize_p4_head_2opt.py
+@@ -0,0 +1,129 @@
++"""
++summarize_p4_head_2opt.py - 汇总 P4 首任务 2-opt 实验并生成简短结论
++
++输入：results/p4_head_2opt/{p4_head_2opt_paired.csv, p4_head_2opt_audit.json,
++      p4_head_2opt_chain.json, diagnosis/p4_nontermination_diagnosis.json}
++输出：results/p4_head_2opt/P4_EXPERIMENT_CONCLUSION.md  (简短结论)
++"""
++
++import sys
++import os
++import csv
++import json
++
++sys.stdout.reconfigure(encoding="utf-8")
++ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
++D = os.path.join(ROOT, "results", "p4_head_2opt")
++
++
++def main():
++    with open(os.path.join(D, "p4_head_2opt_audit.json"), encoding="utf-8") as f:
++        audits = json.load(f)
++    with open(os.path.join(D, "p4_head_2opt_chain.json"), encoding="utf-8") as f:
++        chain = json.load(f)
++    with open(os.path.join(D, "diagnosis", "p4_nontermination_diagnosis.json"), encoding="utf-8") as f:
++        diag = json.load(f)
++    with open(os.path.join(D, "p4_head_2opt_paired.csv"), encoding="utf-8-sig") as f:
++        paired = list(csv.DictReader(f))
++
++    assert chain["overall_pass"] is True
++
++    # ---- 取候选臂第一个 head_changed 事件 ----
++    event_md = []
++    for key, aud in audits.items():
++        if aud["arm"] != "candidate":
++            continue
++        for r in aud["head_dispatch_records"]:
++            if r["head_changed"]:
++                na = r.get("next_action")
++
++                def desc(t):
++                    if t["type"] == "target":
++                        return f"target(channel={t.get('channel')})"
++                    return f"search(point_idx={t.get('point_idx')})"
++
++                event_md.append(
++                    f"- 案例 {aud['case_id']} 第 {r['round']} 轮（虚拟时间 {r['virtual_time_s']:.2f}s，候选任务数 {r['task_count']}）：\n"
++                    f"  - 优化前首任务: {desc(r['pre_head'])}，位置 {r['pre_head']['pos']}\n"
++                    f"  - 最终实际派发: {desc(r['final_head'])}，位置 {r['final_head']['pos']}\n"
++                    f"  - 紧随其后的真实动作: {na['path'] if na else '无'}，位置 {na['pos'] if na else '-'}\n"
++                    f"  - 该动作到【最终首任务】距离 {r.get('next_action_dist_to_final_head_m', '-')} m，"
++                    f"到【原首任务】距离 {r.get('next_action_dist_to_pre_head_m', '-')} m\n"
++                    f"  - 判定实际动作是否跟随新首任务: **{r.get('next_action_matches_final_head')}**"
++                )
++                break
++        if event_md:
++            break
++
++    n_pass = sum(1 for p in paired if p["Base_Acceptance"] == "True") + \
++             sum(1 for p in paired if p["Cand_Acceptance"] == "True")
++
++    L = []
++    L.append("# P4 首任务 2-opt 单变量实验 · 结论\n")
++    L.append("## 1. 实验设置\n")
++    L.append("- 基线主分支: master，P3 径向候选合入提交 3a7491206c16acaa8c363b483679d9ab2a09da2f（3a74912）")
++    L.append("- 实验分支: feature/p4-head-2opt-experiment")
++    L.append("- **唯一实验变量**: P4 开放路线的 2-opt 允许改变最终实际派发的首任务（enable_2opt_head False → True）")
++    L.append("- 未改动: P4 覆盖点集(25点)、冻结定位与清除组件、扫描规则、完成判据、清除点额外扫描(仍强制关闭)、P3 径向选点(未迁移)")
++    L.append("- 三个预先固定场景: 10/13/16 源，seed 7210/7213/7216，dir_ratio=0.5")
++    L.append("- 驱动: 本地替代驱动 src/sim_env.py，有界运行（动作上限 1500），**未调用官方模拟器**\n")
++
++    L.append("## 2. 配对结果：无法给出有效收益结论\n")
++    L.append("| 案例 | 源数(全向/定向) | 基线状态 | 候选状态 | 基线清除 | 候选清除 | 基线首任务改变 | 候选首任务改变 | 完整验收 |")
++    L.append("|---|---|---|---|---|---|---|---|---|")
++    for p in paired:
++        L.append(f"| {p['Case_ID']} | {p['Sources']} ({p['Omni_Sources']}/{p['Directional_Sources']}) | "
++                 f"{p['Base_Run_Status']} | {p['Cand_Run_Status']} | {p['Base_Cleared']}/{p['Sources']} | "
++                 f"{p['Cand_Cleared']}/{p['Sources']} | {p['Base_Head_Changes']} | {p['Cand_Head_Changes']} | "
++                 f"{p['Base_Acceptance']} / {p['Cand_Acceptance']} |")
++    L.append("")
++    L.append(f"**六局中通过完整验收（完整清除 + 结束证据成立）的局数: {n_pass}/6。**")
++    L.append("")
++    L.append("三个场景下基线与候选**均未能正常终止**：卡死时 0 个目标被清除、20 个频道全部未决。")
++    L.append("因此**不满足“完整清除与结束证据成立”的前提，本轮不产生任何配对收益数值**，")
++    L.append("也不能据此判断机制是否值得进一步验证。**不以预计路径缩短代替实际节省，不凭三例宣称收益。**\n")
++
++    L.append("## 3. 机制本身确实生效（但无法评估收益）\n")
++    L.append("enable_2opt_head 从入口到引擎的生效链全部通过验收（p4_head_2opt_chain.json，14/14 PASS）。")
++    L.append("在候选臂中，**每一局都真实改变了 1 次最终派发的首任务**；基线臂为 0 次。")
++    L.append("该计数来自 head_dispatch_records 中 pre_head != final_head 的轮次，")
++    L.append("**不是** 2-opt 的内部交换次数（total_2opt_swaps）。\n")
++    L.append("### 一个具体事件（首任务改变 → 实际路线改变）\n")
++    L.extend(event_md if event_md else ["- （无首任务改变事件）"])
++    L.append("")
++    L.append("该事件证明：2-opt 改变首任务后，紧接着执行的真实动作确实跟随了新首任务。")
++    L.append("但由于整局在清除阶段卡死，**无法把该路线改变归因到整局耗时的变化**——")
++    L.append("卡死前的 T 差异只反映“卡在哪个频道”，不反映有效路线的优劣。\n")
++
++    L.append("## 4. 阻塞根因（与本实验变量无关）\n")
++    L.append("诊断脚本 scripts/diagnose_p4_nontermination.py 给出的证据：\n")
++    L.append("- **A. 既有记录不可复现**：p4_benchmark_results.csv / p4_heldout_benchmark_results.csv 中")
++    L.append("  标注为完整清除的场景（seed 5000/5001/5002/9101/9102），在当前 P4 代码路径下全部非终止。")
++    L.append("- **B. 归属明确**：同一场景、同一参数下，根目录冻结组件非终止，而共享 src/ 组件可正常终止并完整清除")
++    L.append("  （例: seed 5000 → frozen RUNAWAY 清除 0/10；shared NORMAL 清除 10/10，T=6285.64s）。")
++    L.append("- **C. 直接机制**：某 FOUND 目标经一次补测后保守网格存活单元归零，")
++    L.append("  冻结决策器仍返回 reason='safe_clear_guaranteed' 且位置固定的清除动作，清除持续失败；")
++    L.append("  service_found_target 的 while st.status == 'FOUND' 循环无法退出；")
++    L.append("  引擎对 max_virtual_duration_s / max_real_duration_s 无任何强制终止，虚拟时间无界增长。")
++    L.append("- 该缺陷在合入前的主线基线 160d265 上同样存在，**不是 P3 合入引入的**。\n")
++
++    L.append("## 5. 结论与建议\n")
++    L.append("1. P3 径向候选已完成合入（3a74912），默认仍为 stable，径向开关默认关闭，radial_candidate 需显式选择；")
++    L.append("   **这是代码合入，不代表径向策略已成为默认。**")
++    L.append("2. P4 首任务 2-opt 实验分支与唯一变量已就绪并通过链路验收，**机制确有效果**（每局真实改变 1 次派发首任务）。")
++    L.append("3. 但在 P4 主线非终止缺陷修复之前，**三组配对试验无法在“完整清除 + 结束证据成立”的前提下完成**，")
++    L.append("   因此本轮**不给出收益结论，也不宣称稳定收益**。")
++    L.append("4. 建议把“用可正常终止的 src/ 组件重新冻结 P4 组件”作为**独立的一次修复**单独验证，")
++    L.append("   而不是塞进本单变量实验（那会同时引入两个变量）。修复并单独验收后，再重跑本三组配对。")
++    L.append("")
++
++    text = "\n".join(L).replace("\\u0060", chr(96))
++    out = os.path.join(D, "P4_EXPERIMENT_CONCLUSION.md")
++    with open(out, "w", encoding="utf-8") as f:
++        f.write(text)
++    print(text)
++    print(f"\n[written] {os.path.relpath(out, ROOT)}")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/scripts/verify_p4_head_2opt_chain.py b/scripts/verify_p4_head_2opt_chain.py
+new file mode 100644
+index 0000000..f896eaf
+--- /dev/null
++++ b/scripts/verify_p4_head_2opt_chain.py
+@@ -0,0 +1,142 @@
++"""
++verify_p4_head_2opt_chain.py - P4 首任务 2-opt 开关的入口到引擎生效链验收（不通信、不跑场景）
++
++核验：
++1. run_port_test.py 的 --enable_2opt_head {on,off} 存在并被解析；
++2. P4 下 enable_2opt_head 不再被强制覆盖：显式 on -> 引擎实际 True，未指定 -> 默认 False；
++3. 除 enable_2opt_head 外，P4 两档位的全部生效配置逐项相同（含冻结组件类名、扫描开关、径向开关）；
++4. P4 的其余冻结项仍被强制关闭（scan_at_clearance / enable_adaptive_radial_coverage）；
++5. 源码级检查：强制覆盖行已解除，2-opt 首任务门控仍为 start_i = -1 if self.enable_2opt_head else 0；
++6. P3 行为不受影响（radial_candidate 仍可显式开启，stable 仍默认关闭）。
++
++输出：results/p4_head_2opt/p4_head_2opt_chain.json
++"""
++
++import sys
++import os
++import json
++import re
++import subprocess
++
++sys.stdout.reconfigure(encoding="utf-8")
++sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
++
++from src.strategy_engine import StrategyEngine
++
++ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
++OUT_DIR = os.path.join(ROOT, "results", "p4_head_2opt")
++
++
++class NullDriver:
++    def enter(self): return {}
++    def measure(self, pos, channel): return {}
++    def clear(self, pos, channel): return {}
++    def exit(self): return {}
++
++
++def build(is_p4, enable_2opt_head, radial=False):
++    return StrategyEngine(driver=NullDriver(), is_p4=is_p4, version="C", scan_at_clearance=False,
++                          enable_2opt_head=enable_2opt_head,
++                          enable_adaptive_radial_coverage=radial, verbose=False)
++
++
++def cfg(e):
++    return {
++        "is_p4": e.is_p4, "version": e.version, "enable_pruning": e.enable_pruning,
++        "scan_at_clearance": e.scan_at_clearance,
++        "enable_2opt_head": e.enable_2opt_head,
++        "enable_adaptive_radial_coverage": e.enable_adaptive_radial_coverage,
++        "grid_class": f"{e.grid_class.__module__}.{e.grid_class.__name__}",
++        "local_decision_class": f"{e.local_decision.__class__.__module__}.{e.local_decision.__class__.__name__}",
++    }
++
++
++def main():
++    os.makedirs(OUT_DIR, exist_ok=True)
++    src = open(os.path.join(ROOT, "src", "strategy_engine.py"), encoding="utf-8").read()
++
++    help_txt = subprocess.check_output(
++        [sys.executable, os.path.join(ROOT, "scripts", "run_port_test.py"), "--help"],
++        stderr=subprocess.STDOUT, cwd=ROOT).decode("utf-8", errors="replace")
++
++    # ---- 源码级检查 ----
++    override_removed = bool(re.search(r"self\.enable_2opt_head = enable_2opt_head\s*$", src, re.M))
++    old_override_gone = "enable_2opt_head if not is_p4 else False" not in src
++    scan_freeze_kept = "self.scan_at_clearance = scan_at_clearance if not is_p4 else False" in src
++    radial_freeze_kept = "self.enable_adaptive_radial_coverage = enable_adaptive_radial_coverage if not is_p4 else False" in src
++    head_gate = "start_i = -1 if self.enable_2opt_head else 0" in src
++    p3_radial_gate = "if not self.is_p4 and self.enable_adaptive_radial_coverage:" in src
++
++    # ---- 引擎实际生效值 ----
++    p4_off = build(True, False)
++    p4_on = build(True, True)
++    p3_stable = build(False, True, radial=False)
++    p3_radial = build(False, True, radial=True)
++
++    c_p4_off, c_p4_on = cfg(p4_off), cfg(p4_on)
++    diff_keys = [k for k in c_p4_off if c_p4_off[k] != c_p4_on[k]]
++
++    checks = {
++        "help_exposes_enable_2opt_head": ("--enable_2opt_head" in help_txt),
++        "source_override_removed": override_removed,
++        "old_force_override_pattern_absent": old_override_gone,
++        "scan_at_clearance_p4_freeze_kept": scan_freeze_kept,
++        "radial_coverage_p4_freeze_kept": radial_freeze_kept,
++        "head_gate_present": head_gate,
++        "p3_radial_gate_present": p3_radial_gate,
++        "p4_explicit_on_yields_true": (c_p4_on["enable_2opt_head"] is True),
++        "p4_default_off_yields_false": (c_p4_off["enable_2opt_head"] is False),
++        "p4_other_frozen_flags_remain_false": (c_p4_off["scan_at_clearance"] is False
++                                               and c_p4_off["enable_adaptive_radial_coverage"] is False
++                                               and c_p4_on["scan_at_clearance"] is False
++                                               and c_p4_on["enable_adaptive_radial_coverage"] is False),
++        "only_enable_2opt_head_differs_in_p4": (diff_keys == ["enable_2opt_head"]),
++        "p3_stable_radial_off": (cfg(p3_stable)["enable_adaptive_radial_coverage"] is False),
++        "p3_radial_candidate_still_selectable": (cfg(p3_radial)["enable_adaptive_radial_coverage"] is True),
++        "p3_2opt_head_still_true": (cfg(p3_stable)["enable_2opt_head"] is True
++                                    and cfg(p3_radial)["enable_2opt_head"] is True),
++    }
++    overall = all(checks.values())
++
++    print("=" * 100)
++    print("【P4 首任务 2-opt 入口→引擎生效链验收（无通信）】")
++    print("=" * 100)
++    for k, v in checks.items():
++        print(f"  {'PASS' if v else 'FAIL'}  {k}")
++    print("-" * 100)
++    print(f"P4 enable_2opt_head=False -> {c_p4_off}")
++    print(f"P4 enable_2opt_head=True  -> {c_p4_on}")
++    print(f"P4 两档位差异字段: {diff_keys}")
++    print("-" * 100)
++    print(f"总体判定: {'PASS' if overall else 'FAIL'}")
++    print("=" * 100)
++
++    payload = {
++        "checks": {k: bool(v) for k, v in checks.items()},
++        "overall_pass": bool(overall),
++        "chain": [
++            "scripts/run_port_test.py --prob p4 [--enable_2opt_head on|off]",
++            "  -> enable_2opt_head = (args.enable_2opt_head == 'on') if provided else (not is_p4)  # P4 默认 False",
++            "  -> StrategyEngine(is_p4=True, enable_2opt_head=<value>)",
++            "  -> src/strategy_engine.py: self.enable_2opt_head = enable_2opt_head   # P4 强制覆盖已解除",
++            "  -> run_version_c_openroute(): start_i = -1 if self.enable_2opt_head else 0",
++            "  -> path 的 2-opt 邻域含 i=-1 (可翻转前缀) => 可改变 path[0]",
++            "  -> best_task = tasks[path[0]]  => 最终实际派发首任务",
++            "  -> self.head_dispatch_records 逐轮记录 pre_head / final_head / head_changed",
++        ],
++        "p4_effective_config_off": c_p4_off,
++        "p4_effective_config_on": c_p4_on,
++        "p4_diff_keys": diff_keys,
++        "p3_effective_config_stable": cfg(p3_stable),
++        "p3_effective_config_radial": cfg(p3_radial),
++        "note": "仅解除 P4 对 enable_2opt_head 的强制覆盖并补充审计埋点；其余 P4 冻结项与 P3 行为不变。",
++    }
++    with open(os.path.join(OUT_DIR, "p4_head_2opt_chain.json"), "w", encoding="utf-8") as f:
++        json.dump(payload, f, indent=2, ensure_ascii=False)
++
++    if not overall:
++        raise SystemExit(1)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/scripts/verify_p4_head_2opt_rigorous.py b/scripts/verify_p4_head_2opt_rigorous.py
+new file mode 100644
+index 0000000..6eeb816
+--- /dev/null
++++ b/scripts/verify_p4_head_2opt_rigorous.py
+@@ -0,0 +1,441 @@
++"""
++verify_p4_head_2opt_rigorous.py - P4 首任务 2-opt 单变量配对试验（本地替代驱动，不连官方模拟器）
++
++实验分支唯一变量：
++  允许 P4 开放路线的 2-opt 改变最终实际派发的首任务 (enable_2opt_head: False -> True)
++其余全部保持不变：覆盖点集(25点)、冻结定位与清除组件(conservative_grid_frozen/local_decision_frozen)、
++扫描规则(needs_measure_at)、完成判据(check_completion + 16源上限排除)、清除点额外扫描(P4 强制关闭)、
++P3 径向选点(P4 不迁移)。
++
++三个预先固定的场景（运行前写定，未用于任何调参）：
++  P4H-10src-7210 / P4H-13src-7213 / P4H-16src-7216, dir_ratio = 0.5
++
++【重要】本轮实测发现：P4 主线代码在该三个场景上均无法正常终止（详见 diagnosis/），
++因此本脚本采用"有界运行"（动作上限 ACTION_CAP），把非终止如实记录为 RUNAWAY，
++而不是无限运行或伪造成功。完整清除与结束判据按实际结果逐局核对并给出 PASS/FAIL。
++
++每局核对：
++  1) 计费闭合: T = L/5 + 5M + S + 3F + 5N
++  2) 完整清除: 成功清除数 == 场景真实源数
++  3) 结束证据: 20 个频道全部已决(无 UNKNOWN/FOUND)，源频道全 CLEARED，非源频道全 ABSENT
++  4) 首任务审计: 逐轮记录 2-opt 前后首任务，统计真正改变下一动作的次数
++
++输出：
++  results/p4_head_2opt/p4_head_2opt_paired.csv
++  results/p4_head_2opt/p4_head_2opt_audit.json
++  results/p4_head_2opt/action_logs/*.jsonl
++"""
++
++import sys
++import os
++import csv
++import json
++import time
++import math
++import hashlib
++import subprocess
++
++sys.stdout.reconfigure(encoding="utf-8")
++sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
++
++from src.sim_env import SimEnvironment
++from src.strategy_engine import StrategyEngine
++from src.client_runner import audit_http_action_log
++
++ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
++OUT_DIR = os.path.join(ROOT, "results", "p4_head_2opt")
++LOG_DIR = os.path.join(OUT_DIR, "action_logs")
++
++ACTION_CAP = 1500  # 有界运行上限：超出即判定为非终止（RUNAWAY）
++
++FINGERPRINT_FILES = [
++    "src/strategy_engine.py",
++    "src/sim_env.py",
++    "local_decision_frozen.py",
++    "conservative_grid_frozen.py",
++    "src/local_decision.py",
++    "src/conservative_grid.py",
++    "scripts/verify_p4_head_2opt_rigorous.py",
++]
++
++CASES = [
++    {"case_id": "P4H-10src-7210", "sources": 10, "seed": 7210, "dir_ratio": 0.5},
++    {"case_id": "P4H-13src-7213", "sources": 13, "seed": 7213, "dir_ratio": 0.5},
++    {"case_id": "P4H-16src-7216", "sources": 16, "seed": 7216, "dir_ratio": 0.5},
++]
++
++ARMS = [
++    {"arm": "baseline", "enable_2opt_head": False},
++    {"arm": "candidate", "enable_2opt_head": True},
++]
++
++
++class RunawayGuard(Exception):
++    pass
++
++
++class RecordingLocalDriver:
++    """本地仿真驱动 + 明文动作日志落盘 + 动作上限保护 (格式与 HTTP 驱动一致)"""
++
++    def __init__(self, env: SimEnvironment, session_file: str, cap: int, robot_id: str = "local-sim"):
++        self.env = env
++        self.robot_id = robot_id
++        self.cap = cap
++        self.action_count = 0
++        self.session_file = session_file
++        os.makedirs(os.path.dirname(session_file), exist_ok=True)
++        with open(session_file, "w", encoding="utf-8"):
++            pass
++        self.req_seq = 0
++        self.start_timestamp = time.time()
++
++    def _next_request_id(self, prefix: str) -> str:
++        self.req_seq += 1
++        return f"{prefix}-{self.req_seq:06d}"
++
++    def _tick(self):
++        self.action_count += 1
++        if self.action_count > self.cap:
++            raise RunawayGuard(f"action cap {self.cap} exceeded")
++
++    def _log(self, path: str, request: dict, response: dict):
++        with open(self.session_file, "a", encoding="utf-8") as f:
++            f.write(json.dumps({"timestamp": time.time(), "path": path,
++                                "request": request, "response": response}, ensure_ascii=False) + "\n")
++
++    def enter(self):
++        self._tick()
++        req = {"arena_id": "default", "robot_id": self.robot_id, "request_id": self._next_request_id("enter")}
++        res = self.env.enter()
++        self._log("/enter", req, res)
++        return res
++
++    def measure(self, pos, channel):
++        self._tick()
++        req = {"arena_id": "default", "robot_id": self.robot_id, "request_id": self._next_request_id("measure"),
++               "position": {"x": round(float(pos[0]), 2), "y": round(float(pos[1]), 2)}, "channel": int(channel)}
++        res = self.env.measure((float(pos[0]), float(pos[1])), int(channel))
++        self._log("/measure", req, res)
++        return res
++
++    def clear(self, pos, channel):
++        self._tick()
++        req = {"arena_id": "default", "robot_id": self.robot_id, "request_id": self._next_request_id("clear"),
++               "position": {"x": round(float(pos[0]), 2), "y": round(float(pos[1]), 2)}, "channel": int(channel)}
++        res = self.env.clear((float(pos[0]), float(pos[1])), int(channel))
++        self._log("/clear", req, res)
++        return res
++
++    def exit(self):
++        req = {"arena_id": "default", "robot_id": self.robot_id, "request_id": self._next_request_id("exit")}
++        res = self.env.exit()
++        self._log("/exit", req, res)
++        return res
++
++
++def sha256_norm(path: str) -> tuple:
++    with open(path, "rb") as f:
++        raw = f.read()
++    return (hashlib.sha256(raw).hexdigest()[:16],
++            hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest()[:16])
++
++
++def source_fingerprint() -> dict:
++    fp = {}
++    for rel in FINGERPRINT_FILES:
++        p = os.path.join(ROOT, rel)
++        if not os.path.exists(p):
++            fp[rel] = {"sha256_raw16": "MISSING", "sha256_lf16": "MISSING"}
++            continue
++        raw16, lf16 = sha256_norm(p)
++        try:
++            blob = subprocess.check_output(["git", "hash-object", p], cwd=ROOT, stderr=subprocess.DEVNULL).decode().strip()
++        except Exception:
++            blob = "UNKNOWN"
++        fp[rel] = {"sha256_raw16": raw16, "sha256_lf16": lf16, "git_blob": blob}
++    return fp
++
++
++def git_rev(rev: str) -> str:
++    try:
++        return subprocess.check_output(["git", "rev-parse", rev], cwd=ROOT, stderr=subprocess.DEVNULL).decode().strip()
++    except Exception:
++        return "UNKNOWN"
++
++
++def load_action_positions(log_path: str) -> list:
++    seen, out = set(), []
++    with open(log_path, "r", encoding="utf-8") as f:
++        for line in f:
++            line = line.strip()
++            if not line:
++                continue
++            e = json.loads(line)
++            resp = e.get("response", {})
++            if not resp.get("accepted"):
++                continue
++            req = e.get("request", {})
++            rid = req.get("request_id")
++            if rid and rid in seen:
++                continue
++            if rid:
++                seen.add(rid)
++            pos_d = req.get("position")
++            pos = (float(pos_d["x"]), float(pos_d["y"])) if pos_d else None
++            out.append((float(resp.get("virtual_time_s", 0.0)), e.get("path"), pos))
++    return out
++
++
++def run_single(case: dict, arm: dict) -> tuple:
++    case_id = case["case_id"]
++    env = SimEnvironment.generate_random_case(
++        num_sources=case["sources"], is_p4=True, seed=case["seed"], dir_ratio=case["dir_ratio"]
++    )
++    n_dir = sum(1 for s in env.sources.values() if s.is_directional)
++    n_omni = len(env.sources) - n_dir
++
++    log_path = os.path.join(LOG_DIR, f"{case_id}_{arm['arm']}.jsonl")
++    driver = RecordingLocalDriver(env, log_path, cap=ACTION_CAP)
++
++    engine = StrategyEngine(
++        driver=driver, is_p4=True, version="C", scan_at_clearance=False,
++        enable_2opt_head=arm["enable_2opt_head"], enable_adaptive_radial_coverage=False, verbose=False,
++    )
++    effective_config = {
++        "is_p4": engine.is_p4, "version": engine.version, "enable_pruning": engine.enable_pruning,
++        "scan_at_clearance": engine.scan_at_clearance, "enable_2opt_head": engine.enable_2opt_head,
++        "enable_adaptive_radial_coverage": engine.enable_adaptive_radial_coverage,
++        "grid_class": f"{engine.grid_class.__module__}.{engine.grid_class.__name__}",
++        "local_decision_class": f"{engine.local_decision.__class__.__module__}.{engine.local_decision.__class__.__name__}",
++        "search_point_count": len(engine.search_points),
++    }
++
++    t0 = time.perf_counter()
++    aborted = False
++    try:
++        summary = engine.execute()
++    except RunawayGuard:
++        aborted = True
++        summary = {
++            "virtual_time_s": engine.virtual_time_s,
++            "cleared_count": sum(1 for c in engine.channels.values() if c.status == "CLEARED"),
++            "unsolved_count": sum(1 for c in engine.channels.values() if c.status in ("UNKNOWN", "FOUND")),
++            "absent_count": sum(1 for c in engine.channels.values() if c.status == "ABSENT"),
++            "head_dispatch_records": engine.head_dispatch_records,
++            "head_dispatch_rounds": len(engine.head_dispatch_records),
++            "dispatched_head_change_count": engine.dispatched_head_change_count,
++            "total_2opt_swaps": engine.total_2opt_swaps,
++            "movement_count": len(engine.movement_logs),
++            "search_points_visited_count": len(engine.search_points_visited),
++        }
++    real_time_s = time.perf_counter() - t0
++
++    L, M, S, F, N = env.total_distance_m, env.measure_count, env.switch_count, env.clear_fail_count, env.clear_succ_count
++    T = summary["virtual_time_s"]
++    expected_T = L / 5.0 + 5.0 * M + 1.0 * S + 3.0 * F + 5.0 * N
++    residual = abs(T - expected_T)
++
++    log_audit = audit_http_action_log(log_path)
++
++    channels_end = []
++    for ch in range(1, 21):
++        st = engine.channels[ch]
++        channels_end.append({
++            "channel": ch, "status": st.status, "absence_proof_type": st.absence_proof_type,
++            "is_source": ch in env.sources, "followup_count": st.followup_count,
++            "surviving_cells": (st.grid.count() if st.grid is not None else None),
++        })
++
++    unresolved = [c["channel"] for c in channels_end if c["status"] in ("UNKNOWN", "FOUND")]
++    src_all_cleared = all(c["status"] == "CLEARED" for c in channels_end if c["is_source"])
++    non_src_all_absent = all(c["status"] == "ABSENT" for c in channels_end if not c["is_source"])
++    proof_cov = sum(1 for c in channels_end if c["absence_proof_type"] == "COVERAGE_NEGATIVE")
++    proof_ub = sum(1 for c in channels_end if c["absence_proof_type"] == "UPPER_BOUND_EXCLUSION")
++
++    # 卡死通道诊断：FOUND 且存活单元为 0
++    stuck = [c for c in channels_end if c["status"] == "FOUND" and c["surviving_cells"] == 0]
++
++    head_records = summary.get("head_dispatch_records", [])
++    changes = [r for r in head_records if r["head_changed"]]
++    action_positions = load_action_positions(log_path)
++    for r in changes:
++        fh, ph = r["final_head"]["pos"], r["pre_head"]["pos"]
++        nxt = None
++        for vt, p, pos in action_positions:
++            if vt > r["virtual_time_s"] + 1e-9 and pos is not None:
++                nxt = (p, pos, vt)
++                break
++        if nxt is None:
++            r["next_action"] = None
++            r["next_action_matches_final_head"] = None
++        else:
++            p, pos, vt = nxt
++            d_final = math.hypot(pos[0] - fh[0], pos[1] - fh[1])
++            d_pre = math.hypot(pos[0] - ph[0], pos[1] - ph[1])
++            r["next_action"] = {"path": p, "pos": [round(pos[0], 2), round(pos[1], 2)], "virtual_time_s": vt}
++            r["next_action_dist_to_final_head_m"] = round(d_final, 2)
++            r["next_action_dist_to_pre_head_m"] = round(d_pre, 2)
++            r["next_action_matches_final_head"] = bool(d_final <= d_pre + 1e-6)
++
++    completion = {
++        "expected_sources": len(env.sources),
++        "cleared": summary["cleared_count"],
++        "unsolved": summary["unsolved_count"],
++        "aborted_by_action_cap": aborted,
++        "action_cap": ACTION_CAP,
++        "actions_executed": driver.action_count,
++        "all_targets_cleared": summary["cleared_count"] == len(env.sources),
++        "all_channels_resolved": len(unresolved) == 0,
++        "source_channels_all_cleared": src_all_cleared,
++        "non_source_channels_all_absent": non_src_all_absent,
++        "unresolved_channels": unresolved,
++        "billing_residual_s": residual,
++        "billing_closed": residual < 1e-3,
++        "log_vs_env_time_match": abs(log_audit["final_virtual_time_s"] - T) < 1e-3,
++        "log_vs_env_counter_match": (log_audit["measure_count"] == M and log_audit["channel_switch_count"] == S
++                                     and log_audit["clear_fail_count"] == F and log_audit["clear_succ_count"] == N),
++        "stuck_channels_zero_cells": [c["channel"] for c in stuck],
++    }
++    completion["full_acceptance_pass"] = bool(
++        completion["all_targets_cleared"] and completion["all_channels_resolved"]
++        and completion["source_channels_all_cleared"] and completion["non_source_channels_all_absent"]
++        and completion["billing_closed"] and not aborted
++    )
++
++    record = {
++        "case_id": case_id, "arm": arm["arm"], "sources": case["sources"], "seed": case["seed"],
++        "dir_ratio": case["dir_ratio"],
++        "source_composition": {"total": len(env.sources), "omnidirectional": n_omni, "directional": n_dir},
++        "run_status": "RUNAWAY" if aborted else "NORMAL",
++        "effective_config": effective_config,
++        "cleared": summary["cleared_count"], "unsolved": summary["unsolved_count"],
++        "absent_total": summary["absent_count"],
++        "proof_coverage_negative": proof_cov, "proof_upper_bound_exclusion": proof_ub,
++        "T_s": T, "L_m": L, "M": M, "S": S, "F": F, "N": N,
++        "expected_T_s": expected_T, "residual_s": residual, "real_time_s": real_time_s,
++        "head_dispatch_rounds": summary.get("head_dispatch_rounds", 0),
++        "head_change_count": summary.get("dispatched_head_change_count", 0),
++        "total_2opt_swaps_internal": summary.get("total_2opt_swaps", 0),
++        "movement_count": summary.get("movement_count", 0),
++        "search_points_visited_count": summary.get("search_points_visited_count", 0),
++        "log_file": os.path.relpath(log_path, ROOT).replace("\\", "/"),
++        "completion": completion,
++    }
++
++    audit_entry = {
++        "case_id": case_id, "arm": arm["arm"], "sources": case["sources"], "seed": case["seed"],
++        "dir_ratio": case["dir_ratio"], "source_composition": record["source_composition"],
++        "run_status": record["run_status"],
++        "effective_config": effective_config, "source_fingerprint": source_fingerprint(),
++        "git": {"branch": subprocess.check_output(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=ROOT).decode().strip(),
++                "commit": git_rev("HEAD")},
++        "billing_env": {"L_m": L, "move_time_s": L / 5.0, "M": M, "measure_time_s": 5.0 * M, "S": S,
++                        "switch_time_s": 1.0 * S, "F": F, "clear_fail_time_s": 3.0 * F, "N": N,
++                        "clear_succ_time_s": 5.0 * N, "virtual_time_s": T, "expected_time_s": expected_T,
++                        "residual_s": residual},
++        "billing_action_log": log_audit,
++        "channels_end_state": channels_end,
++        "head_dispatch_records": head_records,
++        "completion": completion,
++        "real_time_s": real_time_s,
++        "action_log": os.path.relpath(log_path, ROOT).replace("\\", "/"),
++    }
++
++    print(f"  [{case_id}/{arm['arm']:9s}] 2opt_head={str(arm['enable_2opt_head']):5s} "
++          f"状态={record['run_status']:7s} 动作={driver.action_count:5d} 清除={summary['cleared_count']}/{len(env.sources)} "
++          f"未决={summary['unsolved_count']:2d} T={T:10.2f}s 残差={residual:.2e} "
++          f"首任务轮次={record['head_dispatch_rounds']:2d} 改变={record['head_change_count']:2d} 现实={real_time_s:5.2f}s "
++          f"验收={'PASS' if completion['full_acceptance_pass'] else 'FAIL'} "
++          f"零单元卡死频道={completion['stuck_channels_zero_cells']}", flush=True)
++
++    return record, audit_entry
++
++
++def main():
++    os.makedirs(OUT_DIR, exist_ok=True)
++    os.makedirs(LOG_DIR, exist_ok=True)
++
++    print("=" * 120)
++    print("【P4 首任务 2-opt 单变量配对试验】本地替代驱动，不连接官方模拟器")
++    print(f"分支: {subprocess.check_output(['git','rev-parse','--abbrev-ref','HEAD'], cwd=ROOT).decode().strip()} | "
++          f"HEAD: {git_rev('HEAD')[:12]} | 主线(master)合入提交: {git_rev('master')[:12]}")
++    print(f"唯一变量: enable_2opt_head (P4) False -> True | 有界运行动作上限: {ACTION_CAP}")
++    print("=" * 120, flush=True)
++
++    records, audits = [], {}
++    for case in CASES:
++        for arm in ARMS:
++            rec, aud = run_single(case, arm)
++            records.append(rec)
++            audits[f"{case['case_id']}__{arm['arm']}"] = aud
++
++    csv_path = os.path.join(OUT_DIR, "p4_head_2opt_paired.csv")
++    with open(csv_path, "w", newline="", encoding="utf-8-sig") as f:
++        w = csv.writer(f)
++        w.writerow([
++            "Case_ID", "Sources", "Seed", "Dir_Ratio", "Omni_Sources", "Directional_Sources",
++            "Base_Run_Status", "Cand_Run_Status", "Base_Actions", "Cand_Actions",
++            "Base_Cleared", "Cand_Cleared", "Base_Unsolved", "Cand_Unsolved",
++            "Base_Proof_CovNeg", "Base_Proof_UB", "Cand_Proof_CovNeg", "Cand_Proof_UB",
++            "Base_T_s", "Cand_T_s", "Saved_T_s",
++            "Base_L_m", "Cand_L_m", "Base_M", "Cand_M", "Base_S", "Cand_S", "Base_F", "Cand_F", "Base_N", "Cand_N",
++            "Base_RealTime_s", "Cand_RealTime_s", "Base_Residual_s", "Cand_Residual_s",
++            "Base_Head_Rounds", "Base_Head_Changes", "Cand_Head_Rounds", "Cand_Head_Changes",
++            "Base_2opt_Internal_Swaps", "Cand_2opt_Internal_Swaps",
++            "Base_Stuck_ZeroCell_Channels", "Cand_Stuck_ZeroCell_Channels",
++            "Base_Acceptance", "Cand_Acceptance",
++        ])
++        for case in CASES:
++            b = next(r for r in records if r["case_id"] == case["case_id"] and r["arm"] == "baseline")
++            c = next(r for r in records if r["case_id"] == case["case_id"] and r["arm"] == "candidate")
++            w.writerow([
++                case["case_id"], case["sources"], case["seed"], case["dir_ratio"],
++                b["source_composition"]["omnidirectional"], b["source_composition"]["directional"],
++                b["run_status"], c["run_status"], b["completion"]["actions_executed"], c["completion"]["actions_executed"],
++                b["cleared"], c["cleared"], b["unsolved"], c["unsolved"],
++                b["proof_coverage_negative"], b["proof_upper_bound_exclusion"],
++                c["proof_coverage_negative"], c["proof_upper_bound_exclusion"],
++                f"{b['T_s']:.3f}", f"{c['T_s']:.3f}", f"{b['T_s'] - c['T_s']:+.3f}",
++                f"{b['L_m']:.3f}", f"{c['L_m']:.3f}", b["M"], c["M"], b["S"], c["S"], b["F"], c["F"], b["N"], c["N"],
++                f"{b['real_time_s']:.3f}", f"{c['real_time_s']:.3f}",
++                f"{b['residual_s']:.2e}", f"{c['residual_s']:.2e}",
++                b["head_dispatch_rounds"], b["head_change_count"], c["head_dispatch_rounds"], c["head_change_count"],
++                b["total_2opt_swaps_internal"], c["total_2opt_swaps_internal"],
++                "|".join(map(str, b["completion"]["stuck_channels_zero_cells"])),
++                "|".join(map(str, c["completion"]["stuck_channels_zero_cells"])),
++                b["completion"]["full_acceptance_pass"], c["completion"]["full_acceptance_pass"],
++            ])
++
++    audit_path = os.path.join(OUT_DIR, "p4_head_2opt_audit.json")
++    with open(audit_path, "w", encoding="utf-8") as f:
++        json.dump(audits, f, indent=2, ensure_ascii=False)
++
++    print()
++    print("=" * 120)
++    print("【逐局验收与配对结果】")
++    print("=" * 120)
++    all_aborted = all(r["run_status"] == "RUNAWAY" for r in records)
++    pass_count = sum(1 for r in records if r["completion"]["full_acceptance_pass"])
++    for case in CASES:
++        b = next(r for r in records if r["case_id"] == case["case_id"] and r["arm"] == "baseline")
++        c = next(r for r in records if r["case_id"] == case["case_id"] and r["arm"] == "candidate")
++        print(f"{case['case_id']:18s} 源={case['sources']:2d}(全向{b['source_composition']['omnidirectional']}"
++              f"/定向{b['source_composition']['directional']}) "
++              f"| 基线 {b['run_status']:7s} 清除={b['cleared']:2d}/{case['sources']} 未决={b['unsolved']:2d} "
++              f"首任务改变={b['head_change_count']} | 候选 {c['run_status']:7s} 清除={c['cleared']:2d}/{case['sources']} "
++              f"未决={c['unsolved']:2d} 首任务改变={c['head_change_count']} | 验收 {b['completion']['full_acceptance_pass']}/{c['completion']['full_acceptance_pass']}")
++
++    print("-" * 120)
++    print(f"六局中通过完整验收的局数: {pass_count}/6")
++    print(f"是否全部非终止: {all_aborted}")
++    if all_aborted:
++        print("结论: 三个场景下基线与候选均无法正常终止（0 个目标被清除），")
++        print("      '完整清除与结束证据成立' 的前提不满足，因此【无法给出有效的配对收益结论】。")
++    print("=" * 120)
++    print(f"配对CSV: {os.path.relpath(csv_path, ROOT)}")
++    print(f"审计JSON: {os.path.relpath(audit_path, ROOT)}")
++    print(f"原始动作日志目录: {os.path.relpath(LOG_DIR, ROOT)}")
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/src/strategy_engine.py b/src/strategy_engine.py
+index 6ba521f..fac9033 100644
+--- a/src/strategy_engine.py
++++ b/src/strategy_engine.py
+@@ -30,6 +30,20 @@ class ChannelState:
+         self.first_bearing = None
+ 
+ 
++def describe_task(task: dict) -> dict:
++    """把调度任务描述为可审计标识 (用于对比 2-opt 前后的首任务)"""
++    pos = task["pos"]
++    base = {
++        "type": task["type"],
++        "pos": [round(float(pos[0]), 2), round(float(pos[1]), 2)],
++    }
++    if task["type"] == "target":
++        base["channel"] = int(task["channel"])
++    else:
++        base["point_idx"] = int(task["point_idx"])
++    return base
++
++
+ class StrategyEngine:
+     def __init__(
+         self,
+@@ -46,9 +60,12 @@ class StrategyEngine:
+         self.is_p4 = is_p4
+         self.version = version.upper()
+         self.verbose = verbose
+-        # P4 严格保持冻结状态，不执行清除点额外扫描，且不开启首任务2-opt与径向自适应覆盖
++        # P4 冻结项：清除点额外扫描与径向自适应覆盖仍在 P4 下强制关闭（本届实验不改动）
+         self.scan_at_clearance = scan_at_clearance if not is_p4 else False
+-        self.enable_2opt_head = enable_2opt_head if not is_p4 else False
++        # 【P4 实验分支唯一变量】解除 P4 对 enable_2opt_head 的强制覆盖：
++        # 参数默认值仍为 False（默认继续关闭），仅当调用方显式传入 True 时才允许
++        # 开放路线的 2-opt 改变最终实际派发的首任务。除此以外 P4 行为完全不变。
++        self.enable_2opt_head = enable_2opt_head
+         self.enable_adaptive_radial_coverage = enable_adaptive_radial_coverage if not is_p4 else False
+ 
+         # 是否启用搜索点动态替代剪枝 (根据主要浪费分解进行的单项核心优化)
+@@ -65,6 +82,7 @@ class StrategyEngine:
+         self.total_2opt_swaps = 0              # 统计2-opt内部交换/翻转的总次数
+         self.radial_adjustments_count = 0      # 统计沿射线调整覆盖检测位置的次数
+         self.radial_events = []                # 记录详细径向覆盖调点审计快照
++        self.head_dispatch_records = []        # 逐轮记录"2-opt 前后首任务"，用于统计真正改变下一动作的次数
+ 
+         if not is_p4:
+             self.evidence_tracker = EvidenceTrackerP3()
+@@ -687,12 +705,25 @@ class StrategyEngine:
+                             break
+ 
+                 final_head = path[0]  # 2-opt 优化后最终实际派发的首任务
+-                if pre_2opt_head != final_head:
++                head_changed = (pre_2opt_head != final_head)
++                if head_changed:
+                     self.dispatched_head_change_count += 1
+                     old_t_name = f"目标{tasks[pre_2opt_head]['channel']}" if tasks[pre_2opt_head]['type'] == 'target' else f"搜索点{tasks[pre_2opt_head]['point_idx']}"
+                     new_t_name = f"目标{tasks[final_head]['channel']}" if tasks[final_head]['type'] == 'target' else f"搜索点{tasks[final_head]['point_idx']}"
+                     self._log(f"【2-Opt最终派发首任务变更】由 {old_t_name} 变更为 {new_t_name}")
+ 
++                # 【首任务派发审计】逐轮记录 2-opt 前后的首任务与实际派发任务，
++                # 用于统计"真正改变了下一动作"的次数（区别于 total_2opt_swaps 的内部交换次数）
++                self.head_dispatch_records.append({
++                    "round": len(self.head_dispatch_records) + 1,
++                    "virtual_time_s": round(self.virtual_time_s, 2),
++                    "task_count": len(tasks),
++                    "path_len": len(path),
++                    "pre_head": describe_task(tasks[pre_2opt_head]),
++                    "final_head": describe_task(tasks[final_head]),
++                    "head_changed": head_changed,
++                })
++
+                 best_task = tasks[path[0]]
+ 
+             if best_task["type"] == "target":
+@@ -794,6 +825,8 @@ class StrategyEngine:
+             "total_2opt_swaps": self.total_2opt_swaps,
+             "radial_adjustments_count": self.radial_adjustments_count,
+             "radial_events": self.radial_events,
++            "head_dispatch_records": self.head_dispatch_records,
++            "head_dispatch_rounds": len(self.head_dispatch_records),
+             "empty_prediction_count": getattr(self.local_decision, "empty_prediction_count", 0),
+             "plan_uncovered_count": getattr(self.local_decision, "plan_uncovered_count", 0),
+             "max_single_decision_ms": getattr(self.local_decision, "max_decision_real_time_ms", 0.0),

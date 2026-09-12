@@ -1,0 +1,7 @@
+﻿case,seed,n_src,decisions_with_model,decision_fallbacks,call_fallbacks,model_score_count,fallback_reason_hist,action_changed,position_changed,real_time_s
+P4-10src-seed9501,9501,10,26,0,0,4369,{},0,11,67.038
+P4-10src-seed9502,9502,10,20,0,0,3263,{},2,4,52.736
+P4-13src-seed9513,9513,13,29,9,1337,4716,"{'all_hypotheses_incompatible_after_5_observations': 1000, 'all_hypotheses_incompatible_after_7_observations': 148, 'all_hypotheses_incompatible_after_4_observations': 189}",0,14,83.228
+P4-13src-seed9514,9514,13,28,0,0,4656,{},0,12,75.993
+P4-16src-seed9521,9521,16,32,0,0,5323,{},2,16,70.048
+P4-16src-seed9522,9522,16,39,1,109,6402,{'all_hypotheses_incompatible_after_12_observations': 109},1,18,102.794

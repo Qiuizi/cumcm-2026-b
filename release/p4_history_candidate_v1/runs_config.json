@@ -1,0 +1,6 @@
+{
+  "runs_dir": "../p4_official_runs",
+  "note": "默认运行产物根目录（HTTP 日志/审计/会话文件）。相对路径按包目录解析，指向**包外**目录，因此发布包重建（rmtree 包目录）不会删除历史运行记录。可用环境变量 CUMCM_RUNS_DIR 或命令行 --runs_dir 覆盖。",
+  "env_override": "CUMCM_RUNS_DIR",
+  "cli_override": "--runs_dir"
+}

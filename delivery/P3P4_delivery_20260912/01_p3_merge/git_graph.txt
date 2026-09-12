@@ -1,0 +1,11 @@
+* 24585d1 exp(p4): bounded paired trial, chain verification and non-termination diagnosis
+* cf48fbc exp(p4): remove P4 force-override on enable_2opt_head and add head-dispatch audit
+*   3a74912 merge(p3): merge verified P3 adaptive radial coverage candidate into mainline
+|\  
+| * 7a51d32 feat(p3): wire --profile radial switch into launch entry and add delivery audit tooling
+| * d4ca8bd feat(p3): complete 9-case rigorous evaluation with enable_2opt_head=True
+| * 757e1b1 feat(p3): implement adaptive radial search point selection on independent branch
+|/  
+| * ee0c6cd chore: save previous p3-reschedule work
+|/  
+* 160d265 baseline: v3.4.2-guard-upperbound

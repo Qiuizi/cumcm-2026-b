@@ -1,0 +1,162 @@
+{
+  "profile": "radial_candidate",
+  "profile_label": "radial_candidate (径向候选版 v3.4.2+radial, 实验特性, 径向开关=ON)",
+  "code_version": "v3.4.2-guard-upperbound (git-3a74912, 2026-09-12)",
+  "git_dirty": true,
+  "source_fingerprint": {
+    "src/strategy_engine.py": "d98fd3660a82e693",
+    "src/local_decision.py": "eac1bdd8a0b3e964",
+    "src/conservative_grid.py": "2908487383308aca",
+    "src/evidence_tracker.py": "e9d89c9adb9c6152",
+    "src/client_runner.py": "e4e6ba0f160d9b94",
+    "scripts/run_port_test.py": "39af313f99469030"
+  },
+  "effective_config": {
+    "is_p4": false,
+    "version": "C",
+    "enable_pruning": true,
+    "scan_at_clearance": false,
+    "enable_2opt_head": true,
+    "enable_adaptive_radial_coverage": true,
+    "grid_class": "src.conservative_grid.ConservativeGrid",
+    "local_decision_class": "src.local_decision.LocalDecisionMaker"
+  },
+  "scenario": {
+    "port": 14027,
+    "robot_id": "team2026",
+    "sources_requested": 10,
+    "external_official_port": false
+  },
+  "summary": {
+    "version": "C",
+    "is_p4": false,
+    "enable_pruning": true,
+    "scan_at_clearance": false,
+    "enable_2opt_head": true,
+    "enable_adaptive_radial_coverage": true,
+    "dispatched_head_change_count": 0,
+    "total_2opt_swaps": 0,
+    "radial_adjustments_count": 2,
+    "empty_prediction_count": 0,
+    "plan_uncovered_count": 0,
+    "max_single_decision_ms": 2711.4402999977756,
+    "virtual_time_s": 2486.059,
+    "real_time_s": 16.713253259658813,
+    "cleared_count": 10,
+    "absent_count": 10,
+    "absent_coverage_count": 10,
+    "absent_upper_bound_count": 0,
+    "unsolved_count": 0,
+    "avg_time_per_target": 248.60590000000002,
+    "decision_count": 22,
+    "search_points_visited_count": 7,
+    "search_points_visited": [
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ],
+      [
+        -991.065754692661,
+        -477.2721130293138
+      ],
+      [
+        -900.968867902419,
+        433.8837391175582
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        999.0,
+        0.0
+      ]
+    ],
+    "search_points_substituted_count": 0,
+    "search_points_substituted": [],
+    "redundant_search_points_executed_count": 0,
+    "redundant_search_points_executed": [],
+    "movement_count": 26,
+    "total_move_dist_m": 8875.28
+  },
+  "radial_events": [
+    {
+      "virtual_time_s": 1093.81,
+      "ray_idx": 4,
+      "theta_deg": 205.71,
+      "nom_pos": [
+        -900.07,
+        -433.45
+      ],
+      "chosen_r": 1100.0,
+      "chosen_pos": [
+        -991.07,
+        -477.27
+      ],
+      "cur_pos": [
+        -998.33,
+        -570.82
+      ],
+      "next_pos": [
+        -900.07,
+        433.45
+      ],
+      "cost_baseline_s": 273.16,
+      "cost_chosen_s": 267.82,
+      "expected_save_s": 5.34
+    },
+    {
+      "virtual_time_s": 1336.42,
+      "ray_idx": 3,
+      "theta_deg": 154.29,
+      "nom_pos": [
+        -900.07,
+        433.45
+      ],
+      "chosen_r": 1000.0,
+      "chosen_pos": [
+        -900.97,
+        433.88
+      ],
+      "cur_pos": [
+        -1661.96,
+        -320.52
+      ],
+      "next_pos": [
+        -838.92,
+        499.7
+      ],
+      "cost_baseline_s": 292.41,
+      "cost_chosen_s": 292.4,
+      "expected_save_s": 0.01
+    }
+  ],
+  "http_audit": {
+    "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\results\\audit_logs\\http_session_20260912_155628_team2026.jsonl",
+    "unique_accepted_action_count": 125,
+    "total_move_dist_m": 8875.3,
+    "movement_time_s": 1775.06,
+    "movement_pct": 71.4,
+    "channel_switch_count": 104,
+    "channel_switch_time_s": 104.0,
+    "measure_count": 109,
+    "measure_time_s": 545.0,
+    "clear_fail_count": 4,
+    "clear_fail_time_s": 12.0,
+    "clear_succ_count": 10,
+    "clear_succ_time_s": 50.0,
+    "total_accounted_virtual_time_s": 2486.06,
+    "final_virtual_time_s": 2486.06,
+    "accounting_discrepancy_s": 0.0004,
+    "time_last_clear_to_exit_s": 101.37
+  },
+  "session_file": "D:\\桌面\\output\\cumcm2026\\results\\audit_logs\\http_session_20260912_155628_team2026.jsonl"
+}

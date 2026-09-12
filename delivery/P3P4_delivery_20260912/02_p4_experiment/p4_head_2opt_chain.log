@@ -1,0 +1,24 @@
+====================================================================================================
+【P4 首任务 2-opt 入口→引擎生效链验收（无通信）】
+====================================================================================================
+  PASS  help_exposes_enable_2opt_head
+  PASS  source_override_removed
+  PASS  old_force_override_pattern_absent
+  PASS  scan_at_clearance_p4_freeze_kept
+  PASS  radial_coverage_p4_freeze_kept
+  PASS  head_gate_present
+  PASS  p3_radial_gate_present
+  PASS  p4_explicit_on_yields_true
+  PASS  p4_default_off_yields_false
+  PASS  p4_other_frozen_flags_remain_false
+  PASS  only_enable_2opt_head_differs_in_p4
+  PASS  p3_stable_radial_off
+  PASS  p3_radial_candidate_still_selectable
+  PASS  p3_2opt_head_still_true
+----------------------------------------------------------------------------------------------------
+P4 enable_2opt_head=False -> {'is_p4': True, 'version': 'C', 'enable_pruning': True, 'scan_at_clearance': False, 'enable_2opt_head': False, 'enable_adaptive_radial_coverage': False, 'grid_class': 'conservative_grid_frozen.ConservativeGrid', 'local_decision_class': 'local_decision_frozen.LocalDecisionMaker'}
+P4 enable_2opt_head=True  -> {'is_p4': True, 'version': 'C', 'enable_pruning': True, 'scan_at_clearance': False, 'enable_2opt_head': True, 'enable_adaptive_radial_coverage': False, 'grid_class': 'conservative_grid_frozen.ConservativeGrid', 'local_decision_class': 'local_decision_frozen.LocalDecisionMaker'}
+P4 两档位差异字段: ['enable_2opt_head']
+----------------------------------------------------------------------------------------------------
+总体判定: PASS
+====================================================================================================

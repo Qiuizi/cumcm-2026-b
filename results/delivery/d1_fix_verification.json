@@ -1,0 +1,191 @@
+{
+  "checks": {
+    "A1_normal_scoring_measure": {
+      "identical": true,
+      "old": {
+        "raised": null,
+        "action": "measure",
+        "position": [
+          0.0,
+          0.0
+        ],
+        "reason": "followup_promising (Jq=493.7s vs J0=598.8s)",
+        "force_clear": false,
+        "clear_plan_len": 120,
+        "clear_plan_head": [
+          10.0,
+          0.0
+        ],
+        "j0": 598.7701764863903,
+        "best_jq": 493.7110913949458,
+        "surviving_cells": 10941,
+        "empty_delta": 1,
+        "unrep_delta": 1
+      },
+      "new": {
+        "raised": null,
+        "action": "measure",
+        "position": [
+          0.0,
+          0.0
+        ],
+        "reason": "followup_promising (Jq=493.7s vs J0=598.8s)",
+        "force_clear": false,
+        "clear_plan_len": 120,
+        "clear_plan_head": [
+          10.0,
+          0.0
+        ],
+        "j0": 598.7701764863903,
+        "best_jq": 493.7110913949458,
+        "surviving_cells": 10941,
+        "empty_delta": 1,
+        "unrep_delta": 1
+      }
+    },
+    "A2_normal_scoring_real_candidates": {
+      "identical": true,
+      "old": {
+        "raised": null,
+        "action": "measure",
+        "position": [
+          300.0,
+          0.0
+        ],
+        "reason": "followup_promising (Jq=469.4s vs J0=598.8s)",
+        "force_clear": false,
+        "clear_plan_len": 120,
+        "clear_plan_head": [
+          10.0,
+          0.0
+        ],
+        "j0": 598.7701764863903,
+        "best_jq": 469.4479175143923,
+        "surviving_cells": 10941,
+        "empty_delta": 0,
+        "unrep_delta": 0
+      },
+      "new": {
+        "raised": null,
+        "action": "measure",
+        "position": [
+          300.0,
+          0.0
+        ],
+        "reason": "followup_promising (Jq=469.4s vs J0=598.8s)",
+        "force_clear": false,
+        "clear_plan_len": 120,
+        "clear_plan_head": [
+          10.0,
+          0.0
+        ],
+        "j0": 598.7701764863903,
+        "best_jq": 469.4479175143923,
+        "surviving_cells": 10941,
+        "empty_delta": 0,
+        "unrep_delta": 0
+      }
+    },
+    "A3_normal_scoring_no_model": {
+      "identical": true,
+      "old": {
+        "raised": null,
+        "action": "measure",
+        "position": [
+          0.0,
+          0.0
+        ],
+        "reason": "followup_promising (Jq=372.7s vs J0=598.8s)",
+        "force_clear": false,
+        "clear_plan_len": 120,
+        "clear_plan_head": [
+          10.0,
+          0.0
+        ],
+        "j0": 598.7701764863903,
+        "best_jq": 372.73427507117003,
+        "surviving_cells": 10941,
+        "empty_delta": 0,
+        "unrep_delta": 0
+      },
+      "new": {
+        "raised": null,
+        "action": "measure",
+        "position": [
+          0.0,
+          0.0
+        ],
+        "reason": "followup_promising (Jq=372.7s vs J0=598.8s)",
+        "force_clear": false,
+        "clear_plan_len": 120,
+        "clear_plan_head": [
+          10.0,
+          0.0
+        ],
+        "j0": 598.7701764863903,
+        "best_jq": 372.73427507117003,
+        "surviving_cells": 10941,
+        "empty_delta": 0,
+        "unrep_delta": 0
+      }
+    },
+    "C_far_only_no_model": {
+      "identical": true,
+      "old": {
+        "raised": null,
+        "action": "clear",
+        "position": [
+          10.0,
+          0.0
+        ],
+        "reason": "direct_clear_better (J0=598.8s vs Jq=1403.8s)",
+        "force_clear": true,
+        "clear_plan_len": 120,
+        "clear_plan_head": [
+          10.0,
+          0.0
+        ],
+        "j0": 598.7701764863903,
+        "best_jq": 1403.770176486391,
+        "surviving_cells": 10941,
+        "empty_delta": 0,
+        "unrep_delta": 0
+      },
+      "new": {
+        "raised": null,
+        "action": "clear",
+        "position": [
+          10.0,
+          0.0
+        ],
+        "reason": "direct_clear_better (J0=598.8s vs Jq=1403.8s)",
+        "force_clear": true,
+        "clear_plan_len": 120,
+        "clear_plan_head": [
+          10.0,
+          0.0
+        ],
+        "j0": 598.7701764863903,
+        "best_jq": 1403.770176486391,
+        "surviving_cells": 10941,
+        "empty_delta": 0,
+        "unrep_delta": 0
+      }
+    },
+    "B_all_unrepresentable": {
+      "old_raised": "TypeError",
+      "new_raised": null,
+      "new_action_ok": true,
+      "new_position_is_plan_head": true,
+      "new_force_clear": true,
+      "new_plan_len_ok": true,
+      "new_plan_head_ok": true,
+      "new_best_jq_is_none": true,
+      "counted_unrepresentable": true,
+      "reason_text": "direct_clear_better (J0=598.8s vs Jq=不可表示)"
+    }
+  },
+  "all_pass": true,
+  "old_dirs": "D:\\桌面\\output\\cumcm2026\\scratch\\_d1_old",
+  "new_dirs": "D:\\桌面\\output\\cumcm2026\\release\\p4_history_candidate_v1\\candidate;D:\\桌面\\output\\cumcm2026\\release\\p4_history_candidate_v1"
+}

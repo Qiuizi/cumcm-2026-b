@@ -1,0 +1,77 @@
+{
+  "source_locality": {
+    "identical_except_prediction_block": true,
+    "frozen_lines": 277,
+    "candidate_lines": 277,
+    "first_diff": null,
+    "runtime_uses_inspect_or_exec": false
+  },
+  "numeric_vs_stage2C": {
+    "case": [
+      8801,
+      10
+    ],
+    "fields": {
+      "T_virtual_s": {
+        "stage2_C": 6365.498,
+        "candidate": 6365.498,
+        "equal": true
+      },
+      "L_dist_m": {
+        "stage2_C": 22162.49,
+        "candidate": 22162.49,
+        "equal": true
+      },
+      "M_measures": {
+        "stage2_C": 312,
+        "candidate": 312,
+        "equal": true
+      },
+      "S_switches": {
+        "stage2_C": 290,
+        "candidate": 290,
+        "equal": true
+      },
+      "F_clear_fail": {
+        "stage2_C": 11,
+        "candidate": 11,
+        "equal": true
+      },
+      "N_clear_succ": {
+        "stage2_C": 10,
+        "candidate": 10,
+        "equal": true
+      },
+      "cleared": {
+        "stage2_C": 10,
+        "candidate": 10,
+        "equal": true
+      },
+      "absent": {
+        "stage2_C": 10,
+        "candidate": 10,
+        "equal": true
+      },
+      "completion_status": {
+        "stage2_C": "COMPLETED",
+        "candidate": "COMPLETED",
+        "equal": true
+      }
+    },
+    "all_equal": true
+  },
+  "action_sequence": {
+    "case": [
+      8801,
+      10
+    ],
+    "n_actions_stage2": 333,
+    "n_actions_candidate": 333,
+    "same_length": true,
+    "first_diff": null,
+    "identical": true,
+    "stage2_rerun_T": 6365.498,
+    "candidate_T": 6365.498
+  },
+  "all_pass": true
+}

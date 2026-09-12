@@ -1,0 +1,86 @@
+{
+  "baseline": "v3.4.2-guard-upperbound",
+  "baseline_git_commit": "160d265",
+  "candidate": "v3.4.2+radial (enable_adaptive_radial_coverage=True, 实验特性, 默认关闭)",
+  "source_of_truth": "本文件由 scripts/build_p3_radial_delivery_package.py 从两次本地入口验收落盘的 results/delivery/entry_validation_*.json 自动生成，非手工填写。",
+  "profiles": {
+    "stable": {
+      "launch": "python scripts/run_port_test.py --prob p3 --version C --profile stable --port 2026 --robot_id <队号>",
+      "effective_config": {
+        "is_p4": false,
+        "version": "C",
+        "enable_pruning": true,
+        "scan_at_clearance": false,
+        "enable_2opt_head": true,
+        "enable_adaptive_radial_coverage": false,
+        "grid_class": "src.conservative_grid.ConservativeGrid",
+        "local_decision_class": "src.local_decision.LocalDecisionMaker"
+      },
+      "profile_label": "stable (稳定版 v3.4.2, 径向实验关闭, 径向开关=OFF)",
+      "source_fingerprint": {
+        "src/strategy_engine.py": "d98fd3660a82e693",
+        "src/local_decision.py": "eac1bdd8a0b3e964",
+        "src/conservative_grid.py": "2908487383308aca",
+        "src/evidence_tracker.py": "e9d89c9adb9c6152",
+        "src/client_runner.py": "e4e6ba0f160d9b94",
+        "scripts/run_port_test.py": "b2bcb8f17a0b4275"
+      }
+    },
+    "radial_candidate": {
+      "launch": "python scripts/run_port_test.py --prob p3 --version C --profile radial_candidate --port 2026 --robot_id <队号>",
+      "effective_config": {
+        "is_p4": false,
+        "version": "C",
+        "enable_pruning": true,
+        "scan_at_clearance": false,
+        "enable_2opt_head": true,
+        "enable_adaptive_radial_coverage": true,
+        "grid_class": "src.conservative_grid.ConservativeGrid",
+        "local_decision_class": "src.local_decision.LocalDecisionMaker"
+      },
+      "profile_label": "radial_candidate (径向候选版 v3.4.2+radial, 实验特性, 径向开关=ON)",
+      "source_fingerprint": {
+        "src/strategy_engine.py": "d98fd3660a82e693",
+        "src/local_decision.py": "eac1bdd8a0b3e964",
+        "src/conservative_grid.py": "2908487383308aca",
+        "src/evidence_tracker.py": "e9d89c9adb9c6152",
+        "src/client_runner.py": "e4e6ba0f160d9b94",
+        "scripts/run_port_test.py": "b2bcb8f17a0b4275"
+      }
+    }
+  },
+  "invariants": {
+    "P3_two_profiles_share_identical_config_except_radial": true,
+    "both_profiles_enable_2opt_head": true,
+    "radial_default_off_in_stable_profile": true,
+    "source_fingerprint_identical_between_profiles": true,
+    "P4_frozen": "见 03_verification/launch_profile_matrix.json（P4 两档位均为 radial=False, 2opt=False）"
+  },
+  "entry_acceptance_runs": [
+    {
+      "profile": "stable",
+      "port": 13026,
+      "external_official_port": false,
+      "sources": 10,
+      "cleared": 10,
+      "unsolved": 0,
+      "absent_coverage": 10,
+      "absent_upper_bound": 0,
+      "radial_adjustments": 0,
+      "billing_residual_s": 0.0003
+    },
+    {
+      "profile": "radial_candidate",
+      "port": 13027,
+      "external_official_port": false,
+      "sources": 10,
+      "cleared": 10,
+      "unsolved": 0,
+      "absent_coverage": 10,
+      "absent_upper_bound": 0,
+      "radial_adjustments": 2,
+      "billing_residual_s": 0.0004
+    }
+  ],
+  "note": "以上两局入口验收使用本地 Mock 服务器与非官方端口 (13026/13027)，不构成九组配对评测样本的一部分。"
+}

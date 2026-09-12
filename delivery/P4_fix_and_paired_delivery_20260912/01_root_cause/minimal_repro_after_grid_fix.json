@@ -1,0 +1,120 @@
+{
+  "tag": "after_grid_fix",
+  "generated_at": "2026-09-12T16:28:36",
+  "observations": {
+    "first": {
+      "pos": [
+        999.0,
+        0.0
+      ],
+      "bearing_deg": 36.96
+    },
+    "followup": {
+      "pos": [
+        1840.0,
+        0.0
+      ],
+      "bearing_deg": 140.06
+    }
+  },
+  "ground_truth_offline_only": "射线交点仅用于离线验收，不进入策略",
+  "imported_modules": {
+    "conservative_grid_frozen.py": {
+      "__file__": "D:\\桌面\\output\\cumcm2026\\conservative_grid_frozen.py",
+      "sha256_16": "6d4f0476537ba25a"
+    },
+    "local_decision_frozen.py": {
+      "__file__": "D:\\桌面\\output\\cumcm2026\\local_decision_frozen.py",
+      "sha256_16": "ce0836c5d84addad"
+    }
+  },
+  "ray_intersection": {
+    "point": [
+      1441.945,
+      333.298
+    ],
+    "dist_to_first_station_m": 554.34,
+    "dist_to_followup_station_m": 519.17,
+    "dist_to_origin_m": 1479.96
+  },
+  "intersection_condition_check": {
+    "dot_rel_n_cw": 9.106,
+    "dot_rel_n_ccw": 9.106,
+    "dot_rel_dir": 519.1683,
+    "dist_m": 519.168,
+    "d_g": 1.4142
+  },
+  "decide_action": [
+    {
+      "label": "followup_count=1",
+      "action_type": "clear",
+      "position": [
+        1441.726855067325,
+        333.2815103803716
+      ],
+      "reason": "safe_clear_guaranteed",
+      "surviving_cells": 119
+    },
+    {
+      "label": "followup_count=0",
+      "action_type": "clear",
+      "position": [
+        1441.726855067325,
+        333.2815103803716
+      ],
+      "reason": "safe_clear_guaranteed",
+      "surviving_cells": 119
+    }
+  ],
+  "find_safe_clear_position": [
+    1441.726855067325,
+    333.2815103803716
+  ],
+  "check_safe_clear_at": false,
+  "hypotheses": {
+    "H1_初始化或裁剪错误": {
+      "verdict": "命中：裁剪错误（观测裁剪的角域判据符号写反）",
+      "evidence": "交点位于观测方位 140.06±1.005° 的中心方向上，但冻结实现的判据为 dot(rel,n_cw) <= d_g 且 dot(rel,n_ccw) <= d_g；对中心射线上的点该值约为 |rel|·sin(1.005°) = 9.1060，只有当 |rel| <= d_g/sin(1.005°) ≈ 80.6 m 时才可能通过，因此任意合法的测向观测都会把存活集清空（初始 4193 -> 119）。"
+    },
+    "H2_预测评估修改了真实网格": {
+      "verdict": "未命中",
+      "evidence": "local_decision_frozen.decide_action 的预测使用 surviving[mask] 局部数组，未对 self.alive 赋值；prune_by_* 之外无就地修改。"
+    },
+    "H3_实际导入了错误副本": {
+      "verdict": "未命中（但副本本身含错误实现）",
+      "evidence": "实际导入 conservative_grid_frozen.py (sha256_16=6d4f0476537ba25a)；路径正确、无 shadowing，错误在于该冻结副本自身的角域判据符号与共享实现相反。"
+    },
+    "H4_空网格被误判为 safe_clear_guaranteed": {
+      "verdict": "命中：空集被当作安全清除依据",
+      "evidence": "check_safe_clear_at 在 len(cells)==0 时返回 True（False），find_safe_clear_position 随即返回当前点 (1441.726855067325, 333.2815103803716)，decide_action 返回 reason='safe_clear_guaranteed'，位置固定不变 => 无限重试同一失败清除。"
+    }
+  },
+  "first_erroneous_state_change": {
+    "where": "conservative_grid_frozen.ConservativeGrid.prune_by_direction",
+    "first_bad_transition": "alive 4193 -> 119（首次合法的 direction 观测即清空存活集）",
+    "offending_statements": [
+      "in_cone = (np.dot(rel, n_cw) <= self.d_g) & (np.dot(rel, n_ccw) <= self.d_g) & (np.dot(rel, dirv) > -self.d_g)",
+      "n_cw  = np.array([-math.sin(th_min), math.cos(th_min)])",
+      "n_ccw = np.array([math.sin(th_max), -math.cos(th_max)])",
+      "def check_safe_clear_at: if len(cells) == 0: return True"
+    ]
+  },
+  "steps": [
+    {
+      "step": "after_init",
+      "alive": 4193,
+      "total_cells": 21779
+    },
+    {
+      "step": "after_prune_by_direction",
+      "alive": 119,
+      "alive_before": 4193
+    }
+  ],
+  "grid_state": {
+    "after_init": 4193,
+    "after_prune": 119,
+    "contains_true_cell_after_init": true,
+    "contains_true_cell_after_prune": true
+  }
+}

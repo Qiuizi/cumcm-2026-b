@@ -1,0 +1,1393 @@
+{
+  "P3-Corr-10src-5010": {
+    "case_id": "P3-Corr-10src-5010",
+    "sources": 10,
+    "seed": 5010,
+    "base_billing": {
+      "virtual_time": 2891.791,
+      "expected_time": 2891.7905331417473,
+      "diff_raw": 0.0004668582528211118,
+      "distance_m": 10443.952665708737,
+      "move_time_s": 2088.7905331417473,
+      "measure_count": 118,
+      "measure_time_s": 590.0,
+      "switch_count": 115,
+      "switch_time_s": 115.0,
+      "clear_fail_count": 16,
+      "clear_fail_time_s": 48.0,
+      "clear_succ_count": 10,
+      "clear_succ_time_s": 50.0
+    },
+    "rad_billing": {
+      "virtual_time": 2786.183,
+      "expected_time": 2786.183479397391,
+      "diff_raw": 0.00047939739079083665,
+      "distance_m": 9975.917396986953,
+      "move_time_s": 1995.1834793973908,
+      "measure_count": 118,
+      "measure_time_s": 590.0,
+      "switch_count": 115,
+      "switch_time_s": 115.0,
+      "clear_fail_count": 12,
+      "clear_fail_time_s": 36.0,
+      "clear_succ_count": 10,
+      "clear_succ_time_s": 50.0
+    },
+    "radial_events": [
+      {
+        "virtual_time_s": 412.86,
+        "ray_idx": 5,
+        "theta_deg": 257.14,
+        "nom_pos": [
+          -222.3,
+          -973.95
+        ],
+        "chosen_r": 1275.0,
+        "chosen_pos": [
+          -283.71,
+          -1243.03
+        ],
+        "cur_pos": [
+          -325.93,
+          -1268.97
+        ],
+        "next_pos": [
+          -900.07,
+          -433.45
+        ],
+        "cost_baseline_s": 325.92,
+        "cost_chosen_s": 303.41,
+        "expected_save_s": 22.51
+      },
+      {
+        "virtual_time_s": 713.78,
+        "ray_idx": 6,
+        "theta_deg": 308.57,
+        "nom_pos": [
+          622.87,
+          -781.05
+        ],
+        "chosen_r": 1125.0,
+        "chosen_pos": [
+          701.43,
+          -879.56
+        ],
+        "cur_pos": [
+          510.82,
+          -1483.07
+        ],
+        "next_pos": [
+          834.09,
+          -507.73
+        ],
+        "cost_baseline_s": 295.27,
+        "cost_chosen_s": 289.54,
+        "expected_save_s": 5.73
+      },
+      {
+        "virtual_time_s": 1464.18,
+        "ray_idx": 1,
+        "theta_deg": 51.43,
+        "nom_pos": [
+          622.87,
+          781.05
+        ],
+        "chosen_r": 1025.0,
+        "chosen_pos": [
+          639.08,
+          801.38
+        ],
+        "cur_pos": [
+          1666.59,
+          618.41
+        ],
+        "next_pos": [
+          -222.3,
+          973.95
+        ],
+        "cost_baseline_s": 456.64,
+        "cost_chosen_s": 456.43,
+        "expected_save_s": 0.21
+      },
+      {
+        "virtual_time_s": 1969.71,
+        "ray_idx": 2,
+        "theta_deg": 102.86,
+        "nom_pos": [
+          -222.3,
+          973.95
+        ],
+        "chosen_r": 1200.0,
+        "chosen_pos": [
+          -267.03,
+          1169.91
+        ],
+        "cur_pos": [
+          -75.11,
+          1486.97
+        ],
+        "next_pos": [
+          -459.78,
+          861.45
+        ],
+        "cost_baseline_s": 225.3,
+        "cost_chosen_s": 212.87,
+        "expected_save_s": 12.43
+      },
+      {
+        "virtual_time_s": 2325.03,
+        "ray_idx": 3,
+        "theta_deg": 154.29,
+        "nom_pos": [
+          -900.07,
+          433.45
+        ],
+        "chosen_r": 1050.0,
+        "chosen_pos": [
+          -946.02,
+          455.58
+        ],
+        "cur_pos": [
+          -937.79,
+          584.62
+        ],
+        "next_pos": [
+          -975.64,
+          -40.21
+        ],
+        "cost_baseline_s": 187.09,
+        "cost_chosen_s": 185.19,
+        "expected_save_s": 1.9
+      }
+    ],
+    "search_visited_base": [
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ]
+    ],
+    "search_visited_rad": [
+      [
+        -283.7141907943011,
+        -1243.0330880318252
+      ],
+      [
+        701.4260270910751,
+        -879.5604177765337
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        639.0770469052019,
+        801.3772695297306
+      ],
+      [
+        -267.0251207475772,
+        1169.9134946181885
+      ],
+      [
+        -946.01731129754,
+        455.5779260734361
+      ],
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ]
+    ]
+  },
+  "P3-Corr-13src-5013": {
+    "case_id": "P3-Corr-13src-5013",
+    "sources": 13,
+    "seed": 5013,
+    "base_billing": {
+      "virtual_time": 3126.831,
+      "expected_time": 3126.8308647164713,
+      "diff_raw": 0.00013528352883440675,
+      "distance_m": 11909.154323582357,
+      "move_time_s": 2381.8308647164713,
+      "measure_count": 107,
+      "measure_time_s": 535.0,
+      "switch_count": 103,
+      "switch_time_s": 103.0,
+      "clear_fail_count": 14,
+      "clear_fail_time_s": 42.0,
+      "clear_succ_count": 13,
+      "clear_succ_time_s": 65.0
+    },
+    "rad_billing": {
+      "virtual_time": 3097.307,
+      "expected_time": 3097.3066700815175,
+      "diff_raw": 0.00032991848229357856,
+      "distance_m": 11751.533350407588,
+      "move_time_s": 2350.3066700815175,
+      "measure_count": 108,
+      "measure_time_s": 540.0,
+      "switch_count": 103,
+      "switch_time_s": 103.0,
+      "clear_fail_count": 13,
+      "clear_fail_time_s": 39.0,
+      "clear_succ_count": 13,
+      "clear_succ_time_s": 65.0
+    },
+    "radial_events": [
+      {
+        "virtual_time_s": 882.45,
+        "ray_idx": 2,
+        "theta_deg": 102.86,
+        "nom_pos": [
+          -222.3,
+          973.95
+        ],
+        "chosen_r": 1075.0,
+        "chosen_pos": [
+          -239.21,
+          1048.05
+        ],
+        "cur_pos": [
+          -589.41,
+          1116.08
+        ],
+        "next_pos": [
+          368.16,
+          904.4
+        ],
+        "cost_baseline_s": 263.64,
+        "cost_chosen_s": 262.17,
+        "expected_save_s": 1.47
+      },
+      {
+        "virtual_time_s": 1774.09,
+        "ray_idx": 0,
+        "theta_deg": 0.0,
+        "nom_pos": [
+          999.0,
+          0.0
+        ],
+        "chosen_r": 1050.0,
+        "chosen_pos": [
+          1050.0,
+          0.0
+        ],
+        "cur_pos": [
+          1485.29,
+          560.3
+        ],
+        "next_pos": [
+          971.08,
+          -102.41
+        ],
+        "cost_baseline_s": 229.61,
+        "cost_chosen_s": 227.76,
+        "expected_save_s": 1.85
+      },
+      {
+        "virtual_time_s": 2817.21,
+        "ray_idx": 5,
+        "theta_deg": 257.14,
+        "nom_pos": [
+          -222.3,
+          -973.95
+        ],
+        "chosen_r": 1225.0,
+        "chosen_pos": [
+          -272.59,
+          -1194.29
+        ],
+        "cur_pos": [
+          229.69,
+          -880.54
+        ],
+        "next_pos": [
+          -312.01,
+          -1212.98
+        ],
+        "cost_baseline_s": 185.37,
+        "cost_chosen_s": 169.17,
+        "expected_save_s": 16.2
+      }
+    ],
+    "search_visited_base": [
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ]
+    ],
+    "search_visited_rad": [
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -239.2100040030379,
+        1048.0475055954603
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        1050.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        -272.5881440964854,
+        -1194.286692422734
+      ]
+    ]
+  },
+  "P3-Corr-16src-5016": {
+    "case_id": "P3-Corr-16src-5016",
+    "sources": 16,
+    "seed": 5016,
+    "base_billing": {
+      "virtual_time": 3295.278,
+      "expected_time": 3295.2775394438568,
+      "diff_raw": 0.00046055614302531467,
+      "distance_m": 13336.387697219283,
+      "move_time_s": 2667.2775394438568,
+      "measure_count": 81,
+      "measure_time_s": 405.0,
+      "switch_count": 77,
+      "switch_time_s": 77.0,
+      "clear_fail_count": 22,
+      "clear_fail_time_s": 66.0,
+      "clear_succ_count": 16,
+      "clear_succ_time_s": 80.0
+    },
+    "rad_billing": {
+      "virtual_time": 3304.203,
+      "expected_time": 3304.2033210697127,
+      "diff_raw": 0.00032106971275425167,
+      "distance_m": 13381.016605348565,
+      "move_time_s": 2676.2033210697127,
+      "measure_count": 81,
+      "measure_time_s": 405.0,
+      "switch_count": 77,
+      "switch_time_s": 77.0,
+      "clear_fail_count": 22,
+      "clear_fail_time_s": 66.0,
+      "clear_succ_count": 16,
+      "clear_succ_time_s": 80.0
+    },
+    "radial_events": [
+      {
+        "virtual_time_s": 878.95,
+        "ray_idx": 1,
+        "theta_deg": 51.43,
+        "nom_pos": [
+          622.87,
+          781.05
+        ],
+        "chosen_r": 1050.0,
+        "chosen_pos": [
+          654.66,
+          820.92
+        ],
+        "cur_pos": [
+          574.77,
+          1206.28
+        ],
+        "next_pos": [
+          669.31,
+          711.0
+        ],
+        "cost_baseline_s": 162.4,
+        "cost_chosen_s": 160.89,
+        "expected_save_s": 1.51
+      }
+    ],
+    "search_visited_base": [
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ]
+    ],
+    "search_visited_rad": [
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        654.6642919516703,
+        820.9230565914313
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ]
+    ]
+  },
+  "P3-New-10src-6010": {
+    "case_id": "P3-New-10src-6010",
+    "sources": 10,
+    "seed": 6010,
+    "base_billing": {
+      "virtual_time": 3006.029,
+      "expected_time": 3006.028595755498,
+      "diff_raw": 0.0004042445020786545,
+      "distance_m": 11115.14297877749,
+      "move_time_s": 2223.028595755498,
+      "measure_count": 122,
+      "measure_time_s": 610.0,
+      "switch_count": 114,
+      "switch_time_s": 114.0,
+      "clear_fail_count": 3,
+      "clear_fail_time_s": 9.0,
+      "clear_succ_count": 10,
+      "clear_succ_time_s": 50.0
+    },
+    "rad_billing": {
+      "virtual_time": 3004.324,
+      "expected_time": 3004.3243690921818,
+      "diff_raw": 0.0003690921816996706,
+      "distance_m": 11086.62184546091,
+      "move_time_s": 2217.3243690921818,
+      "measure_count": 121,
+      "measure_time_s": 605.0,
+      "switch_count": 114,
+      "switch_time_s": 114.0,
+      "clear_fail_count": 6,
+      "clear_fail_time_s": 18.0,
+      "clear_succ_count": 10,
+      "clear_succ_time_s": 50.0
+    },
+    "radial_events": [
+      {
+        "virtual_time_s": 624.48,
+        "ray_idx": 5,
+        "theta_deg": 257.14,
+        "nom_pos": [
+          -222.3,
+          -973.95
+        ],
+        "chosen_r": 1075.0,
+        "chosen_pos": [
+          -239.21,
+          -1048.05
+        ],
+        "cur_pos": [
+          18.21,
+          -1278.11
+        ],
+        "next_pos": [
+          -719.93,
+          -659.69
+        ],
+        "cost_baseline_s": 279.26,
+        "cost_chosen_s": 276.65,
+        "expected_save_s": 2.62
+      },
+      {
+        "virtual_time_s": 913.67,
+        "ray_idx": 4,
+        "theta_deg": 205.71,
+        "nom_pos": [
+          -900.07,
+          -433.45
+        ],
+        "chosen_r": 1125.0,
+        "chosen_pos": [
+          -1013.59,
+          -488.12
+        ],
+        "cur_pos": [
+          -552.96,
+          -506.69
+        ],
+        "next_pos": [
+          -1124.62,
+          -636.3
+        ],
+        "cost_baseline_s": 209.47,
+        "cost_chosen_s": 207.23,
+        "expected_save_s": 2.24
+      },
+      {
+        "virtual_time_s": 1576.54,
+        "ray_idx": 3,
+        "theta_deg": 154.29,
+        "nom_pos": [
+          -900.07,
+          433.45
+        ],
+        "chosen_r": 1450.0,
+        "chosen_pos": [
+          -1306.4,
+          629.13
+        ],
+        "cur_pos": [
+          -1358.16,
+          775.75
+        ],
+        "next_pos": [
+          -235.24,
+          947.71
+        ],
+        "cost_baseline_s": 354.47,
+        "cost_chosen_s": 326.61,
+        "expected_save_s": 27.87
+      },
+      {
+        "virtual_time_s": 2281.03,
+        "ray_idx": 1,
+        "theta_deg": 51.43,
+        "nom_pos": [
+          622.87,
+          781.05
+        ],
+        "chosen_r": 1300.0,
+        "chosen_pos": [
+          810.54,
+          1016.38
+        ],
+        "cur_pos": [
+          791.24,
+          1436.37
+        ],
+        "next_pos": [
+          835.24,
+          505.84
+        ],
+        "cost_baseline_s": 270.85,
+        "cost_chosen_s": 252.31,
+        "expected_save_s": 18.53
+      }
+    ],
+    "search_visited_base": [
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ],
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        999.0,
+        0.0
+      ]
+    ],
+    "search_visited_rad": [
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        -239.2100040030382,
+        -1048.0475055954603
+      ],
+      [
+        -1013.5899763902215,
+        -488.1192065072528
+      ],
+      [
+        -1306.4048584585075,
+        629.1314217204595
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        810.5367424163537,
+        1016.3809272084387
+      ],
+      [
+        999.0,
+        0.0
+      ]
+    ]
+  },
+  "P3-New-10src-6110": {
+    "case_id": "P3-New-10src-6110",
+    "sources": 10,
+    "seed": 6110,
+    "base_billing": {
+      "virtual_time": 2669.441,
+      "expected_time": 2669.4407680339887,
+      "diff_raw": 0.0002319660111425037,
+      "distance_m": 9772.203840169943,
+      "move_time_s": 1954.4407680339887,
+      "measure_count": 109,
+      "measure_time_s": 545.0,
+      "switch_count": 105,
+      "switch_time_s": 105.0,
+      "clear_fail_count": 5,
+      "clear_fail_time_s": 15.0,
+      "clear_succ_count": 10,
+      "clear_succ_time_s": 50.0
+    },
+    "rad_billing": {
+      "virtual_time": 2666.676,
+      "expected_time": 2666.6759701259616,
+      "diff_raw": 2.9874038318666862e-05,
+      "distance_m": 9758.379850629808,
+      "move_time_s": 1951.6759701259616,
+      "measure_count": 109,
+      "measure_time_s": 545.0,
+      "switch_count": 105,
+      "switch_time_s": 105.0,
+      "clear_fail_count": 5,
+      "clear_fail_time_s": 15.0,
+      "clear_succ_count": 10,
+      "clear_succ_time_s": 50.0
+    },
+    "radial_events": [
+      {
+        "virtual_time_s": 1795.14,
+        "ray_idx": 1,
+        "theta_deg": 51.43,
+        "nom_pos": [
+          622.87,
+          781.05
+        ],
+        "chosen_r": 1100.0,
+        "chosen_pos": [
+          685.84,
+          860.01
+        ],
+        "cur_pos": [
+          595.75,
+          1076.09
+        ],
+        "next_pos": [
+          999.0,
+          0.0
+        ],
+        "cost_baseline_s": 292.64,
+        "cost_chosen_s": 289.87,
+        "expected_save_s": 2.76
+      }
+    ],
+    "search_visited_base": [
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ]
+    ],
+    "search_visited_rad": [
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        685.838782044607,
+        860.0146307148328
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ]
+    ]
+  },
+  "P3-New-13src-6013": {
+    "case_id": "P3-New-13src-6013",
+    "sources": 13,
+    "seed": 6013,
+    "base_billing": {
+      "virtual_time": 2898.738,
+      "expected_time": 2898.7382600319343,
+      "diff_raw": 0.00026003193443102646,
+      "distance_m": 10958.691300159671,
+      "move_time_s": 2191.7382600319343,
+      "measure_count": 99,
+      "measure_time_s": 495.0,
+      "switch_count": 90,
+      "switch_time_s": 90.0,
+      "clear_fail_count": 19,
+      "clear_fail_time_s": 57.0,
+      "clear_succ_count": 13,
+      "clear_succ_time_s": 65.0
+    },
+    "rad_billing": {
+      "virtual_time": 2900.457,
+      "expected_time": 2900.456739823547,
+      "diff_raw": 0.0002601764526843908,
+      "distance_m": 10967.283699117736,
+      "move_time_s": 2193.456739823547,
+      "measure_count": 99,
+      "measure_time_s": 495.0,
+      "switch_count": 90,
+      "switch_time_s": 90.0,
+      "clear_fail_count": 19,
+      "clear_fail_time_s": 57.0,
+      "clear_succ_count": 13,
+      "clear_succ_time_s": 65.0
+    },
+    "radial_events": [
+      {
+        "virtual_time_s": 819.02,
+        "ray_idx": 2,
+        "theta_deg": 102.86,
+        "nom_pos": [
+          -222.3,
+          973.95
+        ],
+        "chosen_r": 1050.0,
+        "chosen_pos": [
+          -233.65,
+          1023.67
+        ],
+        "cur_pos": [
+          -384.32,
+          1254.98
+        ],
+        "next_pos": [
+          -186.15,
+          958.56
+        ],
+        "cost_baseline_s": 132.74,
+        "cost_chosen_s": 131.33,
+        "expected_save_s": 1.41
+      },
+      {
+        "virtual_time_s": 2570.23,
+        "ray_idx": 4,
+        "theta_deg": 205.71,
+        "nom_pos": [
+          -900.07,
+          -433.45
+        ],
+        "chosen_r": 1125.0,
+        "chosen_pos": [
+          -1013.59,
+          -488.12
+        ],
+        "cur_pos": [
+          -222.3,
+          -973.95
+        ],
+        "next_pos": [
+          -1409.88,
+          -259.89
+        ],
+        "cost_baseline_s": 322.09,
+        "cost_chosen_s": 318.17,
+        "expected_save_s": 3.92
+      }
+    ],
+    "search_visited_base": [
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ],
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ]
+    ],
+    "search_visited_rad": [
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -233.64698065413006,
+        1023.6743077909148
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ],
+      [
+        -1013.5899763902215,
+        -488.1192065072528
+      ]
+    ]
+  },
+  "P3-New-13src-6113": {
+    "case_id": "P3-New-13src-6113",
+    "sources": 13,
+    "seed": 6113,
+    "base_billing": {
+      "virtual_time": 3377.856,
+      "expected_time": 3377.8559516524597,
+      "diff_raw": 4.834754054172663e-05,
+      "distance_m": 12944.279758262299,
+      "move_time_s": 2588.8559516524597,
+      "measure_count": 108,
+      "measure_time_s": 540.0,
+      "switch_count": 103,
+      "switch_time_s": 103.0,
+      "clear_fail_count": 27,
+      "clear_fail_time_s": 81.0,
+      "clear_succ_count": 13,
+      "clear_succ_time_s": 65.0
+    },
+    "rad_billing": {
+      "virtual_time": 3353.2,
+      "expected_time": 3353.200082919017,
+      "diff_raw": 8.291901713164407e-05,
+      "distance_m": 12796.000414595084,
+      "move_time_s": 2559.200082919017,
+      "measure_count": 109,
+      "measure_time_s": 545.0,
+      "switch_count": 103,
+      "switch_time_s": 103.0,
+      "clear_fail_count": 27,
+      "clear_fail_time_s": 81.0,
+      "clear_succ_count": 13,
+      "clear_succ_time_s": 65.0
+    },
+    "radial_events": [
+      {
+        "virtual_time_s": 612.02,
+        "ray_idx": 1,
+        "theta_deg": 51.43,
+        "nom_pos": [
+          622.87,
+          781.05
+        ],
+        "chosen_r": 1150.0,
+        "chosen_pos": [
+          717.01,
+          899.11
+        ],
+        "cur_pos": [
+          1167.75,
+          873.86
+        ],
+        "next_pos": [
+          -222.3,
+          973.95
+        ],
+        "cost_baseline_s": 361.93,
+        "cost_chosen_s": 356.75,
+        "expected_save_s": 5.18
+      },
+      {
+        "virtual_time_s": 1122.67,
+        "ray_idx": 2,
+        "theta_deg": 102.86,
+        "nom_pos": [
+          -222.3,
+          973.95
+        ],
+        "chosen_r": 1225.0,
+        "chosen_pos": [
+          -272.59,
+          1194.29
+        ],
+        "cur_pos": [
+          -164.81,
+          1349.53
+        ],
+        "next_pos": [
+          -548.86,
+          807.62
+        ],
+        "cost_baseline_s": 215.29,
+        "cost_chosen_s": 198.84,
+        "expected_save_s": 16.44
+      }
+    ],
+    "search_visited_base": [
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ]
+    ],
+    "search_visited_rad": [
+      [
+        999.0,
+        0.0
+      ],
+      [
+        717.0132721375436,
+        899.1062048382342
+      ],
+      [
+        -272.58814409648505,
+        1194.286692422734
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -222.29841302235826,
+        -973.9529842696418
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ]
+    ]
+  },
+  "P3-New-16src-6016": {
+    "case_id": "P3-New-16src-6016",
+    "sources": 16,
+    "seed": 6016,
+    "base_billing": {
+      "virtual_time": 3270.033,
+      "expected_time": 3270.0334133692745,
+      "diff_raw": 0.00041336927461088635,
+      "distance_m": 13005.167066846372,
+      "move_time_s": 2601.0334133692745,
+      "measure_count": 92,
+      "measure_time_s": 460.0,
+      "switch_count": 87,
+      "switch_time_s": 87.0,
+      "clear_fail_count": 14,
+      "clear_fail_time_s": 42.0,
+      "clear_succ_count": 16,
+      "clear_succ_time_s": 80.0
+    },
+    "rad_billing": {
+      "virtual_time": 3233.675,
+      "expected_time": 3233.674920352614,
+      "diff_raw": 7.964738597365795e-05,
+      "distance_m": 12848.374601763071,
+      "move_time_s": 2569.674920352614,
+      "measure_count": 91,
+      "measure_time_s": 455.0,
+      "switch_count": 87,
+      "switch_time_s": 87.0,
+      "clear_fail_count": 14,
+      "clear_fail_time_s": 42.0,
+      "clear_succ_count": 16,
+      "clear_succ_time_s": 80.0
+    },
+    "radial_events": [
+      {
+        "virtual_time_s": 984.29,
+        "ray_idx": 3,
+        "theta_deg": 154.29,
+        "nom_pos": [
+          -900.07,
+          433.45
+        ],
+        "chosen_r": 1050.0,
+        "chosen_pos": [
+          -946.02,
+          455.58
+        ],
+        "cur_pos": [
+          -1245.1,
+          343.63
+        ],
+        "next_pos": [
+          -832.58,
+          510.2
+        ],
+        "cost_baseline_s": 157.75,
+        "cost_chosen_s": 155.05,
+        "expected_save_s": 2.7
+      },
+      {
+        "virtual_time_s": 1668.19,
+        "ray_idx": 2,
+        "theta_deg": 102.86,
+        "nom_pos": [
+          -222.3,
+          973.95
+        ],
+        "chosen_r": 1200.0,
+        "chosen_pos": [
+          -267.03,
+          1169.91
+        ],
+        "cur_pos": [
+          -389.84,
+          1229.68
+        ],
+        "next_pos": [
+          145.01,
+          965.64
+        ],
+        "cost_baseline_s": 182.63,
+        "cost_chosen_s": 167.3,
+        "expected_save_s": 15.33
+      }
+    ],
+    "search_visited_base": [
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ]
+    ],
+    "search_visited_rad": [
+      [
+        -900.0678990345167,
+        -433.4498553784405
+      ],
+      [
+        -946.01731129754,
+        455.5779260734361
+      ],
+      [
+        -267.0251207475772,
+        1169.9134946181885
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ]
+    ]
+  },
+  "P3-New-16src-6116": {
+    "case_id": "P3-New-16src-6116",
+    "sources": 16,
+    "seed": 6116,
+    "base_billing": {
+      "virtual_time": 3273.796,
+      "expected_time": 3273.795689239243,
+      "diff_raw": 0.00031076075674718595,
+      "distance_m": 13258.978446196215,
+      "move_time_s": 2651.795689239243,
+      "measure_count": 80,
+      "measure_time_s": 400.0,
+      "switch_count": 76,
+      "switch_time_s": 76.0,
+      "clear_fail_count": 22,
+      "clear_fail_time_s": 66.0,
+      "clear_succ_count": 16,
+      "clear_succ_time_s": 80.0
+    },
+    "rad_billing": {
+      "virtual_time": 3271.135,
+      "expected_time": 3271.135235117343,
+      "diff_raw": 0.00023511734298153897,
+      "distance_m": 13210.676175586716,
+      "move_time_s": 2642.135235117343,
+      "measure_count": 79,
+      "measure_time_s": 395.0,
+      "switch_count": 76,
+      "switch_time_s": 76.0,
+      "clear_fail_count": 26,
+      "clear_fail_time_s": 78.0,
+      "clear_succ_count": 16,
+      "clear_succ_time_s": 80.0
+    },
+    "radial_events": [
+      {
+        "virtual_time_s": 928.92,
+        "ray_idx": 2,
+        "theta_deg": 102.86,
+        "nom_pos": [
+          -222.3,
+          973.95
+        ],
+        "chosen_r": 1125.0,
+        "chosen_pos": [
+          -250.34,
+          1096.79
+        ],
+        "cur_pos": [
+          -355.0,
+          1186.98
+        ],
+        "next_pos": [
+          -119.17,
+          969.17
+        ],
+        "cost_baseline_s": 124.84,
+        "cost_chosen_s": 118.23,
+        "expected_save_s": 6.61
+      },
+      {
+        "virtual_time_s": 1497.36,
+        "ray_idx": 1,
+        "theta_deg": 51.43,
+        "nom_pos": [
+          622.87,
+          781.05
+        ],
+        "chosen_r": 1050.0,
+        "chosen_pos": [
+          654.66,
+          820.92
+        ],
+        "cur_pos": [
+          442.48,
+          1190.43
+        ],
+        "next_pos": [
+          922.71,
+          319.52
+        ],
+        "cost_baseline_s": 247.55,
+        "cost_chosen_s": 246.93,
+        "expected_save_s": 0.62
+      }
+    ],
+    "search_visited_base": [
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -222.29841302235803,
+        973.9529842696418
+      ],
+      [
+        622.8663120568749,
+        781.0496509855618
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ]
+    ],
+    "search_visited_rad": [
+      [
+        -900.0678990345166,
+        433.44985537844065
+      ],
+      [
+        -250.33605070085363,
+        1096.7939012045515
+      ],
+      [
+        654.6642919516703,
+        820.9230565914313
+      ],
+      [
+        999.0,
+        0.0
+      ],
+      [
+        622.8663120568747,
+        -781.0496509855619
+      ]
+    ]
+  }
+}

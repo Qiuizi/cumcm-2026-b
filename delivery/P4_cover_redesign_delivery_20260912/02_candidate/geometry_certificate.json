@@ -1,0 +1,28 @@
+{
+  "candidate_net": "O + 8@990 + 16@1840",
+  "baseline_net": "O + 8@999 + 16@1840",
+  "candidate_certificate": {
+    "n_points": 25,
+    "n_triangles": 32,
+    "max_triangle_edge_m": 999.91104,
+    "edges_within_1000": true,
+    "area_triangles": 10364904.229,
+    "area_outer_polygon": 10364904.229,
+    "tiles_without_gap_or_overlap": true,
+    "outer_polygon_inradius_m": 1804.6449,
+    "covers_omega_1800": true,
+    "certificate_valid": true
+  },
+  "baseline_certificate": {
+    "n_points": 25,
+    "n_triangles": 32,
+    "max_triangle_edge_m": 999.0,
+    "edges_within_1000": true,
+    "area_triangles": 10364904.229,
+    "area_outer_polygon": 10364904.229,
+    "tiles_without_gap_or_overlap": true,
+    "outer_polygon_inradius_m": 1804.6449,
+    "covers_omega_1800": true,
+    "certificate_valid": true
+  }
+}

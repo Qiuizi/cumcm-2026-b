@@ -1,0 +1,139 @@
+{
+  "source_records": {
+    "paired_csv": "results/p3_radial_coverage_9cases_summary.csv",
+    "raw_audit_json": "results/p3_radial_coverage_9cases_audit.json"
+  },
+  "cross_check_vs_paired_csv": {
+    "checked_fields": [
+      "T",
+      "L",
+      "M",
+      "S",
+      "F",
+      "N"
+    ],
+    "mismatches": [],
+    "passed": true
+  },
+  "field_status": {
+    "场景源数": {
+      "recorded_in_all_cases": true,
+      "recorded_case_count": 18,
+      "not_recorded_case_count": 0,
+      "not_recorded_cases": []
+    },
+    "成功清除数": {
+      "recorded_in_all_cases": true,
+      "recorded_case_count": 18,
+      "not_recorded_case_count": 0,
+      "not_recorded_cases": []
+    },
+    "未决频道数": {
+      "recorded_in_all_cases": false,
+      "recorded_case_count": 0,
+      "not_recorded_case_count": 18,
+      "not_recorded_cases": [
+        "P3-Corr-10src-5010",
+        "P3-Corr-13src-5013",
+        "P3-Corr-16src-5016",
+        "P3-New-10src-6010",
+        "P3-New-10src-6110",
+        "P3-New-13src-6013",
+        "P3-New-13src-6113",
+        "P3-New-16src-6016",
+        "P3-New-16src-6116"
+      ]
+    },
+    "阴性覆盖排除数": {
+      "recorded_in_all_cases": false,
+      "recorded_case_count": 0,
+      "not_recorded_case_count": 18,
+      "not_recorded_cases": [
+        "P3-Corr-10src-5010",
+        "P3-Corr-13src-5013",
+        "P3-Corr-16src-5016",
+        "P3-New-10src-6010",
+        "P3-New-10src-6110",
+        "P3-New-13src-6013",
+        "P3-New-13src-6113",
+        "P3-New-16src-6016",
+        "P3-New-16src-6116"
+      ]
+    },
+    "16源上限排除数": {
+      "recorded_in_all_cases": false,
+      "recorded_case_count": 0,
+      "not_recorded_case_count": 18,
+      "not_recorded_cases": [
+        "P3-Corr-10src-5010",
+        "P3-Corr-13src-5013",
+        "P3-Corr-16src-5016",
+        "P3-New-10src-6010",
+        "P3-New-10src-6110",
+        "P3-New-13src-6013",
+        "P3-New-13src-6113",
+        "P3-New-16src-6016",
+        "P3-New-16src-6116"
+      ]
+    },
+    "T(总虚拟时间)": {
+      "recorded_in_all_cases": true,
+      "recorded_case_count": 18,
+      "not_recorded_case_count": 0,
+      "not_recorded_cases": []
+    },
+    "L(里程)": {
+      "recorded_in_all_cases": true,
+      "recorded_case_count": 18,
+      "not_recorded_case_count": 0,
+      "not_recorded_cases": []
+    },
+    "测量次数": {
+      "recorded_in_all_cases": true,
+      "recorded_case_count": 18,
+      "not_recorded_case_count": 0,
+      "not_recorded_cases": []
+    },
+    "切频次数": {
+      "recorded_in_all_cases": true,
+      "recorded_case_count": 18,
+      "not_recorded_case_count": 0,
+      "not_recorded_cases": []
+    },
+    "失败清除次数": {
+      "recorded_in_all_cases": true,
+      "recorded_case_count": 18,
+      "not_recorded_case_count": 0,
+      "not_recorded_cases": []
+    },
+    "现实耗时": {
+      "recorded_in_all_cases": true,
+      "recorded_case_count": 18,
+      "not_recorded_case_count": 0,
+      "not_recorded_cases": []
+    },
+    "成本核算残差": {
+      "recorded_in_all_cases": true,
+      "recorded_case_count": 18,
+      "not_recorded_case_count": 0,
+      "not_recorded_cases": []
+    },
+    "实际生效配置(逐局落盘)": {
+      "recorded_in_all_cases": false,
+      "recorded_case_count": 0,
+      "not_recorded_case_count": 18,
+      "not_recorded_cases": [
+        "P3-Corr-10src-5010",
+        "P3-Corr-13src-5013",
+        "P3-Corr-16src-5016",
+        "P3-New-10src-6010",
+        "P3-New-10src-6110",
+        "P3-New-13src-6013",
+        "P3-New-13src-6113",
+        "P3-New-16src-6016",
+        "P3-New-16src-6116"
+      ]
+    }
+  },
+  "no_fabrication_policy": "原始记录中不存在的字段一律写'未记录'，不填0、不由耗时反推成功。"
+}

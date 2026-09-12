@@ -1,0 +1,4 @@
+﻿Case_ID,Sources,Seed,Dir_Ratio,Omni,Directional,Enable_2opt_head,Completion_Status,Cleared,Unsolved,Failed,Absent_Total,Proof_CovNeg,Proof_UB,T_s,L_m,M,S,F,N,Expected_T_s,Residual_s,Log_Residual_s,RealTime_s,Head_Rounds,Head_Changes,Unrepr_Pred,Empty_Pred,Acceptance_Pass
+P4H-10src-7210,10,7210,0.5,1,9,False,COMPLETED,10,0,0,10,10,0,7177.305,24546.525,357,319,38,10,7177.304984,1.65e-05,1.20e-02,56.129,34,0,0,0,True
+P4H-13src-7213,13,7213,0.5,6,7,False,COMPLETED,13,0,0,7,7,0,7904.584,28852.920,323,274,60,13,7904.583915,8.49e-05,4.00e-04,98.880,37,0,0,0,True
+P4H-16src-7216,16,7216,0.5,7,9,False,COMPLETED,16,0,0,4,0,4,7919.461,30692.305,218,146,155,16,7919.461008,8.06e-06,1.30e-03,108.999,35,0,0,0,True

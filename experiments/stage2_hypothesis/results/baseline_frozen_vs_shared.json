@@ -1,0 +1,93 @@
+{
+  "rows": [
+    {
+      "seed": 8801,
+      "n_src": 10,
+      "decision_maker": "frozen(root)",
+      "T": 6773.046,
+      "cleared": 10,
+      "absent": 10,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "dist_m": 23425.2,
+      "measures": 331,
+      "real_time_s": 82.532
+    },
+    {
+      "seed": 8801,
+      "n_src": 10,
+      "decision_maker": "shared(src/local_decision.py)",
+      "T": 6773.046,
+      "cleared": 10,
+      "absent": 10,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "dist_m": 23425.2,
+      "measures": 331,
+      "real_time_s": 77.508
+    },
+    {
+      "seed": 8813,
+      "n_src": 13,
+      "decision_maker": "frozen(root)",
+      "T": 9318.816,
+      "cleared": 13,
+      "absent": 7,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "dist_m": 35039.1,
+      "measures": 298,
+      "real_time_s": 131.386
+    },
+    {
+      "seed": 8813,
+      "n_src": 13,
+      "decision_maker": "shared(src/local_decision.py)",
+      "T": 9318.816,
+      "cleared": 13,
+      "absent": 7,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "dist_m": 35039.1,
+      "measures": 298,
+      "real_time_s": 131.881
+    },
+    {
+      "seed": 8816,
+      "n_src": 16,
+      "decision_maker": "frozen(root)",
+      "T": 6928.612,
+      "cleared": 16,
+      "absent": 4,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "dist_m": 26478.1,
+      "measures": 237,
+      "real_time_s": 143.445
+    },
+    {
+      "seed": 8816,
+      "n_src": 16,
+      "decision_maker": "shared(src/local_decision.py)",
+      "T": 6928.612,
+      "cleared": 16,
+      "absent": 4,
+      "unsolved": 0,
+      "failed": 0,
+      "completion_status": "COMPLETED",
+      "dist_m": 26478.1,
+      "measures": 237,
+      "real_time_s": 167.281
+    }
+  ],
+  "deltas": [
+    0.0,
+    0.0,
+    0.0
+  ]
+}

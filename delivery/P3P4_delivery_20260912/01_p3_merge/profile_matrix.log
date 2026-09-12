@@ -1,0 +1,14 @@
+========================================================================================
+【启动档位接线验收 (不连接官方端口)】
+========================================================================================
+run_port_test.py --help 暴露 --profile {stable,radial_candidate}: True
+run_port_test.py --help 暴露 --radial_coverage {on,off}:          True
+----------------------------------------------------------------------------------------
+问题   档位                 is_p4  enable_2opt_head   enable_adaptive_radial_coverage  判定
+P3   stable             False  True               False                            PASS
+P3   radial_candidate   False  True               True                             PASS
+P4   stable             True   False              False                            PASS
+P4   radial_candidate   True   False              False                            PASS
+----------------------------------------------------------------------------------------
+总体判定: PASS —— 稳定档/径向候选档接线正确, P4 双重冻结
+========================================================================================

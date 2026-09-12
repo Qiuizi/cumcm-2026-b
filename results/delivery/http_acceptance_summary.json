@@ -1,0 +1,275 @@
+{
+  "scenario": {
+    "prob": "p4",
+    "sources": 10,
+    "mock_seed": 9501
+  },
+  "runs": [
+    {
+      "tag": "R1",
+      "profile": "stable",
+      "prob": "p4",
+      "port": 14026,
+      "cmd": "C:\\Users\\123\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/run_port_test.py --port 14026 --prob p4 --version C --profile stable --robot_id team2026 --sources 10 --mock_seed 9501 --session_dir results\\delivery\\http_sessions",
+      "log": "D:\\桌面\\output\\cumcm2026\\results\\delivery\\http_acceptance_R1_stable_p4.log",
+      "returncode": 0,
+      "started_at": 1789231176.4759097,
+      "wiring_before_run": "already-applied",
+      "session_file": "D:\\桌面\\output\\cumcm2026\\results\\delivery\\http_sessions\\session_stable_p4_20260913_004235.json",
+      "ok": true
+    },
+    {
+      "tag": "R2",
+      "profile": "history_candidate",
+      "prob": "p4",
+      "port": 14027,
+      "cmd": "C:\\Users\\123\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/run_port_test.py --port 14027 --prob p4 --version C --profile history_candidate --robot_id team2026 --sources 10 --mock_seed 9501 --session_dir results\\delivery\\http_sessions",
+      "log": "D:\\桌面\\output\\cumcm2026\\results\\delivery\\http_acceptance_R2_history_candidate_p4.log",
+      "returncode": 0,
+      "started_at": 1789231355.6704035,
+      "wiring_before_run": "already-applied",
+      "session_file": "D:\\桌面\\output\\cumcm2026\\results\\delivery\\http_sessions\\session_history_candidate_p4_20260913_004517.json",
+      "ok": true
+    },
+    {
+      "tag": "R3",
+      "profile": "stable",
+      "prob": "p3",
+      "port": 14028,
+      "cmd": "C:\\Users\\123\\AppData\\Local\\Programs\\Python\\Python312\\python.exe scripts/run_port_test.py --port 14028 --prob p3 --version C --profile stable --robot_id team2026 --sources 10 --mock_seed 9501 --session_dir results\\delivery\\http_sessions",
+      "log": "D:\\桌面\\output\\cumcm2026\\results\\delivery\\http_acceptance_R3_stable_p3.log",
+      "returncode": 0,
+      "started_at": 1789231517.7355347,
+      "wiring_before_run": "already-applied",
+      "session_file": "D:\\桌面\\output\\cumcm2026\\results\\delivery\\http_sessions\\session_stable_p3_20260913_004540.json",
+      "ok": true
+    }
+  ],
+  "checks": {
+    "A_decision_and_fingerprint": {
+      "R1_decision_class": "local_decision_frozen.LocalDecisionMaker",
+      "R1_grid_class": "conservative_grid_frozen.ConservativeGrid",
+      "R1_is_frozen_baseline": true,
+      "R2_decision_class": "candidate_decision.HistoryCandidateDecision",
+      "R2_decision_module_file": "D:\\桌面\\output\\cumcm2026\\experiments\\stage3_candidate\\candidate_decision.py",
+      "R2_is_candidate": true,
+      "R2_module_is_validated_stage3": true,
+      "R2_frozen_prior": {
+        "n_hyp": 512,
+        "p_dir": 0.5,
+        "r_range": [
+          1000.0,
+          1500.0
+        ],
+        "u_prior": "uniform[0,2pi)",
+        "eps_deg": "inherit_from_grid",
+        "pool_factor": 40,
+        "max_rounds": 6,
+        "seed_base": 20260912,
+        "seed_stride": 131
+      },
+      "R2_prior_matches_freeze": true,
+      "R2_wiring_prior_spec_match": true,
+      "R2_provenance_all_match": true,
+      "R2_candidate_file_hashes": {
+        "experiments/stage3_candidate/model.py": "ada6c0069ee9b426",
+        "experiments/stage3_candidate/predictor.py": "0fa1753454775cbd",
+        "experiments/stage3_candidate/candidate_decision.py": "811ed39875813301",
+        "experiments/stage3_candidate/observer.py": "a58d1931ff3334fe",
+        "experiments/stage3_candidate/launch.py": "95330f69f79983c7"
+      },
+      "R2_frozen_file_hashes": {
+        "local_decision_frozen.py": "6d26e61de9a25fd4",
+        "conservative_grid_frozen.py": "778af8fd986a79b6"
+      },
+      "R2_decision_limits": {
+        "max_followups": 12,
+        "max_followup_time_s": 600.0,
+        "margin_s": 5.0
+      }
+    },
+    "B_truth_isolation": {
+      "candidate_ast_clean": true,
+      "candidate_violations": [],
+      "observation_keys_allowed": [
+        "kind",
+        "p",
+        "svd"
+      ],
+      "http_driver_clean": true,
+      "http_driver_fields": [
+        "abs_session_path",
+        "base_url",
+        "log_file",
+        "remaining_real_duration_s",
+        "req_seq",
+        "robot_id",
+        "session_file",
+        "start_timestamp",
+        "timeout_s"
+      ],
+      "forbidden_attr_hits": [],
+      "observer_wraps_http_driver": "observer.RecordingObserverDriver",
+      "note": "observer 包在 HttpSimDriver 外层；HttpSimDriver 的重试在同一 request_id 内完成，对外部观测器只呈现一次调用，因此重试不会重复记入历史"
+    },
+    "C_completion_billing": {
+      "R1": {
+        "present": true,
+        "completed_successfully": true,
+        "completion_status": "COMPLETED",
+        "cleared": 10,
+        "absent": 10,
+        "unsolved": 0,
+        "failed": 0,
+        "n_channels_with_end_evidence": 20,
+        "n_channels_decided": 20,
+        "all_channels_decided": true,
+        "T_virtual_s": 8661.1,
+        "L_dist_m": 30840.51,
+        "M_measures": 349,
+        "S_switches": 308,
+        "F_clear_fail": 130,
+        "N_clear_succ": 10,
+        "closure_residual_s": 0.002,
+        "closure_ok": true,
+        "unique_accepted_actions": 491,
+        "real_time_s": 177.35501861572266
+      },
+      "R2": {
+        "present": true,
+        "completed_successfully": true,
+        "completion_status": "COMPLETED",
+        "cleared": 10,
+        "absent": 10,
+        "unsolved": 0,
+        "failed": 0,
+        "n_channels_with_end_evidence": 20,
+        "n_channels_decided": 20,
+        "all_channels_decided": true,
+        "T_virtual_s": 7454.35,
+        "L_dist_m": 26851.77,
+        "M_measures": 329,
+        "S_switches": 308,
+        "F_clear_fail": 27,
+        "N_clear_succ": 10,
+        "closure_residual_s": 0.004,
+        "closure_ok": true,
+        "unique_accepted_actions": 368,
+        "real_time_s": 160.18729972839355
+      },
+      "R3": {
+        "present": true,
+        "completed_successfully": true,
+        "completion_status": "COMPLETED",
+        "cleared": 10,
+        "absent": 10,
+        "unsolved": 0,
+        "failed": 0,
+        "n_channels_with_end_evidence": 20,
+        "n_channels_decided": 20,
+        "all_channels_decided": true,
+        "T_virtual_s": 3319.93,
+        "L_dist_m": 12559.63,
+        "M_measures": 121,
+        "S_switches": 114,
+        "F_clear_fail": 13,
+        "N_clear_succ": 10,
+        "closure_residual_s": -0.004,
+        "closure_ok": true,
+        "unique_accepted_actions": 146,
+        "real_time_s": 21.50359845161438
+      }
+    },
+    "D_wiring_consistency": {
+      "http_unique_requests": 368,
+      "http_actions": 366,
+      "local_actions": 366,
+      "same_length": true,
+      "first_diff": null,
+      "identical": true,
+      "http_T": 7454.35,
+      "local_T": 7454.341,
+      "same_T": true,
+      "local_metrics": {
+        "T_virtual_s": 7454.341,
+        "L_dist_m": 26851.71,
+        "M_measures": 329,
+        "S_switches": 308,
+        "F_clear_fail": 27,
+        "N_clear_succ": 10,
+        "cleared": 10,
+        "absent": 10
+      }
+    },
+    "E_p3_entry_unchanged": {
+      "reference": "D:\\桌面\\output\\cumcm2026\\results\\delivery\\entry_validation_stable.json",
+      "config_keys_compared": [
+        "is_p4",
+        "version",
+        "enable_pruning",
+        "scan_at_clearance",
+        "enable_2opt_head",
+        "enable_adaptive_radial_coverage",
+        "grid_class",
+        "local_decision_class"
+      ],
+      "config_differences": {},
+      "config_unchanged": true,
+      "reference_fingerprint": {
+        "src/strategy_engine.py": "d98fd3660a82e693",
+        "src/local_decision.py": "eac1bdd8a0b3e964",
+        "src/conservative_grid.py": "2908487383308aca",
+        "src/evidence_tracker.py": "e9d89c9adb9c6152",
+        "src/client_runner.py": "e4e6ba0f160d9b94",
+        "scripts/run_port_test.py": "b2bcb8f17a0b4275"
+      },
+      "now_fingerprint": {
+        "src/strategy_engine.py": "8dca0841ba7c45de",
+        "src/local_decision.py": "eac1bdd8a0b3e964",
+        "src/conservative_grid.py": "2908487383308aca",
+        "src/evidence_tracker.py": "4a627a8bb8a236a1",
+        "src/client_runner.py": "e4e6ba0f160d9b94",
+        "src/sim_env.py": "ffa4f33aa5f943de",
+        "local_decision_frozen.py": "6d26e61de9a25fd4",
+        "conservative_grid_frozen.py": "778af8fd986a79b6",
+        "scripts/run_port_test.py": "230606087416c5f1"
+      },
+      "fingerprint_changes": {
+        "src/strategy_engine.py": {
+          "reference": "d98fd3660a82e693",
+          "now": "8dca0841ba7c45de"
+        },
+        "src/evidence_tracker.py": {
+          "reference": "e9d89c9adb9c6152",
+          "now": "4a627a8bb8a236a1"
+        },
+        "src/sim_env.py": {
+          "reference": null,
+          "now": "ffa4f33aa5f943de"
+        },
+        "local_decision_frozen.py": {
+          "reference": null,
+          "now": "6d26e61de9a25fd4"
+        },
+        "conservative_grid_frozen.py": {
+          "reference": null,
+          "now": "778af8fd986a79b6"
+        },
+        "scripts/run_port_test.py": {
+          "reference": "b2bcb8f17a0b4275",
+          "now": "230606087416c5f1"
+        }
+      }
+    }
+  },
+  "wiring": {
+    "applied": true,
+    "action": "already-applied"
+  },
+  "wiring_diff": {
+    "patch_file": "D:\\桌面\\output\\cumcm2026\\results\\delivery\\run_port_test_wiring.patch",
+    "bytes": 23378,
+    "returncode": 0
+  },
+  "all_checks_pass": true
+}

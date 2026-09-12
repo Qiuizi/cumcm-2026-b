@@ -1,0 +1,4 @@
+Case_ID,Sources,Seed,Base_Cleared,Base_T_s,Base_Dist_m,Base_Meas,Base_Switch,Base_ClearFail,Base_RealTime_s,Base_Billing_Valid,Rad_Cleared,Rad_T_s,Rad_Dist_m,Rad_Meas,Rad_Switch,Rad_ClearFail,Rad_RealTime_s,Rad_Billing_Valid,Saved_T_s,Saved_Dist_m,Radial_Adjust_Count,Chosen_Radii
+P3-New-10src,10,5010,10,2921.83,10609.1,118,115,15,10.591,False,10,2825.06,10140.3,118,115,14,10.064,True,96.77,468.8,5,"[np.float64(1275.0), np.float64(1125.0), np.float64(1025.0), np.float64(1200.0), np.float64(1125.0)]"
+P3-New-13src,13,5013,13,3217.36,12351.8,107,102,15,12.446,False,13,3205.73,12268.6,108,102,15,12.644,False,11.64,83.2,3,"[np.float64(1225.0), np.float64(1050.0), np.float64(1225.0)]"
+P3-New-16src,16,5016,16,3758.47,15877.3,76,72,17,14.333,False,16,3846.20,16246.0,77,72,20,14.197,True,-87.74,-368.7,1,[np.float64(1225.0)]

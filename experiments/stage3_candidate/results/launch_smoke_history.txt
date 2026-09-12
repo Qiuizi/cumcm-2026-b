@@ -1,0 +1,35 @@
+====================================================================================================
+P4 候选版启动入口    version = history_candidate    （默认 stable）
+====================================================================================================
+模块来源与源码标识：
+  env_sim                ffa4f33aa5f943de  D:\桌面\output\cumcm2026\src\sim_env.py
+  strategy_engine        8dca0841ba7c45de  D:\桌面\output\cumcm2026\src\strategy_engine.py
+  evidence_tracker       4a627a8bb8a236a1  D:\桌面\output\cumcm2026\src\evidence_tracker.py
+  decision_maker_frozen  6d26e61de9a25fd4  D:\桌面\output\cumcm2026\local_decision_frozen.py
+  grid_frozen            778af8fd986a79b6  D:\桌面\output\cumcm2026\conservative_grid_frozen.py
+  candidate_decision     811ed39875813301  D:\桌面\output\cumcm2026\experiments\stage3_candidate\candidate_decision.py
+  candidate_predictor    0fa1753454775cbd  D:\桌面\output\cumcm2026\experiments\stage3_candidate\predictor.py
+  candidate_model        ada6c0069ee9b426  D:\桌面\output\cumcm2026\experiments\stage3_candidate\model.py
+
+----------------------------------------------------------------------------------------------------
+案例 seed=9001 源数=10  version=history_candidate
+----------------------------------------------------------------------------------------------------
+实际生效配置：
+  is_p4                            = True
+  engine_version_tag               = C
+  scan_at_clearance                = False
+  enable_2opt_head                 = False
+  enable_adaptive_radial_coverage  = False
+  enable_pruning                   = True
+  max_repeat_clear_fail            = 3
+  decision_maker                   = candidate_decision.HistoryCandidateDecision
+  grid_class                       = conservative_grid_frozen.ConservativeGrid
+  evidence_tracker                 = src.evidence_tracker.EvidenceTrackerP4
+  decision_maker_limits            = {'max_followups': 12, 'max_followup_time_s': 600.0, 'margin_s': 5.0}
+  predictor                        = HistoryReceptionPredictor @ D:\桌面\output\cumcm2026\experiments\stage3_candidate\predictor.py
+    frozen_prior                   = {'n_hyp': 512, 'p_dir': 0.5, 'r_range': [1000.0, 1500.0], 'u_prior': 'uniform[0,2pi)', 'eps_deg': 'inherit_from_grid', 'pool_factor': 40, 'max_rounds': 6, 'seed_base': 20260912, 'seed_stride': 131}
+    update_rule                    = refilter_all_compatible_hypotheses_with_full_history
+    fallback_rule                  = empty_hypothesis_set -> return None -> frozen_recv_prob
+结果：
+  T = 6982.32 s   L = 23906.6 m   M = 357  S = 339  F = 9  N = 10
+  计费闭合 T-(L/5+5M+S+3F+5N) = 0.000000 s  闭合 = True

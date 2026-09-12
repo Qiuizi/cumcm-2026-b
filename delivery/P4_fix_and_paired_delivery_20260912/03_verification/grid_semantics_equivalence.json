@@ -1,0 +1,29 @@
+{
+  "initial_prune_all_equal": true,
+  "legitimate_observation_pairwise": {
+    "cases": 300,
+    "steps": 900,
+    "equal_steps": 900,
+    "shared_emptied_cases": 0,
+    "frozen_rejected_cases": 0,
+    "n_mismatch": 0,
+    "mismatch_cases": []
+  },
+  "non_empty_safe_clear_agreement": true,
+  "ch14_true_cell_retained": {
+    "surviving_cells": 119,
+    "distance_to_true_position_m": 0.3355,
+    "retained": true
+  },
+  "empty_grid_behaviour": {
+    "frozen_fixed_check_safe_clear_at": false,
+    "frozen_fixed_find_safe_clear_position": null,
+    "frozen_fixed_build_clear_plan": [],
+    "shared_legacy_check_safe_clear_at": true,
+    "shared_legacy_find_safe_clear_position": [
+      0.0,
+      0.0
+    ],
+    "note": "共享 src/conservative_grid.py 在空网格下仍保留历史回退(True/cur_p)；该分支在 P3 中不可达（其角域判据正确、网格不会变空），本轮不修改共享组件以保证 P3 合入状态不变。"
+  }
+}

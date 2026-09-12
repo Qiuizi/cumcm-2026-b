@@ -1,0 +1,198 @@
+{
+  "source_consistency": {
+    "generator_reproducible": true,
+    "identical_except_marked_block": true,
+    "replaced_slice_lines_frozen": 24,
+    "replaced_slice_lines_arm_c": 6,
+    "frozen_body_lines": 277,
+    "arm_c_body_lines": 277,
+    "only_substitution_marker": true,
+    "diff": null
+  },
+  "determinism": {
+    "model_params_identical": true,
+    "model_predictions_identical": true,
+    "model_repeat_call_identical": true,
+    "env_same_pos_same_channel_identical": true,
+    "env_r1": {
+      "measure_result": "direction",
+      "svd_deg": 86.72
+    },
+    "env_r2": {
+      "measure_result": "direction",
+      "svd_deg": 86.72
+    }
+  },
+  "grid_untouched": {
+    "grid_alive_array_unchanged": true,
+    "grid_count_before": 10941,
+    "grid_count_after": 10941,
+    "model_has_prune_attribute": false,
+    "model_module_calls": "仅 grid.count() / grid.get_surviving_cells()"
+  },
+  "observation_updates": {
+    "grid_count_unchanged": 10941,
+    "observation_added": {
+      "kind": "no_signal",
+      "p": [
+        700.0,
+        300.0
+      ]
+    },
+    "n_alive_before": 236,
+    "n_alive_after": 20,
+    "n_alive_before_2nd_update": 236,
+    "eliminated_by_new_obs": 216,
+    "p_recv_before": {
+      "A_west_far": 0.877119,
+      "B_west_mid": 0.961864,
+      "C_northwest": 0.915254,
+      "D_near_q": 0.915254
+    },
+    "p_recv_after": {
+      "A_west_far": 0.25,
+      "B_west_mid": 0.65,
+      "C_northwest": 0.0,
+      "D_near_q": 0.0
+    },
+    "prediction_changed": {
+      "A_west_far": true,
+      "B_west_mid": true,
+      "C_northwest": true,
+      "D_near_q": true
+    },
+    "any_prediction_changed": true
+  },
+  "action_change_probe": {
+    "seed": 7701,
+    "n_src": 10,
+    "n_decisions": 22,
+    "n_action_changed": 2,
+    "n_position_changed": 4,
+    "n_model_decisions": 21,
+    "n_decision_fallbacks": 1,
+    "n_call_fallbacks": 0,
+    "fallback_reason_hist": {},
+    "model_score_count": 3156,
+    "T": 6651.682,
+    "completed": "COMPLETED",
+    "example": {
+      "channel": 12,
+      "grid_count": 5136,
+      "observation_history_at_decision": [
+        {
+          "kind": "no_signal",
+          "p": [
+            0.0,
+            0.0
+          ],
+          "svd": null
+        },
+        {
+          "kind": "no_signal",
+          "p": [
+            990.0,
+            0.0
+          ],
+          "svd": null
+        },
+        {
+          "kind": "no_signal",
+          "p": [
+            700.04,
+            700.04
+          ],
+          "svd": null
+        },
+        {
+          "kind": "no_signal",
+          "p": [
+            0.0,
+            990.0
+          ],
+          "svd": null
+        },
+        {
+          "kind": "no_signal",
+          "p": [
+            -700.04,
+            700.04
+          ],
+          "svd": null
+        },
+        {
+          "kind": "no_signal",
+          "p": [
+            0.0,
+            1840.0
+          ],
+          "svd": null
+        },
+        {
+          "kind": "no_signal",
+          "p": [
+            704.14,
+            1699.94
+          ],
+          "svd": null
+        },
+        {
+          "kind": "direction",
+          "p": [
+            1301.08,
+            1301.08
+          ],
+          "svd": 226.62
+        },
+        {
+          "kind": "direction",
+          "p": [
+            1232.39,
+            1228.39
+          ],
+          "svd": 227.17
+        },
+        {
+          "kind": "direction",
+          "p": [
+            962.62,
+            939.18
+          ],
+          "svd": 226.88
+        }
+      ],
+      "n_obs_at_decision": 10,
+      "n_hypotheses_alive": 7,
+      "reception_prediction_update": {
+        "n_obs_at_decision": 10,
+        "n_alive_before": 306,
+        "n_alive_after": 7,
+        "p_recv_before_at_base_pos": 0.0,
+        "p_recv_after_at_base_pos": 0.0,
+        "p_recv_before_at_c_pos": 0.13071895424836602,
+        "p_recv_after_at_c_pos": 1.0
+      },
+      "baseline_decision": {
+        "action": "measure",
+        "position": [
+          715.56,
+          675.46
+        ],
+        "J0": 239.0165325700293,
+        "Jq": 204.26715224358688,
+        "reason": "followup_promising (Jq=204.3s vs J0=239.0s)"
+      },
+      "arm_c_decision": {
+        "action": "clear",
+        "position": [
+          950.79,
+          930.4
+        ],
+        "J0": 239.0165325700293,
+        "Jq": 242.0727037830928,
+        "reason": "direct_clear_better (J0=239.0s vs Jq=242.1s)"
+      },
+      "difference": "action_type"
+    }
+  }
+}

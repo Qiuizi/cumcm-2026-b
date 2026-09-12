@@ -1,0 +1,69 @@
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 7220)
+Traceback (most recent call last):
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 425, in handle_one_request
+    self.wfile.flush() #actually send the response if not already done.
+    ^^^^^^^^^^^^^^^^^^
+ValueError: I/O operation on closed file.
+----------------------------------------
+----------------------------------------
+Exception occurred during processing of request from ('127.0.0.1', 2451)
+Traceback (most recent call last):
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 318, in _handle_request_noblock
+    self.process_request(request, client_address)
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 349, in process_request
+    self.finish_request(request, client_address)
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 362, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\socketserver.py", line 766, in __init__
+    self.handle()
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 436, in handle
+    self.handle_one_request()
+  File "C:\Users\123\AppData\Local\Programs\Python\Python312\Lib\http\server.py", line 425, in handle_one_request
+    self.wfile.flush() #actually send the response if not already done.
+    ^^^^^^^^^^^^^^^^^^
+ValueError: I/O operation on closed file.
+----------------------------------------
+[PORT] 本局明文通信日志单独归档绝对路径: D:\桌面\output\cumcm2026\results\audit_logs\http_session_20260913_031310_stubtest.jsonl
+[RETRY] HTTP 500（模拟器内部错误） (尝试 1/3)
+[RETRY] 网络超时/连接中断 (尝试 2/3): ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+[RETRY] 网络超时/连接中断 (尝试 3/3): ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
+[ABORT] /measure 在 3 次尝试后仍未取得 HTTP 200 —— 本次运行**未完成**（已如实写入会话日志，未伪造完成）。
+================================================================================================
+A) 诊断有效性（本地 stub：第1次 500、第2次起断连）
+================================================================================================
+  服务端收到请求数: 3 (期望 3)
+  request_id 序列: ['measure-000001', 'measure-000001', 'measure-000001']  (期望 3 次复用同一 id)
+  诊断记录: 尝试记录 3 条 + 致命记录 1 条
+    attempt=1 kind=retryable_status status=500 err=
+    attempt=2 kind=transport_error status=None err=ConnectionError(ProtocolError('Connection aborted.', RemoteD
+    attempt=3 kind=transport_error status=None err=ConnectionError(ProtocolError('Connection aborted.', RemoteD
+    attempt=3 kind=retry_exhausted status=500 err=no HTTP 200 after all attempts (last_status=500)
+  抛出异常: HTTP 请求失败: /measure（3 次尝试均未取得 HTTP 200，最后状态码 500）
+  计账审计: 有效唯一动作=0 measure=0 (期望 0 —— 未取得 200 的请求不计账)
+  结论 A: 通过
+
+================================================================================================
+B) 行为不变（既有场景 stable / P4 / 10 源 / seed 9501）
+================================================================================================
+  T_virtual_s  修补前=8661.1       修补后=8661.1       一致
+  L_dist_m     修补前=30840.5      修补后=30840.51     一致
+  M_measures   修补前=349          修补后=349          一致
+  S_switches   修补前=308          修补后=308          一致
+  F_clear_fail 修补前=130          修补后=130          一致
+  N_clear_succ 修补前=10           修补后=10           一致
+  结论 B: 通过
+
+================================================================================================
+定向验收总判定：全部通过
+================================================================================================

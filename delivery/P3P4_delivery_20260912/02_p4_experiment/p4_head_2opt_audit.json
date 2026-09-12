@@ -1,0 +1,2406 @@
+{
+  "P4H-10src-7210__baseline": {
+    "case_id": "P4H-10src-7210",
+    "arm": "baseline",
+    "sources": 10,
+    "seed": 7210,
+    "dir_ratio": 0.5,
+    "source_composition": {
+      "total": 10,
+      "omnidirectional": 1,
+      "directional": 9
+    },
+    "run_status": "RUNAWAY",
+    "effective_config": {
+      "is_p4": true,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": false,
+      "enable_adaptive_radial_coverage": false,
+      "grid_class": "conservative_grid_frozen.ConservativeGrid",
+      "local_decision_class": "local_decision_frozen.LocalDecisionMaker",
+      "search_point_count": 25
+    },
+    "source_fingerprint": {
+      "src/strategy_engine.py": {
+        "sha256_raw16": "0748e61fd7c5acad",
+        "sha256_lf16": "60e4ad0f7fedce55",
+        "git_blob": "fac90330ba1f075832dbd58f304f026ca3a14c61"
+      },
+      "src/sim_env.py": {
+        "sha256_raw16": "ffa4f33aa5f943de",
+        "sha256_lf16": "ffa4f33aa5f943de",
+        "git_blob": "1beec6ed283c0862273aebcec8b125d8c033e2ca"
+      },
+      "local_decision_frozen.py": {
+        "sha256_raw16": "9fb78f534d719b0a",
+        "sha256_lf16": "9fb78f534d719b0a",
+        "git_blob": "506c3a989414b79d371efccae8de39b6ecedefd7"
+      },
+      "conservative_grid_frozen.py": {
+        "sha256_raw16": "8a81a5826c742c2c",
+        "sha256_lf16": "8a81a5826c742c2c",
+        "git_blob": "86d25f6d7577c199a3221ca7ce4369b5e3380c85"
+      },
+      "src/local_decision.py": {
+        "sha256_raw16": "eac1bdd8a0b3e964",
+        "sha256_lf16": "eac1bdd8a0b3e964",
+        "git_blob": "451b6234db6b6dcfdea5c62bc5020c9654473698"
+      },
+      "src/conservative_grid.py": {
+        "sha256_raw16": "2908487383308aca",
+        "sha256_lf16": "2908487383308aca",
+        "git_blob": "50a65e8e827b5ce90850f76a7e9638d1ff8b261a"
+      },
+      "scripts/verify_p4_head_2opt_rigorous.py": {
+        "sha256_raw16": "815cf6b63649b46e",
+        "sha256_lf16": "815cf6b63649b46e",
+        "git_blob": "6eeb816240a13ee31691222c21d83cbfdb0e4b69"
+      }
+    },
+    "git": {
+      "branch": "feature/p4-head-2opt-experiment",
+      "commit": "cf48fbc8fcb1cfcc050883004b28cdf9b3446f66"
+    },
+    "billing_env": {
+      "L_m": 1129.000000547747,
+      "move_time_s": 225.80000010954942,
+      "M": 38,
+      "measure_time_s": 190.0,
+      "S": 36,
+      "switch_time_s": 36.0,
+      "F": 1461,
+      "clear_fail_time_s": 4383.0,
+      "N": 0,
+      "clear_succ_time_s": 0.0,
+      "virtual_time_s": 4834.8,
+      "expected_time_s": 4834.80000010955,
+      "residual_s": 1.0954954632325098e-07
+    },
+    "billing_action_log": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\results\\p4_head_2opt\\action_logs\\P4H-10src-7210_baseline.jsonl",
+      "unique_accepted_action_count": 1500,
+      "total_move_dist_m": 1129.0,
+      "movement_time_s": 225.8,
+      "movement_pct": 4.67,
+      "channel_switch_count": 36,
+      "channel_switch_time_s": 36.0,
+      "measure_count": 38,
+      "measure_time_s": 190.0,
+      "clear_fail_count": 1461,
+      "clear_fail_time_s": 4383.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 4834.8,
+      "final_virtual_time_s": 4834.8,
+      "accounting_discrepancy_s": 0.0008,
+      "time_last_clear_to_exit_s": 4834.8
+    },
+    "channels_end_state": [
+      {
+        "channel": 1,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 2,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 3,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 4,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 5,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 6,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 7,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 3690
+      },
+      {
+        "channel": 8,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 9,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 10,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 11,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 12,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 13,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 14,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 15,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 16,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 17,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 18,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 1,
+        "surviving_cells": 0
+      },
+      {
+        "channel": 19,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 20,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      }
+    ],
+    "head_dispatch_records": [
+      {
+        "round": 1,
+        "virtual_time_s": 119.0,
+        "task_count": 28,
+        "path_len": 28,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "head_changed": false
+      },
+      {
+        "round": 2,
+        "virtual_time_s": 119.0,
+        "task_count": 27,
+        "path_len": 27,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            999.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            999.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "head_changed": false
+      },
+      {
+        "round": 3,
+        "virtual_time_s": 419.8,
+        "task_count": 28,
+        "path_len": 28,
+        "pre_head": {
+          "type": "target",
+          "pos": [
+            1509.24,
+            81.74
+          ],
+          "channel": 18
+        },
+        "final_head": {
+          "type": "target",
+          "pos": [
+            1509.24,
+            81.74
+          ],
+          "channel": 18
+        },
+        "head_changed": false
+      }
+    ],
+    "completion": {
+      "expected_sources": 10,
+      "cleared": 0,
+      "unsolved": 20,
+      "aborted_by_action_cap": true,
+      "action_cap": 1500,
+      "actions_executed": 1501,
+      "all_targets_cleared": false,
+      "all_channels_resolved": false,
+      "source_channels_all_cleared": false,
+      "non_source_channels_all_absent": false,
+      "unresolved_channels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "billing_residual_s": 1.0954954632325098e-07,
+      "billing_closed": true,
+      "log_vs_env_time_match": true,
+      "log_vs_env_counter_match": true,
+      "stuck_channels_zero_cells": [
+        18
+      ],
+      "full_acceptance_pass": false
+    },
+    "real_time_s": 0.6903438000008464,
+    "action_log": "results/p4_head_2opt/action_logs/P4H-10src-7210_baseline.jsonl"
+  },
+  "P4H-10src-7210__candidate": {
+    "case_id": "P4H-10src-7210",
+    "arm": "candidate",
+    "sources": 10,
+    "seed": 7210,
+    "dir_ratio": 0.5,
+    "source_composition": {
+      "total": 10,
+      "omnidirectional": 1,
+      "directional": 9
+    },
+    "run_status": "RUNAWAY",
+    "effective_config": {
+      "is_p4": true,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": true,
+      "enable_adaptive_radial_coverage": false,
+      "grid_class": "conservative_grid_frozen.ConservativeGrid",
+      "local_decision_class": "local_decision_frozen.LocalDecisionMaker",
+      "search_point_count": 25
+    },
+    "source_fingerprint": {
+      "src/strategy_engine.py": {
+        "sha256_raw16": "0748e61fd7c5acad",
+        "sha256_lf16": "60e4ad0f7fedce55",
+        "git_blob": "fac90330ba1f075832dbd58f304f026ca3a14c61"
+      },
+      "src/sim_env.py": {
+        "sha256_raw16": "ffa4f33aa5f943de",
+        "sha256_lf16": "ffa4f33aa5f943de",
+        "git_blob": "1beec6ed283c0862273aebcec8b125d8c033e2ca"
+      },
+      "local_decision_frozen.py": {
+        "sha256_raw16": "9fb78f534d719b0a",
+        "sha256_lf16": "9fb78f534d719b0a",
+        "git_blob": "506c3a989414b79d371efccae8de39b6ecedefd7"
+      },
+      "conservative_grid_frozen.py": {
+        "sha256_raw16": "8a81a5826c742c2c",
+        "sha256_lf16": "8a81a5826c742c2c",
+        "git_blob": "86d25f6d7577c199a3221ca7ce4369b5e3380c85"
+      },
+      "src/local_decision.py": {
+        "sha256_raw16": "eac1bdd8a0b3e964",
+        "sha256_lf16": "eac1bdd8a0b3e964",
+        "git_blob": "451b6234db6b6dcfdea5c62bc5020c9654473698"
+      },
+      "src/conservative_grid.py": {
+        "sha256_raw16": "2908487383308aca",
+        "sha256_lf16": "2908487383308aca",
+        "git_blob": "50a65e8e827b5ce90850f76a7e9638d1ff8b261a"
+      },
+      "scripts/verify_p4_head_2opt_rigorous.py": {
+        "sha256_raw16": "815cf6b63649b46e",
+        "sha256_lf16": "815cf6b63649b46e",
+        "git_blob": "6eeb816240a13ee31691222c21d83cbfdb0e4b69"
+      }
+    },
+    "git": {
+      "branch": "feature/p4-head-2opt-experiment",
+      "commit": "cf48fbc8fcb1cfcc050883004b28cdf9b3446f66"
+    },
+    "billing_env": {
+      "L_m": 1397.0391055945095,
+      "move_time_s": 279.4078211189019,
+      "M": 38,
+      "measure_time_s": 190.0,
+      "S": 36,
+      "switch_time_s": 36.0,
+      "F": 1461,
+      "clear_fail_time_s": 4383.0,
+      "N": 0,
+      "clear_succ_time_s": 0.0,
+      "virtual_time_s": 4888.408,
+      "expected_time_s": 4888.407821118902,
+      "residual_s": 0.0001788810986909084
+    },
+    "billing_action_log": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\results\\p4_head_2opt\\action_logs\\P4H-10src-7210_candidate.jsonl",
+      "unique_accepted_action_count": 1500,
+      "total_move_dist_m": 1397.04,
+      "movement_time_s": 279.41,
+      "movement_pct": 5.72,
+      "channel_switch_count": 36,
+      "channel_switch_time_s": 36.0,
+      "measure_count": 38,
+      "measure_time_s": 190.0,
+      "clear_fail_count": 1461,
+      "clear_fail_time_s": 4383.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 4888.41,
+      "final_virtual_time_s": 4888.41,
+      "accounting_discrepancy_s": 0.0004,
+      "time_last_clear_to_exit_s": 4888.41
+    },
+    "channels_end_state": [
+      {
+        "channel": 1,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 2,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 3,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 4,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 1,
+        "surviving_cells": 0
+      },
+      {
+        "channel": 5,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 6,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 7,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 8,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 9,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 10,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 11,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 12,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 13,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 14,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 15,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 16,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 17,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 18,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 19,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 20,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      }
+    ],
+    "head_dispatch_records": [
+      {
+        "round": 1,
+        "virtual_time_s": 119.0,
+        "task_count": 28,
+        "path_len": 28,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "head_changed": false
+      },
+      {
+        "round": 2,
+        "virtual_time_s": 119.0,
+        "task_count": 27,
+        "path_len": 27,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            999.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            -0.0,
+            -999.0
+          ],
+          "point_idx": 6
+        },
+        "head_changed": true,
+        "next_action": {
+          "path": "/measure",
+          "pos": [
+            -0.0,
+            -999.0
+          ],
+          "virtual_time_s": 323.8
+        },
+        "next_action_dist_to_final_head_m": 0.0,
+        "next_action_dist_to_pre_head_m": 1412.8,
+        "next_action_matches_final_head": true
+      },
+      {
+        "round": 3,
+        "virtual_time_s": 419.8,
+        "task_count": 28,
+        "path_len": 28,
+        "pre_head": {
+          "type": "target",
+          "pos": [
+            151.29,
+            -1501.92
+          ],
+          "channel": 4
+        },
+        "final_head": {
+          "type": "target",
+          "pos": [
+            151.29,
+            -1501.92
+          ],
+          "channel": 4
+        },
+        "head_changed": false
+      }
+    ],
+    "completion": {
+      "expected_sources": 10,
+      "cleared": 0,
+      "unsolved": 20,
+      "aborted_by_action_cap": true,
+      "action_cap": 1500,
+      "actions_executed": 1501,
+      "all_targets_cleared": false,
+      "all_channels_resolved": false,
+      "source_channels_all_cleared": false,
+      "non_source_channels_all_absent": false,
+      "unresolved_channels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "billing_residual_s": 0.0001788810986909084,
+      "billing_closed": true,
+      "log_vs_env_time_match": false,
+      "log_vs_env_counter_match": true,
+      "stuck_channels_zero_cells": [
+        4
+      ],
+      "full_acceptance_pass": false
+    },
+    "real_time_s": 0.7890181000002485,
+    "action_log": "results/p4_head_2opt/action_logs/P4H-10src-7210_candidate.jsonl"
+  },
+  "P4H-13src-7213__baseline": {
+    "case_id": "P4H-13src-7213",
+    "arm": "baseline",
+    "sources": 13,
+    "seed": 7213,
+    "dir_ratio": 0.5,
+    "source_composition": {
+      "total": 13,
+      "omnidirectional": 6,
+      "directional": 7
+    },
+    "run_status": "RUNAWAY",
+    "effective_config": {
+      "is_p4": true,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": false,
+      "enable_adaptive_radial_coverage": false,
+      "grid_class": "conservative_grid_frozen.ConservativeGrid",
+      "local_decision_class": "local_decision_frozen.LocalDecisionMaker",
+      "search_point_count": 25
+    },
+    "source_fingerprint": {
+      "src/strategy_engine.py": {
+        "sha256_raw16": "0748e61fd7c5acad",
+        "sha256_lf16": "60e4ad0f7fedce55",
+        "git_blob": "fac90330ba1f075832dbd58f304f026ca3a14c61"
+      },
+      "src/sim_env.py": {
+        "sha256_raw16": "ffa4f33aa5f943de",
+        "sha256_lf16": "ffa4f33aa5f943de",
+        "git_blob": "1beec6ed283c0862273aebcec8b125d8c033e2ca"
+      },
+      "local_decision_frozen.py": {
+        "sha256_raw16": "9fb78f534d719b0a",
+        "sha256_lf16": "9fb78f534d719b0a",
+        "git_blob": "506c3a989414b79d371efccae8de39b6ecedefd7"
+      },
+      "conservative_grid_frozen.py": {
+        "sha256_raw16": "8a81a5826c742c2c",
+        "sha256_lf16": "8a81a5826c742c2c",
+        "git_blob": "86d25f6d7577c199a3221ca7ce4369b5e3380c85"
+      },
+      "src/local_decision.py": {
+        "sha256_raw16": "eac1bdd8a0b3e964",
+        "sha256_lf16": "eac1bdd8a0b3e964",
+        "git_blob": "451b6234db6b6dcfdea5c62bc5020c9654473698"
+      },
+      "src/conservative_grid.py": {
+        "sha256_raw16": "2908487383308aca",
+        "sha256_lf16": "2908487383308aca",
+        "git_blob": "50a65e8e827b5ce90850f76a7e9638d1ff8b261a"
+      },
+      "scripts/verify_p4_head_2opt_rigorous.py": {
+        "sha256_raw16": "815cf6b63649b46e",
+        "sha256_lf16": "815cf6b63649b46e",
+        "git_blob": "6eeb816240a13ee31691222c21d83cbfdb0e4b69"
+      }
+    },
+    "git": {
+      "branch": "feature/p4-head-2opt-experiment",
+      "commit": "cf48fbc8fcb1cfcc050883004b28cdf9b3446f66"
+    },
+    "billing_env": {
+      "L_m": 1840.0,
+      "move_time_s": 368.0,
+      "M": 51,
+      "measure_time_s": 255.0,
+      "S": 48,
+      "switch_time_s": 48.0,
+      "F": 1448,
+      "clear_fail_time_s": 4344.0,
+      "N": 0,
+      "clear_succ_time_s": 0.0,
+      "virtual_time_s": 5015.0,
+      "expected_time_s": 5015.0,
+      "residual_s": 0.0
+    },
+    "billing_action_log": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\results\\p4_head_2opt\\action_logs\\P4H-13src-7213_baseline.jsonl",
+      "unique_accepted_action_count": 1500,
+      "total_move_dist_m": 1840.0,
+      "movement_time_s": 368.0,
+      "movement_pct": 7.34,
+      "channel_switch_count": 48,
+      "channel_switch_time_s": 48.0,
+      "measure_count": 51,
+      "measure_time_s": 255.0,
+      "clear_fail_count": 1448,
+      "clear_fail_time_s": 4344.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 5015.0,
+      "final_virtual_time_s": 5015.0,
+      "accounting_discrepancy_s": 0.0,
+      "time_last_clear_to_exit_s": 5015.0
+    },
+    "channels_end_state": [
+      {
+        "channel": 1,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 2,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 3,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 4,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 5,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 6,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 7,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 8,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 9,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 10,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 11,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 12,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 13,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 14,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 1,
+        "surviving_cells": 0
+      },
+      {
+        "channel": 15,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10937
+      },
+      {
+        "channel": 16,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 17,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 18,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 19,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 20,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      }
+    ],
+    "head_dispatch_records": [
+      {
+        "round": 1,
+        "virtual_time_s": 119.0,
+        "task_count": 29,
+        "path_len": 29,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "head_changed": false
+      },
+      {
+        "round": 2,
+        "virtual_time_s": 119.0,
+        "task_count": 28,
+        "path_len": 28,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            999.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            999.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "head_changed": false
+      },
+      {
+        "round": 3,
+        "virtual_time_s": 413.8,
+        "task_count": 29,
+        "path_len": 29,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            1840.0,
+            0.0
+          ],
+          "point_idx": 7
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            1840.0,
+            0.0
+          ],
+          "point_idx": 7
+        },
+        "head_changed": false
+      },
+      {
+        "round": 4,
+        "virtual_time_s": 665.0,
+        "task_count": 28,
+        "path_len": 28,
+        "pre_head": {
+          "type": "target",
+          "pos": [
+            1460.82,
+            347.59
+          ],
+          "channel": 14
+        },
+        "final_head": {
+          "type": "target",
+          "pos": [
+            1460.82,
+            347.59
+          ],
+          "channel": 14
+        },
+        "head_changed": false
+      }
+    ],
+    "completion": {
+      "expected_sources": 13,
+      "cleared": 0,
+      "unsolved": 20,
+      "aborted_by_action_cap": true,
+      "action_cap": 1500,
+      "actions_executed": 1501,
+      "all_targets_cleared": false,
+      "all_channels_resolved": false,
+      "source_channels_all_cleared": false,
+      "non_source_channels_all_absent": false,
+      "unresolved_channels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "billing_residual_s": 0.0,
+      "billing_closed": true,
+      "log_vs_env_time_match": true,
+      "log_vs_env_counter_match": true,
+      "stuck_channels_zero_cells": [
+        14
+      ],
+      "full_acceptance_pass": false
+    },
+    "real_time_s": 0.7276262999985192,
+    "action_log": "results/p4_head_2opt/action_logs/P4H-13src-7213_baseline.jsonl"
+  },
+  "P4H-13src-7213__candidate": {
+    "case_id": "P4H-13src-7213",
+    "arm": "candidate",
+    "sources": 13,
+    "seed": 7213,
+    "dir_ratio": 0.5,
+    "source_composition": {
+      "total": 13,
+      "omnidirectional": 6,
+      "directional": 7
+    },
+    "run_status": "RUNAWAY",
+    "effective_config": {
+      "is_p4": true,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": true,
+      "enable_adaptive_radial_coverage": false,
+      "grid_class": "conservative_grid_frozen.ConservativeGrid",
+      "local_decision_class": "local_decision_frozen.LocalDecisionMaker",
+      "search_point_count": 25
+    },
+    "source_fingerprint": {
+      "src/strategy_engine.py": {
+        "sha256_raw16": "0748e61fd7c5acad",
+        "sha256_lf16": "60e4ad0f7fedce55",
+        "git_blob": "fac90330ba1f075832dbd58f304f026ca3a14c61"
+      },
+      "src/sim_env.py": {
+        "sha256_raw16": "ffa4f33aa5f943de",
+        "sha256_lf16": "ffa4f33aa5f943de",
+        "git_blob": "1beec6ed283c0862273aebcec8b125d8c033e2ca"
+      },
+      "local_decision_frozen.py": {
+        "sha256_raw16": "9fb78f534d719b0a",
+        "sha256_lf16": "9fb78f534d719b0a",
+        "git_blob": "506c3a989414b79d371efccae8de39b6ecedefd7"
+      },
+      "conservative_grid_frozen.py": {
+        "sha256_raw16": "8a81a5826c742c2c",
+        "sha256_lf16": "8a81a5826c742c2c",
+        "git_blob": "86d25f6d7577c199a3221ca7ce4369b5e3380c85"
+      },
+      "src/local_decision.py": {
+        "sha256_raw16": "eac1bdd8a0b3e964",
+        "sha256_lf16": "eac1bdd8a0b3e964",
+        "git_blob": "451b6234db6b6dcfdea5c62bc5020c9654473698"
+      },
+      "src/conservative_grid.py": {
+        "sha256_raw16": "2908487383308aca",
+        "sha256_lf16": "2908487383308aca",
+        "git_blob": "50a65e8e827b5ce90850f76a7e9638d1ff8b261a"
+      },
+      "scripts/verify_p4_head_2opt_rigorous.py": {
+        "sha256_raw16": "815cf6b63649b46e",
+        "sha256_lf16": "815cf6b63649b46e",
+        "git_blob": "6eeb816240a13ee31691222c21d83cbfdb0e4b69"
+      }
+    },
+    "git": {
+      "branch": "feature/p4-head-2opt-experiment",
+      "commit": "cf48fbc8fcb1cfcc050883004b28cdf9b3446f66"
+    },
+    "billing_env": {
+      "L_m": 1763.6014978654496,
+      "move_time_s": 352.7202995730899,
+      "M": 51,
+      "measure_time_s": 255.0,
+      "S": 48,
+      "switch_time_s": 48.0,
+      "F": 1448,
+      "clear_fail_time_s": 4344.0,
+      "N": 0,
+      "clear_succ_time_s": 0.0,
+      "virtual_time_s": 4999.72,
+      "expected_time_s": 4999.7202995730895,
+      "residual_s": 0.00029957308925077086
+    },
+    "billing_action_log": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\results\\p4_head_2opt\\action_logs\\P4H-13src-7213_candidate.jsonl",
+      "unique_accepted_action_count": 1500,
+      "total_move_dist_m": 1763.6,
+      "movement_time_s": 352.72,
+      "movement_pct": 7.05,
+      "channel_switch_count": 48,
+      "channel_switch_time_s": 48.0,
+      "measure_count": 51,
+      "measure_time_s": 255.0,
+      "clear_fail_count": 1448,
+      "clear_fail_time_s": 4344.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 4999.72,
+      "final_virtual_time_s": 4999.72,
+      "accounting_discrepancy_s": 0.0003,
+      "time_last_clear_to_exit_s": 4999.72
+    },
+    "channels_end_state": [
+      {
+        "channel": 1,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 2,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 3,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 4,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 5,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 6,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 7,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 8,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 9,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 10,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 11,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 12,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 13,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 14,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 4193
+      },
+      {
+        "channel": 15,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10937
+      },
+      {
+        "channel": 16,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 17,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 1,
+        "surviving_cells": 0
+      },
+      {
+        "channel": 18,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 19,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 20,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      }
+    ],
+    "head_dispatch_records": [
+      {
+        "round": 1,
+        "virtual_time_s": 119.0,
+        "task_count": 29,
+        "path_len": 29,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "head_changed": false
+      },
+      {
+        "round": 2,
+        "virtual_time_s": 119.0,
+        "task_count": 28,
+        "path_len": 28,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            999.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            999.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "head_changed": false
+      },
+      {
+        "round": 3,
+        "virtual_time_s": 413.8,
+        "task_count": 29,
+        "path_len": 29,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            1840.0,
+            0.0
+          ],
+          "point_idx": 7
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            706.4,
+            -706.4
+          ],
+          "point_idx": 6
+        },
+        "head_changed": true,
+        "next_action": {
+          "path": "/measure",
+          "pos": [
+            706.4,
+            -706.4
+          ],
+          "virtual_time_s": 571.72
+        },
+        "next_action_dist_to_final_head_m": 0.0,
+        "next_action_dist_to_pre_head_m": 1335.68,
+        "next_action_matches_final_head": true
+      },
+      {
+        "round": 4,
+        "virtual_time_s": 649.72,
+        "task_count": 28,
+        "path_len": 28,
+        "pre_head": {
+          "type": "target",
+          "pos": [
+            172.08,
+            -961.19
+          ],
+          "channel": 17
+        },
+        "final_head": {
+          "type": "target",
+          "pos": [
+            172.08,
+            -961.19
+          ],
+          "channel": 17
+        },
+        "head_changed": false
+      }
+    ],
+    "completion": {
+      "expected_sources": 13,
+      "cleared": 0,
+      "unsolved": 20,
+      "aborted_by_action_cap": true,
+      "action_cap": 1500,
+      "actions_executed": 1501,
+      "all_targets_cleared": false,
+      "all_channels_resolved": false,
+      "source_channels_all_cleared": false,
+      "non_source_channels_all_absent": false,
+      "unresolved_channels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "billing_residual_s": 0.00029957308925077086,
+      "billing_closed": true,
+      "log_vs_env_time_match": true,
+      "log_vs_env_counter_match": true,
+      "stuck_channels_zero_cells": [
+        17
+      ],
+      "full_acceptance_pass": false
+    },
+    "real_time_s": 0.9595383000014408,
+    "action_log": "results/p4_head_2opt/action_logs/P4H-13src-7213_candidate.jsonl"
+  },
+  "P4H-16src-7216__baseline": {
+    "case_id": "P4H-16src-7216",
+    "arm": "baseline",
+    "sources": 16,
+    "seed": 7216,
+    "dir_ratio": 0.5,
+    "source_composition": {
+      "total": 16,
+      "omnidirectional": 7,
+      "directional": 9
+    },
+    "run_status": "RUNAWAY",
+    "effective_config": {
+      "is_p4": true,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": false,
+      "enable_adaptive_radial_coverage": false,
+      "grid_class": "conservative_grid_frozen.ConservativeGrid",
+      "local_decision_class": "local_decision_frozen.LocalDecisionMaker",
+      "search_point_count": 25
+    },
+    "source_fingerprint": {
+      "src/strategy_engine.py": {
+        "sha256_raw16": "0748e61fd7c5acad",
+        "sha256_lf16": "60e4ad0f7fedce55",
+        "git_blob": "fac90330ba1f075832dbd58f304f026ca3a14c61"
+      },
+      "src/sim_env.py": {
+        "sha256_raw16": "ffa4f33aa5f943de",
+        "sha256_lf16": "ffa4f33aa5f943de",
+        "git_blob": "1beec6ed283c0862273aebcec8b125d8c033e2ca"
+      },
+      "local_decision_frozen.py": {
+        "sha256_raw16": "9fb78f534d719b0a",
+        "sha256_lf16": "9fb78f534d719b0a",
+        "git_blob": "506c3a989414b79d371efccae8de39b6ecedefd7"
+      },
+      "conservative_grid_frozen.py": {
+        "sha256_raw16": "8a81a5826c742c2c",
+        "sha256_lf16": "8a81a5826c742c2c",
+        "git_blob": "86d25f6d7577c199a3221ca7ce4369b5e3380c85"
+      },
+      "src/local_decision.py": {
+        "sha256_raw16": "eac1bdd8a0b3e964",
+        "sha256_lf16": "eac1bdd8a0b3e964",
+        "git_blob": "451b6234db6b6dcfdea5c62bc5020c9654473698"
+      },
+      "src/conservative_grid.py": {
+        "sha256_raw16": "2908487383308aca",
+        "sha256_lf16": "2908487383308aca",
+        "git_blob": "50a65e8e827b5ce90850f76a7e9638d1ff8b261a"
+      },
+      "scripts/verify_p4_head_2opt_rigorous.py": {
+        "sha256_raw16": "815cf6b63649b46e",
+        "sha256_lf16": "815cf6b63649b46e",
+        "git_blob": "6eeb816240a13ee31691222c21d83cbfdb0e4b69"
+      }
+    },
+    "git": {
+      "branch": "feature/p4-head-2opt-experiment",
+      "commit": "cf48fbc8fcb1cfcc050883004b28cdf9b3446f66"
+    },
+    "billing_env": {
+      "L_m": 3310.473625752772,
+      "move_time_s": 662.0947251505544,
+      "M": 56,
+      "measure_time_s": 280.0,
+      "S": 52,
+      "switch_time_s": 52.0,
+      "F": 1443,
+      "clear_fail_time_s": 4329.0,
+      "N": 0,
+      "clear_succ_time_s": 0.0,
+      "virtual_time_s": 5323.095,
+      "expected_time_s": 5323.094725150554,
+      "residual_s": 0.0002748494462139206
+    },
+    "billing_action_log": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\results\\p4_head_2opt\\action_logs\\P4H-16src-7216_baseline.jsonl",
+      "unique_accepted_action_count": 1500,
+      "total_move_dist_m": 3310.48,
+      "movement_time_s": 662.1,
+      "movement_pct": 12.44,
+      "channel_switch_count": 52,
+      "channel_switch_time_s": 52.0,
+      "measure_count": 56,
+      "measure_time_s": 280.0,
+      "clear_fail_count": 1443,
+      "clear_fail_time_s": 4329.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 5323.1,
+      "final_virtual_time_s": 5323.1,
+      "accounting_discrepancy_s": 0.0005,
+      "time_last_clear_to_exit_s": 5323.1
+    },
+    "channels_end_state": [
+      {
+        "channel": 1,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 2,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 3,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 4,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 5,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 6,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 7,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 8,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 9,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 10,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 11,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 12,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 13,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 14,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 15,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 1,
+        "surviving_cells": 0
+      },
+      {
+        "channel": 16,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 17,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 18,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 19,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 20,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      }
+    ],
+    "head_dispatch_records": [
+      {
+        "round": 1,
+        "virtual_time_s": 119.0,
+        "task_count": 32,
+        "path_len": 32,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "head_changed": false
+      },
+      {
+        "round": 2,
+        "virtual_time_s": 119.0,
+        "task_count": 31,
+        "path_len": 31,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            706.4,
+            -706.4
+          ],
+          "point_idx": 7
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            706.4,
+            -706.4
+          ],
+          "point_idx": 7
+        },
+        "head_changed": false
+      },
+      {
+        "round": 3,
+        "virtual_time_s": 395.8,
+        "task_count": 32,
+        "path_len": 32,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            704.14,
+            -1699.94
+          ],
+          "point_idx": 20
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            704.14,
+            -1699.94
+          ],
+          "point_idx": 20
+        },
+        "head_changed": false
+      },
+      {
+        "round": 4,
+        "virtual_time_s": 659.51,
+        "task_count": 31,
+        "path_len": 31,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            1301.08,
+            -1301.08
+          ],
+          "point_idx": 20
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            1301.08,
+            -1301.08
+          ],
+          "point_idx": 20
+        },
+        "head_changed": false
+      },
+      {
+        "round": 5,
+        "virtual_time_s": 868.1,
+        "task_count": 30,
+        "path_len": 30,
+        "pre_head": {
+          "type": "target",
+          "pos": [
+            1348.92,
+            -628.42
+          ],
+          "channel": 15
+        },
+        "final_head": {
+          "type": "target",
+          "pos": [
+            1348.92,
+            -628.42
+          ],
+          "channel": 15
+        },
+        "head_changed": false
+      }
+    ],
+    "completion": {
+      "expected_sources": 16,
+      "cleared": 0,
+      "unsolved": 20,
+      "aborted_by_action_cap": true,
+      "action_cap": 1500,
+      "actions_executed": 1501,
+      "all_targets_cleared": false,
+      "all_channels_resolved": false,
+      "source_channels_all_cleared": false,
+      "non_source_channels_all_absent": false,
+      "unresolved_channels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "billing_residual_s": 0.0002748494462139206,
+      "billing_closed": true,
+      "log_vs_env_time_match": false,
+      "log_vs_env_counter_match": true,
+      "stuck_channels_zero_cells": [
+        15
+      ],
+      "full_acceptance_pass": false
+    },
+    "real_time_s": 0.8932411999994656,
+    "action_log": "results/p4_head_2opt/action_logs/P4H-16src-7216_baseline.jsonl"
+  },
+  "P4H-16src-7216__candidate": {
+    "case_id": "P4H-16src-7216",
+    "arm": "candidate",
+    "sources": 16,
+    "seed": 7216,
+    "dir_ratio": 0.5,
+    "source_composition": {
+      "total": 16,
+      "omnidirectional": 7,
+      "directional": 9
+    },
+    "run_status": "RUNAWAY",
+    "effective_config": {
+      "is_p4": true,
+      "version": "C",
+      "enable_pruning": true,
+      "scan_at_clearance": false,
+      "enable_2opt_head": true,
+      "enable_adaptive_radial_coverage": false,
+      "grid_class": "conservative_grid_frozen.ConservativeGrid",
+      "local_decision_class": "local_decision_frozen.LocalDecisionMaker",
+      "search_point_count": 25
+    },
+    "source_fingerprint": {
+      "src/strategy_engine.py": {
+        "sha256_raw16": "0748e61fd7c5acad",
+        "sha256_lf16": "60e4ad0f7fedce55",
+        "git_blob": "fac90330ba1f075832dbd58f304f026ca3a14c61"
+      },
+      "src/sim_env.py": {
+        "sha256_raw16": "ffa4f33aa5f943de",
+        "sha256_lf16": "ffa4f33aa5f943de",
+        "git_blob": "1beec6ed283c0862273aebcec8b125d8c033e2ca"
+      },
+      "local_decision_frozen.py": {
+        "sha256_raw16": "9fb78f534d719b0a",
+        "sha256_lf16": "9fb78f534d719b0a",
+        "git_blob": "506c3a989414b79d371efccae8de39b6ecedefd7"
+      },
+      "conservative_grid_frozen.py": {
+        "sha256_raw16": "8a81a5826c742c2c",
+        "sha256_lf16": "8a81a5826c742c2c",
+        "git_blob": "86d25f6d7577c199a3221ca7ce4369b5e3380c85"
+      },
+      "src/local_decision.py": {
+        "sha256_raw16": "eac1bdd8a0b3e964",
+        "sha256_lf16": "eac1bdd8a0b3e964",
+        "git_blob": "451b6234db6b6dcfdea5c62bc5020c9654473698"
+      },
+      "src/conservative_grid.py": {
+        "sha256_raw16": "2908487383308aca",
+        "sha256_lf16": "2908487383308aca",
+        "git_blob": "50a65e8e827b5ce90850f76a7e9638d1ff8b261a"
+      },
+      "scripts/verify_p4_head_2opt_rigorous.py": {
+        "sha256_raw16": "815cf6b63649b46e",
+        "sha256_lf16": "815cf6b63649b46e",
+        "git_blob": "6eeb816240a13ee31691222c21d83cbfdb0e4b69"
+      }
+    },
+    "git": {
+      "branch": "feature/p4-head-2opt-experiment",
+      "commit": "cf48fbc8fcb1cfcc050883004b28cdf9b3446f66"
+    },
+    "billing_env": {
+      "L_m": 1763.6014978654493,
+      "move_time_s": 352.72029957308985,
+      "M": 45,
+      "measure_time_s": 225.0,
+      "S": 42,
+      "switch_time_s": 42.0,
+      "F": 1454,
+      "clear_fail_time_s": 4362.0,
+      "N": 0,
+      "clear_succ_time_s": 0.0,
+      "virtual_time_s": 4981.72,
+      "expected_time_s": 4981.7202995730895,
+      "residual_s": 0.00029957308925077086
+    },
+    "billing_action_log": {
+      "log_file_abs_path": "D:\\桌面\\output\\cumcm2026\\results\\p4_head_2opt\\action_logs\\P4H-16src-7216_candidate.jsonl",
+      "unique_accepted_action_count": 1500,
+      "total_move_dist_m": 1763.6,
+      "movement_time_s": 352.72,
+      "movement_pct": 7.08,
+      "channel_switch_count": 42,
+      "channel_switch_time_s": 42.0,
+      "measure_count": 45,
+      "measure_time_s": 225.0,
+      "clear_fail_count": 1454,
+      "clear_fail_time_s": 4362.0,
+      "clear_succ_count": 0,
+      "clear_succ_time_s": 0.0,
+      "total_accounted_virtual_time_s": 4981.72,
+      "final_virtual_time_s": 4981.72,
+      "accounting_discrepancy_s": 0.0004,
+      "time_last_clear_to_exit_s": 4981.72
+    },
+    "channels_end_state": [
+      {
+        "channel": 1,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 2,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 3,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 4,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 5,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 6,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 7,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 8,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 9,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 10,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 11,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 12,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 13,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 14,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 15,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 5140
+      },
+      {
+        "channel": 16,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 17,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": 10941
+      },
+      {
+        "channel": 18,
+        "status": "FOUND",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 1,
+        "surviving_cells": 0
+      },
+      {
+        "channel": 19,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": false,
+        "followup_count": 0,
+        "surviving_cells": null
+      },
+      {
+        "channel": 20,
+        "status": "UNKNOWN",
+        "absence_proof_type": null,
+        "is_source": true,
+        "followup_count": 0,
+        "surviving_cells": null
+      }
+    ],
+    "head_dispatch_records": [
+      {
+        "round": 1,
+        "virtual_time_s": 119.0,
+        "task_count": 32,
+        "path_len": 32,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            0.0,
+            0.0
+          ],
+          "point_idx": 0
+        },
+        "head_changed": false
+      },
+      {
+        "round": 2,
+        "virtual_time_s": 119.0,
+        "task_count": 31,
+        "path_len": 31,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            706.4,
+            -706.4
+          ],
+          "point_idx": 7
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            706.4,
+            -706.4
+          ],
+          "point_idx": 7
+        },
+        "head_changed": false
+      },
+      {
+        "round": 3,
+        "virtual_time_s": 395.8,
+        "task_count": 32,
+        "path_len": 32,
+        "pre_head": {
+          "type": "search",
+          "pos": [
+            704.14,
+            -1699.94
+          ],
+          "point_idx": 20
+        },
+        "final_head": {
+          "type": "search",
+          "pos": [
+            -0.0,
+            -999.0
+          ],
+          "point_idx": 6
+        },
+        "head_changed": true,
+        "next_action": {
+          "path": "/measure",
+          "pos": [
+            -0.0,
+            -999.0
+          ],
+          "virtual_time_s": 553.72
+        },
+        "next_action_dist_to_final_head_m": 0.0,
+        "next_action_dist_to_pre_head_m": 993.54,
+        "next_action_matches_final_head": true
+      },
+      {
+        "round": 4,
+        "virtual_time_s": 613.72,
+        "task_count": 31,
+        "path_len": 31,
+        "pre_head": {
+          "type": "target",
+          "pos": [
+            -510.35,
+            -832.49
+          ],
+          "channel": 18
+        },
+        "final_head": {
+          "type": "target",
+          "pos": [
+            -510.35,
+            -832.49
+          ],
+          "channel": 18
+        },
+        "head_changed": false
+      }
+    ],
+    "completion": {
+      "expected_sources": 16,
+      "cleared": 0,
+      "unsolved": 20,
+      "aborted_by_action_cap": true,
+      "action_cap": 1500,
+      "actions_executed": 1501,
+      "all_targets_cleared": false,
+      "all_channels_resolved": false,
+      "source_channels_all_cleared": false,
+      "non_source_channels_all_absent": false,
+      "unresolved_channels": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "billing_residual_s": 0.00029957308925077086,
+      "billing_closed": true,
+      "log_vs_env_time_match": true,
+      "log_vs_env_counter_match": true,
+      "stuck_channels_zero_cells": [
+        18
+      ],
+      "full_acceptance_pass": false
+    },
+    "real_time_s": 0.9848615000009886,
+    "action_log": "results/p4_head_2opt/action_logs/P4H-16src-7216_candidate.jsonl"
+  }
+}

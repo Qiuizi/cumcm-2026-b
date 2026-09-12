@@ -1,0 +1,38 @@
+{
+  "before": {
+    "pkg_results": {},
+    "runs": {
+      "audit_logs/_D2_probe_runsdir_test.jsonl": "e967dc05ae8471539614d62f35fabec0887c28ae4316ac6153e24b862b4b08c1",
+      "legacy_package_results/audit_logs/_D2_probe_legacy_test.jsonl": "f1371bd485d659296b1c77cb195258f4659c9761206497e2101b16d959c03915"
+    }
+  },
+  "entry_run": {
+    "returncode": 3,
+    "new_files_in_runs": {
+      "http_action_log.jsonl": "ce457e534ee80e7bba501cc7edc492c4d9607da2dfba0697bdef1b3119bd55f5",
+      "audit_logs/http_session_20260913_040231_d2test.jsonl": "ce457e534ee80e7bba501cc7edc492c4d9607da2dfba0697bdef1b3119bd55f5",
+      "sessions/session_stable_p4_20260913_040233.json": "6ca1b738a8bf7e3286986b405a335290faca3b76c2aa711c587fb5dfb361f047"
+    },
+    "new_files_in_package_results": {},
+    "stdout_tail": [
+      "  明文 HTTP 日志: D:\\桌面\\output\\cumcm2026\\release\\p4_official_runs\\audit_logs\\http_session_20260913_040231_d2test.jsonl",
+      "=====================================================================================",
+      "[会话落盘·未完成] 独立会话文件: D:\\桌面\\output\\cumcm2026\\release\\p4_official_runs\\sessions\\session_stable_p4_20260913_040233.json",
+      "  completion_status = ABORTED_HTTP_NO_COMPLETION（未完成，非 COMPLETED）"
+    ]
+  },
+  "after_rebuild": {
+    "returncode": 0,
+    "runs": {
+      "http_action_log.jsonl": "ce457e534ee80e7bba501cc7edc492c4d9607da2dfba0697bdef1b3119bd55f5",
+      "audit_logs/http_session_20260913_040231_d2test.jsonl": "ce457e534ee80e7bba501cc7edc492c4d9607da2dfba0697bdef1b3119bd55f5",
+      "audit_logs/_D2_probe_runsdir_test.jsonl": "e967dc05ae8471539614d62f35fabec0887c28ae4316ac6153e24b862b4b08c1",
+      "legacy_package_results/audit_logs/_D2_probe_legacy_test.jsonl": "f1371bd485d659296b1c77cb195258f4659c9761206497e2101b16d959c03915",
+      "sessions/session_stable_p4_20260913_040233.json": "6ca1b738a8bf7e3286986b405a335290faca3b76c2aa711c587fb5dfb361f047"
+    },
+    "pkg_results": {},
+    "all_unchanged": true,
+    "lost": []
+  },
+  "all_pass": true
+}

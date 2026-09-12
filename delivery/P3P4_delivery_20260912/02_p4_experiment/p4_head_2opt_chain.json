@@ -1,0 +1,73 @@
+{
+  "checks": {
+    "help_exposes_enable_2opt_head": true,
+    "source_override_removed": true,
+    "old_force_override_pattern_absent": true,
+    "scan_at_clearance_p4_freeze_kept": true,
+    "radial_coverage_p4_freeze_kept": true,
+    "head_gate_present": true,
+    "p3_radial_gate_present": true,
+    "p4_explicit_on_yields_true": true,
+    "p4_default_off_yields_false": true,
+    "p4_other_frozen_flags_remain_false": true,
+    "only_enable_2opt_head_differs_in_p4": true,
+    "p3_stable_radial_off": true,
+    "p3_radial_candidate_still_selectable": true,
+    "p3_2opt_head_still_true": true
+  },
+  "overall_pass": true,
+  "chain": [
+    "scripts/run_port_test.py --prob p4 [--enable_2opt_head on|off]",
+    "  -> enable_2opt_head = (args.enable_2opt_head == 'on') if provided else (not is_p4)  # P4 默认 False",
+    "  -> StrategyEngine(is_p4=True, enable_2opt_head=<value>)",
+    "  -> src/strategy_engine.py: self.enable_2opt_head = enable_2opt_head   # P4 强制覆盖已解除",
+    "  -> run_version_c_openroute(): start_i = -1 if self.enable_2opt_head else 0",
+    "  -> path 的 2-opt 邻域含 i=-1 (可翻转前缀) => 可改变 path[0]",
+    "  -> best_task = tasks[path[0]]  => 最终实际派发首任务",
+    "  -> self.head_dispatch_records 逐轮记录 pre_head / final_head / head_changed"
+  ],
+  "p4_effective_config_off": {
+    "is_p4": true,
+    "version": "C",
+    "enable_pruning": true,
+    "scan_at_clearance": false,
+    "enable_2opt_head": false,
+    "enable_adaptive_radial_coverage": false,
+    "grid_class": "conservative_grid_frozen.ConservativeGrid",
+    "local_decision_class": "local_decision_frozen.LocalDecisionMaker"
+  },
+  "p4_effective_config_on": {
+    "is_p4": true,
+    "version": "C",
+    "enable_pruning": true,
+    "scan_at_clearance": false,
+    "enable_2opt_head": true,
+    "enable_adaptive_radial_coverage": false,
+    "grid_class": "conservative_grid_frozen.ConservativeGrid",
+    "local_decision_class": "local_decision_frozen.LocalDecisionMaker"
+  },
+  "p4_diff_keys": [
+    "enable_2opt_head"
+  ],
+  "p3_effective_config_stable": {
+    "is_p4": false,
+    "version": "C",
+    "enable_pruning": true,
+    "scan_at_clearance": false,
+    "enable_2opt_head": true,
+    "enable_adaptive_radial_coverage": false,
+    "grid_class": "src.conservative_grid.ConservativeGrid",
+    "local_decision_class": "src.local_decision.LocalDecisionMaker"
+  },
+  "p3_effective_config_radial": {
+    "is_p4": false,
+    "version": "C",
+    "enable_pruning": true,
+    "scan_at_clearance": false,
+    "enable_2opt_head": true,
+    "enable_adaptive_radial_coverage": true,
+    "grid_class": "src.conservative_grid.ConservativeGrid",
+    "local_decision_class": "src.local_decision.LocalDecisionMaker"
+  },
+  "note": "仅解除 P4 对 enable_2opt_head 的强制覆盖并补充审计埋点；其余 P4 冻结项与 P3 行为不变。"
+}
